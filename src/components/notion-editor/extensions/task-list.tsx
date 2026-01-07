@@ -7,7 +7,7 @@ import {
 	ReactNodeViewProps,
 } from "@tiptap/react";
 import { TaskItemChecked } from "../icons/task-item-checked";
-import { cn } from "../utils";
+import { cn } from "../lib/utils";
 
 export function MyNodeView(props: ReactNodeViewProps) {
 	const { editor, node, updateAttributes } = props;

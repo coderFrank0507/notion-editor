@@ -1,22 +1,17 @@
-import { useEditor, EditorContent } from "@tiptap/react";
+import { useEditor, EditorContent, EditorContext, useCurrentEditor } from "@tiptap/react";
 import extensions from "./extensions";
 import EditorToolbarFloating from "./editor-toolbar-floating";
 
+// --- Styles ---
+import "./styles/_keyframe-animations.scss";
+import "./styles/_variables.scss";
 import "./styles/notion-editor.scss";
 import "./styles/task-list.scss";
 
-export default function NotionEditor() {
-	const editor = useEditor({
-		immediatelyRender: false,
-		// editorProps: {
-		// 	attributes: {
-		// 		class: "notion-editor",
-		// 	},
-		// },
-		extensions,
-	});
+export function EditorContentArea() {
+	const { editor } = useCurrentEditor();
 
-	if (!editor) return null;
+	if (!editor) return <span>Error: editor instance is null</span>;
 
 	return (
 		<div>
@@ -47,5 +42,25 @@ export default function NotionEditor() {
 				<EditorToolbarFloating />
 			</EditorContent>
 		</div>
+	);
+}
+
+export default function NotionEditor() {
+	const editor = useEditor({
+		immediatelyRender: false,
+		// editorProps: {
+		// 	attributes: {
+		// 		class: "notion-editor",
+		// 	},
+		// },
+		extensions,
+	});
+
+	if (!editor) return null;
+
+	return (
+		<EditorContext.Provider value={{ editor }}>
+			<EditorContentArea />
+		</EditorContext.Provider>
 	);
 }

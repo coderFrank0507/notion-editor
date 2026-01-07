@@ -8,16 +8,37 @@ importers:
 
   .:
     dependencies:
+      '@floating-ui/react':
+        specifier: ^0.27.16
+        version: 0.27.16(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
       '@tailwindcss/vite':
         specifier: ^4.1.18
         version: 4.1.18(vite@7.3.0(@types/node@24.10.4)(jiti@2.6.1)(lightningcss@1.30.2)(sass-embedded@1.97.2)(sass@1.97.2))
+      '@tiptap/core':
+        specifier: ^3.15.1
+        version: 3.15.1(@tiptap/pm@3.15.1)
+      '@tiptap/extension-bold':
+        specifier: ^3.15.1
+        version: 3.15.1(@tiptap/core@3.15.1(@tiptap/pm@3.15.1))
+      '@tiptap/extension-code':
+        specifier: ^3.15.1
+        version: 3.15.1(@tiptap/core@3.15.1(@tiptap/pm@3.15.1))
       '@tiptap/extension-document':
+        specifier: ^3.15.1
+        version: 3.15.1(@tiptap/core@3.15.1(@tiptap/pm@3.15.1))
+      '@tiptap/extension-italic':
         specifier: ^3.15.1
         version: 3.15.1(@tiptap/core@3.15.1(@tiptap/pm@3.15.1))
       '@tiptap/extension-paragraph':
         specifier: ^3.15.1
         version: 3.15.1(@tiptap/core@3.15.1(@tiptap/pm@3.15.1))
+      '@tiptap/extension-strike':
+        specifier: ^3.15.1
+        version: 3.15.1(@tiptap/core@3.15.1(@tiptap/pm@3.15.1))
       '@tiptap/extension-text':
+        specifier: ^3.15.1
+        version: 3.15.1(@tiptap/core@3.15.1(@tiptap/pm@3.15.1))
+      '@tiptap/extension-underline':
         specifier: ^3.15.1
         version: 3.15.1(@tiptap/core@3.15.1(@tiptap/pm@3.15.1))
       '@tiptap/extension-unique-id':
@@ -26,6 +47,9 @@ importers:
       '@tiptap/extensions':
         specifier: ^3.15.1
         version: 3.15.1(@tiptap/core@3.15.1(@tiptap/pm@3.15.1))(@tiptap/pm@3.15.1)
+      '@tiptap/pm':
+        specifier: ^3.15.1
+        version: 3.15.1
       '@tiptap/react':
         specifier: ^3.15.1
         version: 3.15.1(@floating-ui/dom@1.7.4)(@tiptap/core@3.15.1(@tiptap/pm@3.15.1))(@tiptap/pm@3.15.1)(@types/react-dom@19.2.3(@types/react@19.2.7))(@types/react@19.2.7)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
@@ -376,6 +400,18 @@ packages:
   '@floating-ui/dom@1.7.4':
     resolution: {integrity: sha512-OOchDgh4F2CchOX94cRVqhvy7b3AFb+/rQXyswmzmGakRfkMgoWVjfnLWkRirfLEfuD4ysVW16eXzwt3jHIzKA==}
 
+  '@floating-ui/react-dom@2.1.6':
+    resolution: {integrity: sha512-4JX6rEatQEvlmgU80wZyq9RT96HZJa88q8hp0pBd+LrczeDI4o6uA2M+uvxngVHo4Ihr8uibXxH6+70zhAFrVw==}
+    peerDependencies:
+      react: '>=16.8.0'
+      react-dom: '>=16.8.0'
+
+  '@floating-ui/react@0.27.16':
+    resolution: {integrity: sha512-9O8N4SeG2z++TSM8QA/KTeKFBVCNEz/AGS7gWPJf6KFRzmRWixFRnCnkPHRDwSVZW6QPDO6uT0P2SpWNKCc9/g==}
+    peerDependencies:
+      react: '>=17.0.0'
+      react-dom: '>=17.0.0'
+
   '@floating-ui/utils@0.2.10':
     resolution: {integrity: sha512-aGTxbpbg8/b5JfU1HXSrbH3wXZuLPJcNEcZQFMxLs3oSzgtVu6nFPkbbGGUvBcUjKV2YyB9Wxxabo+HEH9tcRQ==}
 
@@ -719,11 +755,21 @@ packages:
     peerDependencies:
       '@tiptap/pm': ^3.15.1
 
+  '@tiptap/extension-bold@3.15.1':
+    resolution: {integrity: sha512-iP8gnkPjY/V4JKKtgJunUyqbNobTEF4N2XiLqSjzlzZOTifBTF8I2zRzgIdk4ZYkMXY+w5RLXQ4FgHg9/EoJ/w==}
+    peerDependencies:
+      '@tiptap/core': ^3.15.1
+
   '@tiptap/extension-bubble-menu@3.15.1':
     resolution: {integrity: sha512-3UdVQSBs79N9TUyq0R9dbMB91Y5L1F7pWBnLuIoAj/ty+LfF7YZEkY9q6Il3EqRbxVNEucjOfp4Nuss+ZKceKw==}
     peerDependencies:
       '@tiptap/core': ^3.15.1
       '@tiptap/pm': ^3.15.1
+
+  '@tiptap/extension-code@3.15.1':
+    resolution: {integrity: sha512-cKcx1YT+PmuDgPlDTFiajY0jm3sgVbhSy1gpG3BJeochtGJkVAEBs/I6WFnDTrTk/mU/5XdFwMRD4HEuAOg5XA==}
+    peerDependencies:
+      '@tiptap/core': ^3.15.1
 
   '@tiptap/extension-document@3.15.1':
     resolution: {integrity: sha512-iq7+S+8NFKSoJ/hMBmsKOYXOt4ipEppDewIs5T9BUBwnYJMIRZqkqxHP7iiM3z71igFUdmc1yFVqkkLZpkTU+A==}
@@ -737,13 +783,28 @@ packages:
       '@tiptap/core': ^3.15.1
       '@tiptap/pm': ^3.15.1
 
+  '@tiptap/extension-italic@3.15.1':
+    resolution: {integrity: sha512-MZoxmvqge02ZR897hz7i5npXK7PksjYqkjMOC8BTdH3rpU2X2ExbSBXIl1vYM1ClcgDyVE42Q/I5oG4fQY2wDg==}
+    peerDependencies:
+      '@tiptap/core': ^3.15.1
+
   '@tiptap/extension-paragraph@3.15.1':
     resolution: {integrity: sha512-GGgNyzZ9hasse9iFpxKsUniaIel8Wk2VpMw2tbFfELjK6EM0XaiO+nmMivP55dwA8nRY/DjMm8PB3czgMJ73Lg==}
     peerDependencies:
       '@tiptap/core': ^3.15.1
 
+  '@tiptap/extension-strike@3.15.1':
+    resolution: {integrity: sha512-um0P7xdIrw+8J/WUx3MYmkKk07e74OMkPc1hXKg6YU8yZGpBQXAWHwo8OM7WqfDrs7tMMMTK3zIzZkl5K/jkdw==}
+    peerDependencies:
+      '@tiptap/core': ^3.15.1
+
   '@tiptap/extension-text@3.15.1':
     resolution: {integrity: sha512-jwKD5xVGhriQ3ZoA2aMbLmat7FmmHkqv5O807vjnHhQmYqinsFVQ/hc2YsulMtqex9I5qWXji4CTtF7p04USRQ==}
+    peerDependencies:
+      '@tiptap/core': ^3.15.1
+
+  '@tiptap/extension-underline@3.15.1':
+    resolution: {integrity: sha512-/gWo7CkCLD5wVOPJ0AlgNhqkdoOSOq1UjJmqNoPve5oBq/WXkz2/c0k+xCgDBisCJQPrR/fK1POWd5RKFl0rQg==}
     peerDependencies:
       '@tiptap/core': ^3.15.1
 
@@ -1638,6 +1699,9 @@ packages:
     resolution: {integrity: sha512-GTt8rSKje5FilG+wEdfCkOcLL7LWqpMlr2c3LRuKt/YXxcJ52aGSbGBAdI4L3aaqfrBt6y711El53ItyH1NWzg==}
     engines: {node: '>=16.0.0'}
 
+  tabbable@6.4.0:
+    resolution: {integrity: sha512-05PUHKSNE8ou2dwIxTngl4EzcnsCDZGJ/iCLtDflR/SHB/ny14rXc+qU5P4mG9JkusiV7EivzY9Mhm55AzAvCg==}
+
   tailwind-merge@3.4.0:
     resolution: {integrity: sha512-uSaO4gnW+b3Y2aWoWfFpX62vn2sR3skfhbjsEnaBI81WD1wBLlHZe5sWf0AqjksNdYTbGBEd0UasQMT3SNV15g==}
 
@@ -2019,16 +2083,27 @@ snapshots:
   '@floating-ui/core@1.7.3':
     dependencies:
       '@floating-ui/utils': 0.2.10
-    optional: true
 
   '@floating-ui/dom@1.7.4':
     dependencies:
       '@floating-ui/core': 1.7.3
       '@floating-ui/utils': 0.2.10
-    optional: true
 
-  '@floating-ui/utils@0.2.10':
-    optional: true
+  '@floating-ui/react-dom@2.1.6(react-dom@19.2.3(react@19.2.3))(react@19.2.3)':
+    dependencies:
+      '@floating-ui/dom': 1.7.4
+      react: 19.2.3
+      react-dom: 19.2.3(react@19.2.3)
+
+  '@floating-ui/react@0.27.16(react-dom@19.2.3(react@19.2.3))(react@19.2.3)':
+    dependencies:
+      '@floating-ui/react-dom': 2.1.6(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
+      '@floating-ui/utils': 0.2.10
+      react: 19.2.3
+      react-dom: 19.2.3(react@19.2.3)
+      tabbable: 6.4.0
+
+  '@floating-ui/utils@0.2.10': {}
 
   '@humanfs/core@0.19.1': {}
 
@@ -2272,12 +2347,20 @@ snapshots:
     dependencies:
       '@tiptap/pm': 3.15.1
 
+  '@tiptap/extension-bold@3.15.1(@tiptap/core@3.15.1(@tiptap/pm@3.15.1))':
+    dependencies:
+      '@tiptap/core': 3.15.1(@tiptap/pm@3.15.1)
+
   '@tiptap/extension-bubble-menu@3.15.1(@tiptap/core@3.15.1(@tiptap/pm@3.15.1))(@tiptap/pm@3.15.1)':
     dependencies:
       '@floating-ui/dom': 1.7.4
       '@tiptap/core': 3.15.1(@tiptap/pm@3.15.1)
       '@tiptap/pm': 3.15.1
     optional: true
+
+  '@tiptap/extension-code@3.15.1(@tiptap/core@3.15.1(@tiptap/pm@3.15.1))':
+    dependencies:
+      '@tiptap/core': 3.15.1(@tiptap/pm@3.15.1)
 
   '@tiptap/extension-document@3.15.1(@tiptap/core@3.15.1(@tiptap/pm@3.15.1))':
     dependencies:
@@ -2290,11 +2373,23 @@ snapshots:
       '@tiptap/pm': 3.15.1
     optional: true
 
+  '@tiptap/extension-italic@3.15.1(@tiptap/core@3.15.1(@tiptap/pm@3.15.1))':
+    dependencies:
+      '@tiptap/core': 3.15.1(@tiptap/pm@3.15.1)
+
   '@tiptap/extension-paragraph@3.15.1(@tiptap/core@3.15.1(@tiptap/pm@3.15.1))':
     dependencies:
       '@tiptap/core': 3.15.1(@tiptap/pm@3.15.1)
 
+  '@tiptap/extension-strike@3.15.1(@tiptap/core@3.15.1(@tiptap/pm@3.15.1))':
+    dependencies:
+      '@tiptap/core': 3.15.1(@tiptap/pm@3.15.1)
+
   '@tiptap/extension-text@3.15.1(@tiptap/core@3.15.1(@tiptap/pm@3.15.1))':
+    dependencies:
+      '@tiptap/core': 3.15.1(@tiptap/pm@3.15.1)
+
+  '@tiptap/extension-underline@3.15.1(@tiptap/core@3.15.1(@tiptap/pm@3.15.1))':
     dependencies:
       '@tiptap/core': 3.15.1(@tiptap/pm@3.15.1)
 
@@ -3259,6 +3354,8 @@ snapshots:
       sync-message-port: 1.1.3
 
   sync-message-port@1.1.3: {}
+
+  tabbable@6.4.0: {}
 
   tailwind-merge@3.4.0: {}
 
