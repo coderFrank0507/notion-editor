@@ -11,8 +11,9 @@ import { DragContextMenu } from "./ui/drag-context-menu";
 import "./styles/_keyframe-animations.scss";
 import "./styles/_variables.scss";
 import "./styles/notion-editor.scss";
-import "./styles/task-list.scss";
+import "./styles/list-node.scss";
 import "./styles/paragraph-node.scss";
+import { HeadTools } from "./_dev-tools";
 
 export function EditorContentArea() {
 	const { editor } = useCurrentEditor();
@@ -57,6 +58,16 @@ export default function NotionEditor() {
 						},
 					],
 				},
+				{
+					type: "paragraph",
+					attrs: { id: "a8129dc9-4933-4bae-9708-4b662daeb2d8" },
+					content: [
+						{
+							type: "text",
+							text: "frank wang",
+						},
+					],
+				},
 			],
 		},
 	});
@@ -65,22 +76,7 @@ export default function NotionEditor() {
 
 	return (
 		<>
-			<div className="flex gap-4">
-				<button
-					onClick={() => {
-						editor.chain().focus().setNode("paragraph").run();
-					}}
-				>
-					paragraph
-				</button>
-				<button
-					onClick={() => {
-						editor.chain().focus().setNode("task-list").run();
-					}}
-				>
-					task-list
-				</button>
-			</div>
+			<HeadTools editor={editor} />
 			<EditorContext.Provider value={{ editor }}>
 				<EditorContentArea />
 			</EditorContext.Provider>

@@ -7,8 +7,12 @@
 		outline: none;
 	}
 
+	.list-item-content > [data-node-view-content-react] {
+		padding-left: 2px;
+	}
+
 	.notion-editor-container {
-		padding: 40px;
+		padding: 80px;
 	}
 
 	.paragraph.is-empty::before {

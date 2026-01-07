@@ -18,6 +18,9 @@ import { Dropcursor } from "@tiptap/extensions";
 // --- Custom Extensions ---
 import { TaskList } from "./task-list";
 import { UiState } from "./ui-state-extension";
+import { BulletList } from "./bullet-list";
+import { OrderedList } from "./ordered-list";
+import { ClearNodeSelectionAfterDrop } from "./ClearNodeSelectionAfterDrop";
 
 export default [
 	Document,
@@ -28,20 +31,23 @@ export default [
 	Underline,
 	Strike,
 	Code,
+	TaskList,
+	BulletList,
+	OrderedList,
 	Dropcursor.configure({
 		width: 2,
 	}),
-	TaskList,
 	Placeholder.configure({
 		placeholder: ({ node }) => {
-			if (node.type.name === "task-list") {
-				return "Task Item";
-			}
+			const { type } = node;
+			if (type.name === "task-list") return "Task Item";
+			if (type.name === "bullet-list") return "Bullet Item";
 			return "Write something …";
 		},
 	}),
 	UniqueID.configure({
-		types: ["heading", "paragraph", "task-list"],
+		types: ["heading", "paragraph", "task-list", "ordered-list", "bullet-list"],
 	}),
 	UiState,
+	ClearNodeSelectionAfterDrop,
 ];

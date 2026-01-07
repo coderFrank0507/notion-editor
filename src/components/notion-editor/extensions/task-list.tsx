@@ -9,7 +9,7 @@ import {
 import { TaskItemChecked } from "../icons/task-item-checked";
 import { cn } from "../lib/utils";
 
-export function MyNodeView(props: ReactNodeViewProps) {
+export function TaskItemView(props: ReactNodeViewProps) {
 	const { editor, node, updateAttributes } = props;
 
 	return (
@@ -17,7 +17,7 @@ export function MyNodeView(props: ReactNodeViewProps) {
 			<div className="flex items-center">
 				<div
 					className={cn(
-						"size-[16px] mr-2 border-[1.5px] rounded relative cursor-pointer",
+						"size-[16px] mr-2 border-[1.5px] border-text-color rounded relative cursor-pointer",
 						node.attrs.checked && "bg-blue-600 border-blue-600"
 					)}
 					onMouseDownCapture={() => {
@@ -35,7 +35,7 @@ export function MyNodeView(props: ReactNodeViewProps) {
 					/>
 				</div>
 				<NodeViewContent
-					className={cn("task-item-content", node.attrs.checked && "text-gray-500 line-through")}
+					className={cn("list-item-content", node.attrs.checked && "text-gray-500 line-through")}
 				/>
 			</div>
 		</NodeViewWrapper>
@@ -63,10 +63,10 @@ export const TaskList = Node.create<ParagraphOptions>({
 		};
 	},
 	parseHTML() {
-		return [{ tag: "div[data-type='task-list']" }];
+		return [{ tag: "div" }];
 	},
 	addNodeView() {
-		return ReactNodeViewRenderer(MyNodeView, {
+		return ReactNodeViewRenderer(TaskItemView, {
 			attrs({ node }) {
 				return {
 					"data-id": node.attrs.id,

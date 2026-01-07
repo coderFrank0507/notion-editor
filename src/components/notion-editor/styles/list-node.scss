@@ -1,8 +1,6 @@
-.node-task-list {
-	.task-item-content > [data-node-view-content-react] {
-		padding-left: 2px;
-	}
-
+.node-task-list,
+.node-bullet-list,
+.node-ordered-list {
 	&.is-empty::before {
 		content: attr(data-placeholder);
 		color: #9ca3af;

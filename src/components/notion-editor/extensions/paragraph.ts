@@ -33,9 +33,12 @@ export const Paragraph = Node.create<ParagraphOptions>({
 				const { $from } = state.selection;
 
 				const hasContent = $from.parent.textContent.trim().length > 0;
-				if ($from.parent.type.name === "task-list" && hasContent) {
+				if (
+					["task-list", "bullet-list", "ordered-list"].includes($from.parent.type.name) &&
+					hasContent
+				) {
 					return editor.commands.insertContent({
-						type: "task-list",
+						type: $from.parent.type.name,
 					});
 				}
 

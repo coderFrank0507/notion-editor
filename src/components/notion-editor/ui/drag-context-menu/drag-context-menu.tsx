@@ -304,11 +304,12 @@ export const DragContextMenu = ({
 	const onElementDragEnd = useCallback(() => {
 		if (!editor) return;
 		editor.commands.setIsDragging(false);
+		editor.commands.blur();
 
-		setTimeout(() => {
-			editor.view.dom.blur();
-			editor.view.focus();
-		}, 0);
+		// setTimeout(() => {
+		// 	editor.view.dom.blur();
+		// 	editor.view.focus();
+		// }, 0);
 	}, [editor]);
 
 	if (!editor) return null;
@@ -358,7 +359,7 @@ export const DragContextMenu = ({
 							cursor: "grab",
 							...(open ? { pointerEvents: "none" } : {}),
 						}}
-						onMouseDown={() => selectNodeAndHideFloating(editor, nodePos)}
+						// onMouseDown={() => selectNodeAndHideFloating(editor, nodePos)}
 					>
 						<GripVerticalIcon className="tiptap-button-icon" />
 					</Button>
