@@ -31,15 +31,19 @@ export const Paragraph = Node.create<ParagraphOptions>({
 			Enter: ({ editor }) => {
 				const { state } = editor;
 				const { $from } = state.selection;
-				console.log($from.parent.type.name, this.name);
-				// 只在 myBlock 内生效
-				if ($from.parent.type.name !== this.name) {
+
+				const hasContent = $from.parent.textContent.trim().length > 0;
+				if ($from.parent.type.name === "task-list" && hasContent) {
+					return editor.commands.insertContent({
+						type: "task-list",
+					});
+				}
+
+				if ($from.parent.type.name !== "paragraph") {
+					return editor.chain().focus().setNode("paragraph").run();
+				} else {
 					return false;
 				}
-				// this.options.HTMLAttributes["data-type"] = "text";
-				return editor.commands.insertContent({
-					type: "task-list",
-				});
 			},
 		};
 	},

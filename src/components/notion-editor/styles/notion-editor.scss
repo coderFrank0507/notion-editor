@@ -1,11 +1,17 @@
 #notion-editor-content {
-	padding: 40px;
-
 	& * {
 		box-sizing: border-box;
 	}
 
-	.is-empty.is-editor-empty::before {
+	.ProseMirror-focused {
+		outline: none;
+	}
+
+	.notion-editor-container {
+		padding: 40px;
+	}
+
+	.paragraph.is-empty::before {
 		content: attr(data-placeholder);
 		color: #9ca3af;
 		pointer-events: none;
@@ -14,13 +20,7 @@
 		right: 0;
 	}
 
-	// .is-empty.is-editor-empty:has(.ProseMirror-trailingBreak:only-child)::before {
-	// 	content: attr(data-placeholder);
-	// 	color: #9ca3af;
-	// 	pointer-events: none;
-	// }
-
-	.ProseMirror-focused {
-		outline: none;
+	[data-id] {
+		position: relative;
 	}
 }
