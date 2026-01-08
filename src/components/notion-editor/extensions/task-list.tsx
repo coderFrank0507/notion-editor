@@ -13,27 +13,30 @@ export function TaskItemView(props: ReactNodeViewProps) {
 	const { editor, node, updateAttributes } = props;
 
 	return (
-		<NodeViewWrapper>
-			<div className="flex items-center">
-				<div
-					className={cn(
-						"size-[16px] mr-2 border-[1.5px] border-text-color rounded relative cursor-pointer",
-						node.attrs.checked && "bg-blue-600 border-blue-600"
-					)}
-					onMouseDownCapture={() => {
-						editor.chain().blur();
-					}}
-					onClick={() => {
-						updateAttributes({
-							checked: !node.attrs.checked,
-						});
-					}}
-				>
-					<TaskItemChecked
-						className={cn("block size-full none", node.attrs.checked && "block")}
-						color="white"
-					/>
+		<NodeViewWrapper as={"ul"}>
+			<div className="flex items-start">
+				<div className="w-4 h-6 mr-1.5 flex items-center">
+					<div
+						className={cn(
+							"size-4 border-[1.5px] border-text-color rounded relative cursor-pointer",
+							node.attrs.checked && "bg-blue-600 border-blue-600"
+						)}
+						onMouseDownCapture={() => {
+							editor.chain().blur();
+						}}
+						onClick={() => {
+							updateAttributes({
+								checked: !node.attrs.checked,
+							});
+						}}
+					>
+						<TaskItemChecked
+							className={cn("block size-full none", node.attrs.checked && "block")}
+							color="white"
+						/>
+					</div>
 				</div>
+
 				<NodeViewContent
 					className={cn("list-item-content", node.attrs.checked && "text-gray-500 line-through")}
 				/>
@@ -71,10 +74,10 @@ export const TaskList = Node.create<ParagraphOptions>({
 		};
 	},
 	parseHTML() {
-		return [{ tag: "div" }];
+		return [{ tag: "ul" }];
 	},
 	renderHTML() {
-		return ["div", 0];
+		return ["ul", 0];
 	},
 	addCommands() {
 		return {

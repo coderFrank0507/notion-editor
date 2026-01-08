@@ -7,14 +7,16 @@ export const ClearSelectionDropEnd = Extension.create({
 	addProseMirrorPlugins() {
 		return [
 			new Plugin({
-				appendTransaction(transactions, _, newState) {
-					const tr = transactions.find((tr) => tr.selection instanceof NodeSelection);
-					if (!tr) return;
+				appendTransaction(transactions, oldState, newState) {
+					// console.log(oldState.doc.content.size, newState.doc.content.size);
+					return null;
+					// const tr = transactions.find((tr) => tr.selection instanceof NodeSelection);
+					// if (!tr) return;
 
-					const { selection } = newState;
-					if (!(selection instanceof NodeSelection)) return;
+					// const { selection } = newState;
+					// if (!(selection instanceof NodeSelection)) return;
 
-					return newState.tr.setSelection(TextSelection.create(newState.doc, selection.from + 1));
+					// return newState.tr.setSelection(TextSelection.create(newState.doc, selection.from + 1));
 				},
 			}),
 		];

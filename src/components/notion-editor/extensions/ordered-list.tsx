@@ -47,9 +47,9 @@ export function OrderedItemView(props: ReactNodeViewProps) {
 	const number = getOrderedIndex(editor.state.doc, getPos());
 
 	return (
-		<NodeViewWrapper>
-			<div className="ordered-item flex items-center">
-				<div className="w-4 mr-2.5 flex justify-center">{`${number}.`}</div>
+		<NodeViewWrapper as={"ul"}>
+			<div className="ordered-item flex items-start">
+				<div className="w-4 h-6 mr-1.5 flex justify-center items-center">{`${number}.`}</div>
 				<NodeViewContent className="list-item-content" />
 			</div>
 		</NodeViewWrapper>
@@ -78,10 +78,10 @@ export const OrderedList = Node.create<ParagraphOptions>({
 		};
 	},
 	parseHTML() {
-		return [{ tag: "div" }];
+		return [{ tag: "ul" }];
 	},
 	renderHTML() {
-		return ["div", 0];
+		return ["ul", 0];
 	},
 	addCommands() {
 		return {

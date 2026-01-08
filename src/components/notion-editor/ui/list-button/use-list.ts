@@ -11,7 +11,6 @@ import { ListTodoIcon } from "../../icons/list-todo-icon";
 
 // --- Lib ---
 import {
-	dispatchOrderedListRefresh,
 	findNodePosition,
 	isNodeInSchema,
 	isNodeTypeSelected,
@@ -287,7 +286,6 @@ export function useList(config: UseListConfig) {
 
 		const success = toggleList(editor, type);
 		if (success) {
-			dispatchOrderedListRefresh(editor);
 			onToggled?.();
 		}
 		return success;

@@ -21,10 +21,10 @@ const Paragraph = Node.create<ParagraphOptions>({
 	// 	};
 	// },
 	parseHTML() {
-		return [{ tag: "div" }];
+		return [{ tag: "p" }];
 	},
 	renderHTML({ HTMLAttributes }) {
-		return ["div", mergeAttributes(this.options.HTMLAttributes, HTMLAttributes), 0];
+		return ["p", mergeAttributes(this.options.HTMLAttributes, HTMLAttributes), 0];
 	},
 	addKeyboardShortcuts() {
 		return {
@@ -37,12 +37,13 @@ const Paragraph = Node.create<ParagraphOptions>({
 					["taskList", "bulletList", "orderedList"].includes($from.parent.type.name) &&
 					hasContent
 				) {
-					return editor.commands.insertContent({
+					const res = editor.commands.insertContent({
 						type: $from.parent.type.name,
 					});
+					return res;
 				}
 
-				if ($from.parent.type.name !== "paragraph") {
+				if ($from.parent.type.name !== "paragraph" && !hasContent) {
 					return editor.chain().focus().setNode("paragraph").run();
 				} else {
 					return false;

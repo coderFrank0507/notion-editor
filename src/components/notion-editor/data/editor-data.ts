@@ -52,6 +52,18 @@ export const EditorDataJson: JSONContent = {
 			],
 		},
 		{
+			type: "image",
+			attrs: {
+				id: "81b9bf40-8e99-47d4-a5a8-5697f388c5a3",
+				src: "https://test-image-1316325187.cos.ap-beijing.myqcloud.com/2025-11-28/01.jpg",
+				alt: "test",
+				title: "test",
+				width: 300,
+				height: 500,
+				"data-align": "center",
+			},
+		},
+		{
 			type: "taskList",
 			attrs: {
 				id: "9aa558bd-c8d2-4f38-a574-13505e158fe5",
@@ -93,6 +105,19 @@ export const EditorDataJson: JSONContent = {
 				{
 					type: "text",
 					text: "Mention someone",
+				},
+			],
+		},
+		{
+			type: "codeBlock",
+			attrs: {
+				id: "81b9bf40-8e99-47d4-a5a8-5697f388c5a4",
+				language: null,
+			},
+			content: [
+				{
+					type: "text",
+					text: "# Headings\n- Lists\n> Quotes\n`Inline code`",
 				},
 			],
 		},

@@ -276,3 +276,32 @@ export function dispatchOrderedListRefresh(editor: Editor) {
 
 	view.dispatch(tr);
 }
+
+/**
+ * Checks if one or more extensions are registered in the Tiptap editor.
+ * @param editor - The Tiptap editor instance
+ * @param extensionNames - A single extension name or an array of names to check
+ * @returns True if at least one of the extensions is available, false otherwise
+ */
+export function isExtensionAvailable(
+	editor: Editor | null,
+	extensionNames: string | string[]
+): boolean {
+	if (!editor) return false;
+
+	const names = Array.isArray(extensionNames) ? extensionNames : [extensionNames];
+
+	const found = names.some((name) =>
+		editor.extensionManager.extensions.some((ext) => ext.name === name)
+	);
+
+	if (!found) {
+		console.warn(
+			`None of the extensions [${names.join(
+				", "
+			)}] were found in the editor schema. Ensure they are included in the editor configuration.`
+		);
+	}
+
+	return found;
+}

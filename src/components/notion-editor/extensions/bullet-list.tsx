@@ -11,11 +11,12 @@ export function BulletItemView(props: ReactNodeViewProps) {
 	// const { editor, node, updateAttributes } = props;
 
 	return (
-		<NodeViewWrapper>
-			<div className="flex items-center">
-				<div className="w-4 mr-2.5 flex justify-center">
+		<NodeViewWrapper as={"ul"}>
+			<div className="flex items-start">
+				<div className="w-4 h-6 mr-1.5 flex justify-center items-center">
 					<div className="size-2 rounded-full bg-text-color" />
 				</div>
+
 				<NodeViewContent className="list-item-content" />
 			</div>
 		</NodeViewWrapper>
@@ -44,10 +45,10 @@ export const BulletList = Node.create<ParagraphOptions>({
 		};
 	},
 	parseHTML() {
-		return [{ tag: "div" }];
+		return [{ tag: "ul" }];
 	},
 	renderHTML() {
-		return ["div", 0];
+		return ["ul", 0];
 	},
 	addCommands() {
 		return {

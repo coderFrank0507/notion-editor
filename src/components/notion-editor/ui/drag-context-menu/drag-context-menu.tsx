@@ -38,7 +38,7 @@ import { SlashCommandTriggerButton } from "../slash-command-trigger-button";
 
 // Utils
 import { getNodeDisplayName, isTextSelectionValid } from "../../lib/collab-utils";
-import { dispatchOrderedListRefresh, SR_ONLY } from "../../lib/utils";
+import { SR_ONLY } from "../../lib/utils";
 
 import type {
 	DragContextMenuProps,
@@ -311,8 +311,6 @@ export const DragContextMenu = ({
 				editor.view.dom.blur();
 				editor.view.focus();
 			}, 0);
-
-			dispatchOrderedListRefresh(editor);
 		},
 		[editor]
 	);
