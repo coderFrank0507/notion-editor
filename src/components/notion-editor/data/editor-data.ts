@@ -13,7 +13,7 @@ export const EditorDataJson: JSONContent = {
 			content: [
 				{
 					type: "text",
-					text: "Welcome to Notion-like template ",
+					text: "Welcome to Notion-like template",
 				},
 			],
 		},
