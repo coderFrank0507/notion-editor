@@ -1,8 +1,10 @@
 import type { Node as PMNode } from "@tiptap/pm/model";
-import { Editor } from "@tiptap/core";
-import { AllSelection, NodeSelection, PluginKey, TextSelection } from "@tiptap/pm/state";
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
+import type { Transaction } from "@tiptap/pm/state";
+import { AllSelection, NodeSelection, PluginKey, Selection, TextSelection } from "@tiptap/pm/state";
+import { cellAround, CellSelection } from "@tiptap/pm/tables";
+import { findParentNodeClosestToPos, type Editor, type NodeWithPos } from "@tiptap/react";
+
+export const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 
 export const MAC_SYMBOLS: Record<string, string> = {
 	mod: "⌘",
@@ -32,17 +34,8 @@ export const SR_ONLY = {
 	borderWidth: 0,
 } as const;
 
-export function cn(...inputs: ClassValue[]) {
-	return twMerge(clsx(inputs));
-}
-
-/**
- * Checks if a value is a valid number (not null, undefined, or NaN)
- * @param value - The value to check
- * @returns boolean indicating if the value is a valid number
- */
-export function isValidPosition(pos: number | null | undefined): pos is number {
-	return typeof pos === "number" && pos >= 0;
+export function cn(...classes: (string | boolean | undefined | null)[]): string {
+	return classes.filter(Boolean).join(" ");
 }
 
 /**
@@ -103,40 +96,84 @@ export const isMarkInSchema = (markName: string, editor: Editor | null): boolean
 };
 
 /**
- * Determines whether the current selection contains a node whose type matches
- * any of the provided node type names.
- * @param editor Tiptap editor instance
- * @param nodeTypeNames List of node type names to match against
- * @param checkAncestorNodes Whether to check ancestor node types up the depth chain
+ * Checks if a node exists in the editor schema
+ * @param nodeName - The name of the node to check
+ * @param editor - The editor instance
+ * @returns boolean indicating if the node exists in the schema
  */
-export function isNodeTypeSelected(
+export const isNodeInSchema = (nodeName: string, editor: Editor | null): boolean => {
+	if (!editor?.schema) return false;
+	return editor.schema.spec.nodes.get(nodeName) !== undefined;
+};
+
+/**
+ * Moves the focus to the next node in the editor
+ * @param editor - The editor instance
+ * @returns boolean indicating if the focus was moved
+ */
+export function focusNextNode(editor: Editor) {
+	const { state, view } = editor;
+	const { doc, selection } = state;
+
+	const nextSel = Selection.findFrom(selection.$to, 1, true);
+	if (nextSel) {
+		view.dispatch(state.tr.setSelection(nextSel).scrollIntoView());
+		return true;
+	}
+
+	const paragraphType = state.schema.nodes.paragraph;
+	if (!paragraphType) {
+		console.warn("No paragraph node type found in schema.");
+		return false;
+	}
+
+	const end = doc.content.size;
+	const para = paragraphType.create();
+	let tr = state.tr.insert(end, para);
+
+	// Place the selection inside the new paragraph
+	const $inside = tr.doc.resolve(end + 1);
+	tr = tr.setSelection(TextSelection.near($inside)).scrollIntoView();
+	view.dispatch(tr);
+	return true;
+}
+
+/**
+ * Checks if a value is a valid number (not null, undefined, or NaN)
+ * @param value - The value to check
+ * @returns boolean indicating if the value is a valid number
+ */
+export function isValidPosition(pos: number | null | undefined): pos is number {
+	return typeof pos === "number" && pos >= 0;
+}
+
+/**
+ * Checks if one or more extensions are registered in the Tiptap editor.
+ * @param editor - The Tiptap editor instance
+ * @param extensionNames - A single extension name or an array of names to check
+ * @returns True if at least one of the extensions is available, false otherwise
+ */
+export function isExtensionAvailable(
 	editor: Editor | null,
-	nodeTypeNames: string[] = [],
-	checkAncestorNodes: boolean = false
+	extensionNames: string | string[]
 ): boolean {
-	if (!editor || !editor.state.selection) return false;
+	if (!editor) return false;
 
-	const { selection } = editor.state;
-	if (selection.empty) return false;
+	const names = Array.isArray(extensionNames) ? extensionNames : [extensionNames];
 
-	// Direct node selection check
-	if (selection instanceof NodeSelection) {
-		const selectedNode = selection.node;
-		return selectedNode ? nodeTypeNames.includes(selectedNode.type.name) : false;
+	const found = names.some((name) =>
+		editor.extensionManager.extensions.some((ext) => ext.name === name)
+	);
+
+	if (!found) {
+		console.warn(
+			`None of the extensions [${names.join(
+				", "
+			)}] were found in the editor schema. Ensure they are included in the editor configuration.`
+		);
 	}
 
-	// Depth-based ancestor node check
-	if (checkAncestorNodes) {
-		const { $from } = selection;
-		for (let depth = $from.depth; depth > 0; depth--) {
-			const ancestorNode = $from.node(depth);
-			if (nodeTypeNames.includes(ancestorNode.type.name)) {
-				return true;
-			}
-		}
-	}
-
-	return false;
+	return found;
 }
 
 /**
@@ -217,15 +254,41 @@ export function findNodePosition(props: {
 }
 
 /**
- * Checks if a node exists in the editor schema
- * @param nodeName - The name of the node to check
- * @param editor - The editor instance
- * @returns boolean indicating if the node exists in the schema
+ * Determines whether the current selection contains a node whose type matches
+ * any of the provided node type names.
+ * @param editor Tiptap editor instance
+ * @param nodeTypeNames List of node type names to match against
+ * @param checkAncestorNodes Whether to check ancestor node types up the depth chain
  */
-export const isNodeInSchema = (nodeName: string, editor: Editor | null): boolean => {
-	if (!editor?.schema) return false;
-	return editor.schema.spec.nodes.get(nodeName) !== undefined;
-};
+export function isNodeTypeSelected(
+	editor: Editor | null,
+	nodeTypeNames: string[] = [],
+	checkAncestorNodes: boolean = false
+): boolean {
+	if (!editor || !editor.state.selection) return false;
+
+	const { selection } = editor.state;
+	if (selection.empty) return false;
+
+	// Direct node selection check
+	if (selection instanceof NodeSelection) {
+		const selectedNode = selection.node;
+		return selectedNode ? nodeTypeNames.includes(selectedNode.type.name) : false;
+	}
+
+	// Depth-based ancestor node check
+	if (checkAncestorNodes) {
+		const { $from } = selection;
+		for (let depth = $from.depth; depth > 0; depth--) {
+			const ancestorNode = $from.node(depth);
+			if (nodeTypeNames.includes(ancestorNode.type.name)) {
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
 
 /**
  * Check whether the current selection is fully within nodes
@@ -261,6 +324,250 @@ export function selectionWithinConvertibleTypes(editor: Editor, types: string[] 
 	return false;
 }
 
+/**
+ * Handles image upload with progress tracking and abort capability
+ * @param file The file to upload
+ * @param onProgress Optional callback for tracking upload progress
+ * @param abortSignal Optional AbortSignal for cancelling the upload
+ * @returns Promise resolving to the URL of the uploaded image
+ */
+export const handleImageUpload = async (
+	file: File,
+	onProgress?: (event: { progress: number }) => void,
+	abortSignal?: AbortSignal
+): Promise<string> => {
+	// Validate file
+	if (!file) {
+		throw new Error("No file provided");
+	}
+
+	if (file.size > MAX_FILE_SIZE) {
+		throw new Error(`File size exceeds maximum allowed (${MAX_FILE_SIZE / (1024 * 1024)}MB)`);
+	}
+
+	// For demo/testing: Simulate upload progress. In production, replace the following code
+	// with your own upload implementation.
+	for (let progress = 0; progress <= 100; progress += 10) {
+		if (abortSignal?.aborted) {
+			throw new Error("Upload cancelled");
+		}
+		await new Promise((resolve) => setTimeout(resolve, 500));
+		onProgress?.({ progress });
+	}
+
+	return "/images/tiptap-ui-placeholder-image.jpg";
+};
+
+type ProtocolOptions = {
+	/**
+	 * The protocol scheme to be registered.
+	 * @default '''
+	 * @example 'ftp'
+	 * @example 'git'
+	 */
+	scheme: string;
+
+	/**
+	 * If enabled, it allows optional slashes after the protocol.
+	 * @default false
+	 * @example true
+	 */
+	optionalSlashes?: boolean;
+};
+
+type ProtocolConfig = Array<ProtocolOptions | string>;
+
+const ATTR_WHITESPACE =
+	// eslint-disable-next-line no-control-regex
+	/[\u0000-\u0020\u00A0\u1680\u180E\u2000-\u2029\u205F\u3000]/g;
+
+export function isAllowedUri(uri: string | undefined, protocols?: ProtocolConfig) {
+	const allowedProtocols: string[] = [
+		"http",
+		"https",
+		"ftp",
+		"ftps",
+		"mailto",
+		"tel",
+		"callto",
+		"sms",
+		"cid",
+		"xmpp",
+	];
+
+	if (protocols) {
+		protocols.forEach((protocol) => {
+			const nextProtocol = typeof protocol === "string" ? protocol : protocol.scheme;
+
+			if (nextProtocol) {
+				allowedProtocols.push(nextProtocol);
+			}
+		});
+	}
+
+	return (
+		!uri ||
+		uri.replace(ATTR_WHITESPACE, "").match(
+			new RegExp(
+				// eslint-disable-next-line no-useless-escape
+				`^(?:(?:${allowedProtocols.join("|")}):|[^a-z]|[a-z0-9+.\-]+(?:[^a-z+.\-:]|$))`,
+				"i"
+			)
+		)
+	);
+}
+
+export function sanitizeUrl(inputUrl: string, baseUrl: string, protocols?: ProtocolConfig): string {
+	try {
+		const url = new URL(inputUrl, baseUrl);
+
+		if (isAllowedUri(url.href, protocols)) {
+			return url.href;
+		}
+	} catch {
+		// If URL creation fails, it's considered invalid
+	}
+	return "#";
+}
+
+/**
+ * Update a single attribute on multiple nodes.
+ *
+ * @param tr - The transaction to mutate
+ * @param targets - Array of { node, pos }
+ * @param attrName - Attribute key to update
+ * @param next - New value OR updater function receiving previous value
+ *               Pass `undefined` to remove the attribute.
+ * @returns true if at least one node was updated, false otherwise
+ */
+export function updateNodesAttr<A extends string = string, V = unknown>(
+	tr: Transaction,
+	targets: readonly NodeWithPos[],
+	attrName: A,
+	next: V | ((prev: V | undefined) => V | undefined)
+): boolean {
+	if (!targets.length) return false;
+
+	let changed = false;
+
+	for (const { pos } of targets) {
+		// Always re-read from the transaction's current doc
+		const currentNode = tr.doc.nodeAt(pos);
+		if (!currentNode) continue;
+
+		const prevValue = (currentNode.attrs as Record<string, unknown>)[attrName] as V | undefined;
+		const resolvedNext =
+			typeof next === "function" ? (next as (p: V | undefined) => V | undefined)(prevValue) : next;
+
+		if (prevValue === resolvedNext) continue;
+
+		const nextAttrs: Record<string, unknown> = { ...currentNode.attrs };
+		if (resolvedNext === undefined) {
+			// Remove the key entirely instead of setting null
+			delete nextAttrs[attrName];
+		} else {
+			nextAttrs[attrName] = resolvedNext;
+		}
+
+		tr.setNodeMarkup(pos, undefined, nextAttrs);
+		changed = true;
+	}
+
+	return changed;
+}
+
+/**
+ * Selects the entire content of the current block node if the selection is empty.
+ * If the selection is not empty, it does nothing.
+ * @param editor The Tiptap editor instance
+ */
+export function selectCurrentBlockContent(editor: Editor) {
+	const { selection, doc } = editor.state;
+
+	if (!selection.empty) return;
+
+	const $pos = selection.$from;
+	let blockNode = null;
+	let blockPos = -1;
+
+	for (let depth = $pos.depth; depth >= 0; depth--) {
+		const node = $pos.node(depth);
+		const pos = $pos.start(depth);
+
+		if (node.isBlock && node.textContent.trim()) {
+			blockNode = node;
+			blockPos = pos;
+			break;
+		}
+	}
+
+	if (blockNode && blockPos >= 0) {
+		const from = blockPos;
+		const to = blockPos + blockNode.nodeSize - 2; // -2 to exclude the closing tag
+
+		if (from < to) {
+			const $from = doc.resolve(from);
+			const $to = doc.resolve(to);
+			const newSelection = TextSelection.between($from, $to, 1);
+
+			if (newSelection && !selection.eq(newSelection)) {
+				editor.view.dispatch(editor.state.tr.setSelection(newSelection));
+			}
+		}
+	}
+}
+
+/**
+ * Retrieves all nodes of specified types from the current selection.
+ * @param selection The current editor selection
+ * @param allowedNodeTypes An array of node type names to look for (e.g., ["image", "table"])
+ * @returns An array of objects containing the node and its position
+ */
+export function getSelectedNodesOfType(
+	selection: Selection,
+	allowedNodeTypes: string[]
+): NodeWithPos[] {
+	const results: NodeWithPos[] = [];
+	const allowed = new Set(allowedNodeTypes);
+
+	if (selection instanceof CellSelection) {
+		selection.forEachCell((node: PMNode, pos: number) => {
+			if (allowed.has(node.type.name)) {
+				results.push({ node, pos });
+			}
+		});
+		return results;
+	}
+
+	if (selection instanceof NodeSelection) {
+		const { node, from: pos } = selection;
+		if (node && allowed.has(node.type.name)) {
+			results.push({ node, pos });
+		}
+		return results;
+	}
+
+	const { $anchor } = selection;
+	const cell = cellAround($anchor);
+
+	if (cell) {
+		const cellNode = selection.$anchor.doc.nodeAt(cell.pos);
+		if (cellNode && allowed.has(cellNode.type.name)) {
+			results.push({ node: cellNode, pos: cell.pos });
+			return results;
+		}
+	}
+
+	// Fallback: find parent nodes of allowed types
+	const parentNode = findParentNodeClosestToPos($anchor, (node) => allowed.has(node.type.name));
+
+	if (parentNode) {
+		results.push({ node: parentNode.node, pos: parentNode.pos });
+	}
+
+	return results;
+}
+
 export const OrderedRefreshKey = new PluginKey<{
 	from: number;
 	to: number;
@@ -275,33 +582,4 @@ export function dispatchOrderedListRefresh(editor: Editor) {
 	});
 
 	view.dispatch(tr);
-}
-
-/**
- * Checks if one or more extensions are registered in the Tiptap editor.
- * @param editor - The Tiptap editor instance
- * @param extensionNames - A single extension name or an array of names to check
- * @returns True if at least one of the extensions is available, false otherwise
- */
-export function isExtensionAvailable(
-	editor: Editor | null,
-	extensionNames: string | string[]
-): boolean {
-	if (!editor) return false;
-
-	const names = Array.isArray(extensionNames) ? extensionNames : [extensionNames];
-
-	const found = names.some((name) =>
-		editor.extensionManager.extensions.some((ext) => ext.name === name)
-	);
-
-	if (!found) {
-		console.warn(
-			`None of the extensions [${names.join(
-				", "
-			)}] were found in the editor schema. Ensure they are included in the editor configuration.`
-		);
-	}
-
-	return found;
 }

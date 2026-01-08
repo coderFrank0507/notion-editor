@@ -70,10 +70,9 @@ export default function NotionEditor() {
 		extensions,
 		content: EditorDataJson,
 		onUpdate: ({ editor }) => {
-			// const json = editor.getJSON();
-			// console.log("onUpdate: ", json);
+			const json = editor.getJSON();
+			console.log("onUpdate: ", json);
 		},
-		onMount: () => {},
 	});
 
 	if (!editor) return null;

@@ -17,6 +17,7 @@ import Underline from "@tiptap/extension-underline";
 import Strike from "@tiptap/extension-strike";
 import Code from "@tiptap/extension-code";
 import Typography from "@tiptap/extension-typography";
+import Highlight from "@tiptap/extension-highlight";
 import { Placeholder, Selection } from "@tiptap/extensions";
 import { Dropcursor } from "@tiptap/extensions";
 import { Color, TextStyle } from "@tiptap/extension-text-style";
@@ -52,6 +53,7 @@ export default [
 	UiState,
 	Image,
 	ClearSelectionDropEnd,
+	Highlight.configure({ multicolor: true }),
 	TextAlign.configure({ types: ["heading", "paragraph", "taskList", "orderedList", "bulletList"] }),
 	Dropcursor.configure({
 		width: 2,

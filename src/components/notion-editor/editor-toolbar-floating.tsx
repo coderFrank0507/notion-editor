@@ -7,6 +7,7 @@ import { Toolbar, ToolbarGroup, ToolbarSeparator } from "./ui-primitive/toolbar"
 import { MarkButton } from "./ui/mark-button";
 import { TurnIntoDropdown } from "./ui/turn-into-dropdown";
 import { ImageNodeFloating } from "./extensions/image-node/image-node-floating";
+import { ColorTextPopover } from "./ui/color-text-popover";
 
 export default function EditorToolbarFloating() {
 	const { editor } = useCurrentEditor();
@@ -41,6 +42,10 @@ export default function EditorToolbarFloating() {
 
 				<ToolbarGroup>
 					<ImageNodeFloating />
+				</ToolbarGroup>
+
+				<ToolbarGroup>
+					<ColorTextPopover hideWhenUnavailable={true} />
 				</ToolbarGroup>
 			</Toolbar>
 		</FloatingElement>

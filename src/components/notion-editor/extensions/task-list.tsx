@@ -14,7 +14,7 @@ export function TaskItemView(props: ReactNodeViewProps) {
 
 	return (
 		<NodeViewWrapper as={"ul"}>
-			<div className="flex items-start">
+			<div className="flex items-start py-0.5">
 				<div className="w-4 h-6 mr-1.5 flex items-center">
 					<div
 						className={cn(

@@ -48,7 +48,7 @@ export function OrderedItemView(props: ReactNodeViewProps) {
 
 	return (
 		<NodeViewWrapper as={"ul"}>
-			<div className="ordered-item flex items-start">
+			<div className="ordered-item flex items-start py-0.5">
 				<div className="w-4 h-6 mr-1.5 flex justify-center items-center">{`${number}.`}</div>
 				<NodeViewContent className="list-item-content" />
 			</div>

@@ -12,7 +12,7 @@ export function BulletItemView(props: ReactNodeViewProps) {
 
 	return (
 		<NodeViewWrapper as={"ul"}>
-			<div className="flex items-start">
+			<div className="flex items-start py-0.5">
 				<div className="w-4 h-6 mr-1.5 flex justify-center items-center">
 					<div className="size-2 rounded-full bg-text-color" />
 				</div>
