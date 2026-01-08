@@ -2,7 +2,10 @@
 import Document from "@tiptap/extension-document";
 import Text from "@tiptap/extension-text";
 import UniqueID from "@tiptap/extension-unique-id";
-import { Paragraph } from "./paragraph";
+import Heading from "@tiptap/extension-heading";
+import HorizontalRule from "@tiptap/extension-horizontal-rule";
+import Paragraph from "./paragraph";
+import HardBreak from "@tiptap/extension-hard-break";
 
 // --- Marks ---
 import Bold from "@tiptap/extension-bold";
@@ -20,7 +23,7 @@ import { TaskList } from "./task-list";
 import { UiState } from "./ui-state-extension";
 import { BulletList } from "./bullet-list";
 import { OrderedList } from "./ordered-list";
-import { ClearNodeSelectionAfterDrop } from "./ClearNodeSelectionAfterDrop";
+import { ClearSelectionDropEnd } from "./plugins";
 
 export default [
 	Document,
@@ -34,6 +37,9 @@ export default [
 	TaskList,
 	BulletList,
 	OrderedList,
+	HorizontalRule,
+	Heading,
+	HardBreak,
 	Dropcursor.configure({
 		width: 2,
 	}),
@@ -46,8 +52,8 @@ export default [
 		},
 	}),
 	UniqueID.configure({
-		types: ["heading", "paragraph", "task-list", "ordered-list", "bullet-list"],
+		types: ["heading", "paragraph", "taskList", "orderedList", "bulletList", "horizontalRule"],
 	}),
 	UiState,
-	ClearNodeSelectionAfterDrop,
+	ClearSelectionDropEnd,
 ];

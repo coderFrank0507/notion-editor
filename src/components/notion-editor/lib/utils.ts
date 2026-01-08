@@ -1,6 +1,6 @@
 import type { Node as PMNode } from "@tiptap/pm/model";
 import { Editor } from "@tiptap/core";
-import { NodeSelection } from "@tiptap/pm/state";
+import { AllSelection, NodeSelection, PluginKey, TextSelection } from "@tiptap/pm/state";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -214,4 +214,65 @@ export function findNodePosition(props: {
 	}
 
 	return null;
+}
+
+/**
+ * Checks if a node exists in the editor schema
+ * @param nodeName - The name of the node to check
+ * @param editor - The editor instance
+ * @returns boolean indicating if the node exists in the schema
+ */
+export const isNodeInSchema = (nodeName: string, editor: Editor | null): boolean => {
+	if (!editor?.schema) return false;
+	return editor.schema.spec.nodes.get(nodeName) !== undefined;
+};
+
+/**
+ * Check whether the current selection is fully within nodes
+ * whose type names are in the provided `types` list.
+ *
+ * - NodeSelection → checks the selected node.
+ * - Text/AllSelection → ensures all textblocks within [from, to) are allowed.
+ */
+export function selectionWithinConvertibleTypes(editor: Editor, types: string[] = []): boolean {
+	if (!editor || types.length === 0) return false;
+
+	const { state } = editor;
+	const { selection } = state;
+	const allowed = new Set(types);
+
+	if (selection instanceof NodeSelection) {
+		const nodeType = selection.node?.type?.name;
+		return !!nodeType && allowed.has(nodeType);
+	}
+
+	if (selection instanceof TextSelection || selection instanceof AllSelection) {
+		let valid = true;
+		state.doc.nodesBetween(selection.from, selection.to, (node) => {
+			if (node.isTextblock && !allowed.has(node.type.name)) {
+				valid = false;
+				return false; // stop early
+			}
+			return valid;
+		});
+		return valid;
+	}
+
+	return false;
+}
+
+export const OrderedRefreshKey = new PluginKey<{
+	from: number;
+	to: number;
+} | null>("ordered-refresh");
+
+export function dispatchOrderedListRefresh(editor: Editor) {
+	const view = editor.view;
+	const tr = view.state.tr;
+	tr.setMeta(OrderedRefreshKey, {
+		from: 0,
+		to: editor.state.doc.content.size,
+	});
+
+	view.dispatch(tr);
 }

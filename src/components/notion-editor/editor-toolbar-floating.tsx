@@ -5,6 +5,7 @@ import { isSelectionValid } from "./lib/collab-utils";
 import { FloatingElement } from "./ui-utils/floating-element";
 import { Toolbar, ToolbarGroup } from "./ui-primitive/toolbar";
 import { MarkButton } from "./ui/mark-button";
+import { TurnIntoDropdown } from "./ui/turn-into-dropdown";
 
 export default function EditorToolbarFloating() {
 	const { editor } = useCurrentEditor();
@@ -21,6 +22,10 @@ export default function EditorToolbarFloating() {
 	return (
 		<FloatingElement shouldShow={shouldShow}>
 			<Toolbar variant="floating">
+				<ToolbarGroup>
+					<TurnIntoDropdown hideWhenUnavailable={true} />
+				</ToolbarGroup>
+
 				<ToolbarGroup>
 					<MarkButton type="bold" hideWhenUnavailable={true} />
 					<MarkButton type="italic" hideWhenUnavailable={true} />

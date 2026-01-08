@@ -1,7 +1,7 @@
 import { mergeAttributes, Node } from "@tiptap/react";
 import type { ParagraphOptions } from "@tiptap/extension-paragraph";
 
-export const Paragraph = Node.create<ParagraphOptions>({
+const Paragraph = Node.create<ParagraphOptions>({
 	name: "paragraph",
 	group: "block",
 	content: "inline*",
@@ -34,7 +34,7 @@ export const Paragraph = Node.create<ParagraphOptions>({
 
 				const hasContent = $from.parent.textContent.trim().length > 0;
 				if (
-					["task-list", "bullet-list", "ordered-list"].includes($from.parent.type.name) &&
+					["taskList", "bulletList", "orderedList"].includes($from.parent.type.name) &&
 					hasContent
 				) {
 					return editor.commands.insertContent({
@@ -51,3 +51,5 @@ export const Paragraph = Node.create<ParagraphOptions>({
 		};
 	},
 });
+
+export default Paragraph;

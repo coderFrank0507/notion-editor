@@ -38,7 +38,7 @@ import { SlashCommandTriggerButton } from "../slash-command-trigger-button";
 
 // Utils
 import { getNodeDisplayName, isTextSelectionValid } from "../../lib/collab-utils";
-import { SR_ONLY } from "../../lib/utils";
+import { dispatchOrderedListRefresh, SR_ONLY } from "../../lib/utils";
 
 import type {
 	DragContextMenuProps,
@@ -301,16 +301,21 @@ export const DragContextMenu = ({
 		editor.commands.setIsDragging(true);
 	}, [editor]);
 
-	const onElementDragEnd = useCallback(() => {
-		if (!editor) return;
-		editor.commands.setIsDragging(false);
-		editor.commands.blur();
+	const onElementDragEnd = useCallback(
+		(event: DragEvent) => {
+			if (!editor) return;
+			editor.commands.setIsDragging(false);
+			editor.commands.blur();
 
-		// setTimeout(() => {
-		// 	editor.view.dom.blur();
-		// 	editor.view.focus();
-		// }, 0);
-	}, [editor]);
+			setTimeout(() => {
+				editor.view.dom.blur();
+				editor.view.focus();
+			}, 0);
+
+			dispatchOrderedListRefresh(editor);
+		},
+		[editor]
+	);
 
 	if (!editor) return null;
 
@@ -359,7 +364,7 @@ export const DragContextMenu = ({
 							cursor: "grab",
 							...(open ? { pointerEvents: "none" } : {}),
 						}}
-						// onMouseDown={() => selectNodeAndHideFloating(editor, nodePos)}
+						onMouseDown={() => selectNodeAndHideFloating(editor, nodePos)}
 					>
 						<GripVerticalIcon className="tiptap-button-icon" />
 					</Button>

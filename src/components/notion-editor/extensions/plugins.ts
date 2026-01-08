@@ -1,9 +1,8 @@
-// clearNodeSelectionAfterDrop.ts
 import { Extension } from "@tiptap/core";
 import { Plugin, NodeSelection, TextSelection } from "prosemirror-state";
 
-export const ClearNodeSelectionAfterDrop = Extension.create({
-	name: "clear-node-selection-after-drop",
+export const ClearSelectionDropEnd = Extension.create({
+	name: "clear-selection-drop-end",
 
 	addProseMirrorPlugins() {
 		return [

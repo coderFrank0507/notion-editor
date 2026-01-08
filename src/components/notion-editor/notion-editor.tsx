@@ -13,7 +13,11 @@ import "./styles/_variables.scss";
 import "./styles/notion-editor.scss";
 import "./styles/list-node.scss";
 import "./styles/paragraph-node.scss";
+import "./styles/heading-node.scss";
+
+// --- Dev ---
 import { HeadTools } from "./_dev-tools";
+import { EditorDataJson } from "./data/editor-data";
 
 export function EditorContentArea() {
 	const { editor } = useCurrentEditor();
@@ -45,31 +49,11 @@ export default function NotionEditor() {
 			},
 		},
 		extensions,
-		content: {
-			type: "doc",
-			content: [
-				{
-					type: "paragraph",
-					attrs: { id: "a8129dc9-4933-4bae-9708-4b662daeb2d6" },
-					content: [
-						{
-							type: "text",
-							text: "hello world",
-						},
-					],
-				},
-				{
-					type: "paragraph",
-					attrs: { id: "a8129dc9-4933-4bae-9708-4b662daeb2d8" },
-					content: [
-						{
-							type: "text",
-							text: "frank wang",
-						},
-					],
-				},
-			],
-		},
+		content: EditorDataJson,
+		// onUpdate: ({ editor }) => {
+		// 	const json = editor.getJSON();
+		// 	console.log("onUpdate: ", json);
+		// },
 	});
 
 	if (!editor) return null;

@@ -1,0 +1,162 @@
+import { JSONContent } from "@tiptap/core";
+
+export const EditorDataJson: JSONContent = {
+	type: "doc",
+	content: [
+		{
+			type: "heading",
+			attrs: {
+				id: "b6cd8ecb-fc0d-4575-ab93-3418a52279b9",
+				textAlign: null,
+				level: 1,
+			},
+			content: [
+				{
+					type: "text",
+					text: "Welcome to Notion-like template ",
+				},
+			],
+		},
+		{
+			type: "paragraph",
+			attrs: {
+				id: "70447a3a-b34b-4b71-975d-d70ba7376c13",
+				textAlign: null,
+				backgroundColor: null,
+			},
+			content: [
+				{
+					type: "text",
+					text: "Start writing your thoughts here … ",
+				},
+				{
+					type: "text",
+					text: " ",
+				},
+				{
+					type: "hardBreak",
+				},
+				{
+					type: "text",
+					text: "Try some ",
+				},
+				{
+					type: "text",
+					marks: [
+						{
+							type: "bold",
+						},
+					],
+					text: "Markdown:",
+				},
+			],
+		},
+		{
+			type: "taskList",
+			attrs: {
+				id: "9aa558bd-c8d2-4f38-a574-13505e158fe5",
+				textAlign: null,
+				backgroundColor: null,
+				checked: true,
+			},
+			content: [
+				{
+					type: "text",
+					text: "Read up to this point",
+				},
+			],
+		},
+		{
+			type: "taskList",
+			attrs: {
+				id: "d9b7734a-4b28-4903-9f44-262450bb142d",
+				textAlign: null,
+				backgroundColor: null,
+				checked: false,
+			},
+			content: [
+				{
+					type: "text",
+					text: "Try a slash command",
+				},
+			],
+		},
+		{
+			type: "taskList",
+			attrs: {
+				id: "5cceb712-6cb7-4e26-a768-8fb28637b098",
+				textAlign: null,
+				backgroundColor: null,
+				checked: false,
+			},
+			content: [
+				{
+					type: "text",
+					text: "Mention someone",
+				},
+			],
+		},
+		{
+			type: "bulletList",
+			attrs: {
+				id: "b8c80273-447a-4e0e-ab9f-78d0150d0a3b",
+				textAlign: null,
+				backgroundColor: null,
+				nodeTextAlign: null,
+				nodeVerticalAlign: null,
+			},
+			content: [
+				{
+					type: "text",
+					text: "Content blocks = Node Components",
+				},
+			],
+		},
+		{
+			type: "bulletList",
+			attrs: {
+				id: "49974099-ca00-48f1-bd3d-ffd877fa45f1",
+				textAlign: null,
+				backgroundColor: null,
+				nodeTextAlign: null,
+				nodeVerticalAlign: null,
+			},
+			content: [
+				{
+					type: "text",
+					text: "Toolbars, menus, and buttons = UI Components",
+				},
+			],
+		},
+		{
+			type: "orderedList",
+			attrs: {
+				id: "30afe9a9-a336-40ae-8b0c-8cdaa040db81",
+				textAlign: null,
+				backgroundColor: null,
+			},
+			content: [
+				{
+					type: "text",
+					text: "Content blocks = Node Components",
+				},
+			],
+		},
+		{
+			type: "orderedList",
+			attrs: {
+				id: "30afe9a9-a336-40ae-8b0c-8cdaa040db82",
+				textAlign: null,
+				backgroundColor: null,
+				nodeTextAlign: null,
+				nodeVerticalAlign: null,
+			},
+			content: [
+				{
+					type: "text",
+					text: "Toolbars, menus, and buttons = UI Components",
+				},
+			],
+		},
+	],
+};

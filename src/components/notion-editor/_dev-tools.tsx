@@ -16,21 +16,21 @@ export function HeadTools({ editor }: HeadToolsProps) {
 			</button>
 			<button
 				onClick={() => {
-					editor.chain().focus().setNode("task-list").run();
+					editor.chain().focus().setNode("taskList").run();
 				}}
 			>
 				task-list
 			</button>
 			<button
 				onClick={() => {
-					editor.chain().focus().setNode("bullet-list").run();
+					editor.chain().focus().setNode("bulletList").run();
 				}}
 			>
 				bullet-list
 			</button>
 			<button
 				onClick={() => {
-					editor.chain().focus().setNode("ordered-list").run();
+					editor.chain().focus().setNode("orderedList").run();
 				}}
 			>
 				ordered-list

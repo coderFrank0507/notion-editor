@@ -22,21 +22,40 @@ export function BulletItemView(props: ReactNodeViewProps) {
 	);
 }
 
+declare module "@tiptap/core" {
+	interface Commands<ReturnType> {
+		bulletList: {
+			toggleBulletList: (type: string) => ReturnType;
+		};
+	}
+}
+
 export const BulletList = Node.create<ParagraphOptions>({
-	name: "bullet-list",
+	name: "bulletList",
 	group: "block",
 	content: "inline*",
 
 	addOptions() {
 		return {
 			HTMLAttributes: {
-				"data-type": "bullet-list",
-				class: "bullet-list",
+				"data-type": "bulletList",
+				class: "bulletList",
 			},
 		};
 	},
 	parseHTML() {
 		return [{ tag: "div" }];
+	},
+	renderHTML() {
+		return ["div", 0];
+	},
+	addCommands() {
+		return {
+			toggleBulletList:
+				(type) =>
+				({ commands }) =>
+					commands.toggleNode(this.name, type),
+		};
 	},
 	addNodeView() {
 		return ReactNodeViewRenderer(BulletItemView, {

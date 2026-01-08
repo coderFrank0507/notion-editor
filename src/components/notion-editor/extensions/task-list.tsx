@@ -42,16 +42,24 @@ export function TaskItemView(props: ReactNodeViewProps) {
 	);
 }
 
+declare module "@tiptap/core" {
+	interface Commands<ReturnType> {
+		taskList: {
+			toggleTaskList: (type: string) => ReturnType;
+		};
+	}
+}
+
 export const TaskList = Node.create<ParagraphOptions>({
-	name: "task-list",
+	name: "taskList",
 	group: "block",
 	content: "inline*",
 
 	addOptions() {
 		return {
 			HTMLAttributes: {
-				"data-type": "task-list",
-				class: "task-list",
+				"data-type": "taskList",
+				class: "taskList",
 			},
 		};
 	},
@@ -64,6 +72,17 @@ export const TaskList = Node.create<ParagraphOptions>({
 	},
 	parseHTML() {
 		return [{ tag: "div" }];
+	},
+	renderHTML() {
+		return ["div", 0];
+	},
+	addCommands() {
+		return {
+			toggleTaskList:
+				(type) =>
+				({ commands }) =>
+					commands.toggleNode(this.name, type),
+		};
 	},
 	addNodeView() {
 		return ReactNodeViewRenderer(TaskItemView, {
