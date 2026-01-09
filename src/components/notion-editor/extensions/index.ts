@@ -29,6 +29,7 @@ import { BulletList } from "./bullet-list";
 import { OrderedList } from "./ordered-list";
 import { ClearSelectionDropEnd } from "./plugins";
 import { Image } from "./image-node/image-node-extension";
+import { NodeBackground } from "./node-background-extension";
 
 export default [
 	Document,
@@ -52,6 +53,7 @@ export default [
 	TextStyle,
 	UiState,
 	Image,
+	NodeBackground,
 	ClearSelectionDropEnd,
 	Highlight.configure({ multicolor: true }),
 	TextAlign.configure({ types: ["heading", "paragraph", "taskList", "orderedList", "bulletList"] }),
@@ -79,6 +81,7 @@ export default [
 			"bulletList",
 			"horizontalRule",
 			"image",
+			"codeBlock",
 		],
 	}),
 ];
