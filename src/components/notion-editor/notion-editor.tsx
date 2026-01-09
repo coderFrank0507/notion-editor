@@ -26,17 +26,16 @@ import "./styles/code-block-node.scss";
 import "./styles/tailwind.css";
 
 import { dispatchOrderedListRefresh } from "./lib/utils";
-import { HandleBlockType } from "./lib/content-utils";
+import { HandleBlockJson } from "./lib/content-utils";
 import { debounce } from "lodash-es";
 import onUpdate from "./lib/onUpdate";
 
 // --- Dev ---
 // import { HeadTools } from "./_dev-tools";
-import { EditorDataJson } from "./data/editor-data";
 
 interface NotionEditorProps {
 	initContent?: (editor: Editor) => void;
-	onUpdate?: (data: HandleBlockType[]) => void;
+	onUpdate?: (data: HandleBlockJson[]) => void;
 	onDropEnd?: DragContextMenuProps["handleDropEnd"];
 }
 

@@ -128,14 +128,18 @@ function transformContent(content: Array<JSONContent>) {
 	return list;
 }
 
-export function transacionToDbdata(json: JSONContent, handleType: HandleType): DatabaseContentJson {
-	const result: DatabaseContentJson = { type: json.type! };
-	if (json.attrs) result["attrs"] = json.attrs;
-	if (json.content && handleType !== "delete") {
-		const content = transformContent(json.content);
-		result["content"] = content;
+export function transacionToDbdata(list: HandleBlockJson[]) {
+	const content: DatabaseContentJson[] = [];
+	for (const { handleType, json } of list) {
+		const result: DatabaseContentJson = { type: json.type! };
+		if (json.attrs) result["attrs"] = json.attrs;
+		if (json.content && handleType !== "delete") {
+			const content = transformContent(json.content);
+			result["content"] = content;
+		}
+		content.push(result);
 	}
-	return result;
+	return content;
 }
 
 // --- Database to JSONContent

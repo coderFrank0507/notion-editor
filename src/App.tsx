@@ -1,4 +1,7 @@
-import NotionEditor, { databaseToJSONContent } from "./components/notion-editor";
+import NotionEditor, {
+	databaseToJSONContent,
+	transacionToDbdata,
+} from "./components/notion-editor";
 import { databaseData } from "./components/notion-editor/data/database-data";
 
 function App() {
@@ -10,6 +13,10 @@ function App() {
 						type: "doc",
 						content: databaseToJSONContent(databaseData),
 					});
+				}}
+				onUpdate={(data) => {
+					const blocks = transacionToDbdata(data);
+					console.log("blocks: ", blocks);
 				}}
 			/>
 		</div>

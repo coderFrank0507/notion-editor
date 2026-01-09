@@ -13,7 +13,7 @@ export const dropInfo = {
 
 const onUpdate = (
 	props: EditorEvents["update"],
-	handleUpdate?: (data: HandleBlockType[]) => void
+	handleUpdate?: (data: HandleBlockJson[]) => void
 ) => {
 	// 排序时不执行此函数
 	if (dropInfo.droping) {
@@ -57,7 +57,6 @@ const onUpdate = (
 	}
 
 	const start = Math.min(...startIndex);
-	console.log("result: ", result);
 
 	// 缓存新的数据
 	CacheMap.clear();
@@ -66,17 +65,7 @@ const onUpdate = (
 		// sortRes.push({ id: item.attrs!.id, type: item.type, sort: i });
 	});
 
-	if (result.length) {
-		const blocks: HandleBlockType[] = [];
-		for (const item of result) {
-			blocks.push({
-				handleType: item.handleType,
-				json: transacionToDbdata(item.json, item.handleType),
-			});
-		}
-		if (blocks.length) handleUpdate?.(blocks);
-		console.log("blocks: ", blocks, start);
-	}
+	if (result.length) handleUpdate?.(result);
 };
 
 export default onUpdate;
