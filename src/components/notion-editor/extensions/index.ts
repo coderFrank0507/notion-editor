@@ -30,6 +30,10 @@ import { OrderedList } from "./ordered-list";
 import { ClearSelectionDropEnd } from "./plugins";
 import { Image } from "./image-node/image-node-extension";
 import { NodeBackground } from "./node-background-extension";
+import { ImageUploadNode } from "./image-upload-node/image-upload-node-extension";
+
+// --- Lib ---
+import { handleImageUpload, MAX_FILE_SIZE } from "../lib/utils";
 
 export default [
 	Document,
@@ -64,12 +68,19 @@ export default [
 		depth: 50,
 		newGroupDelay: 500,
 	}),
+	ImageUploadNode.configure({
+		accept: "image/*",
+		maxSize: MAX_FILE_SIZE,
+		limit: 3,
+		upload: handleImageUpload,
+		onError: (error) => console.error("Upload failed:", error),
+	}),
 	Placeholder.configure({
 		placeholder: ({ node }) => {
 			const { type } = node;
 			if (type.name === "task-list") return "Task Item";
 			if (type.name === "bullet-list") return "Bullet Item";
-			return "Write something …";
+			return "Write, type '/' for commands…";
 		},
 	}),
 	UniqueID.configure({

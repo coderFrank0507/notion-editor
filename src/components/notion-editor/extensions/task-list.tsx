@@ -19,7 +19,7 @@ export function TaskItemView(props: ReactNodeViewProps) {
 					<div
 						className={cn(
 							"size-4 border-[1.5px] rounded relative cursor-pointer",
-							node.attrs.checked ? "bg-blue-600 border-blue-600" : "border-text-color"
+							node.attrs.checked ? "bg-checked border-checked" : "border-text-color"
 						)}
 						onMouseDownCapture={() => {
 							editor.chain().blur();

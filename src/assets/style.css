@@ -4,6 +4,7 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
+	--color-checked: var(--checked);
 	--color-text-color: var(--text-color);
 	--color-background: var(--background);
 	--color-sidebar-background: var(--sidebar-background);
@@ -48,6 +49,7 @@
 }
 
 :root {
+	--checked: #155dfc;
 	--text-color: #1b1b1b;
 	--radius: 0.65rem;
 	--background: #ffffff;
@@ -88,6 +90,7 @@
 }
 
 .dark {
+	--checked: #155dfc;
 	--text-color: #f8f8f8;
 	--background: #202020;
 	--sidebar-background: #272727;

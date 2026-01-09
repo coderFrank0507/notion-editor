@@ -5,7 +5,7 @@ import EditorToolbarFloating from "./editor-toolbar-floating";
 import useUiEditorState from "./hooks/use-ui-editor-state";
 
 // --- Tiptap UI ---
-// import { SlashDropdownMenu } from "./ui/slash-dropdown-menu";
+import { SlashDropdownMenu } from "./ui/slash-dropdown-menu";
 import { DragContextMenu } from "./ui/drag-context-menu";
 
 // --- Styles ---
@@ -18,7 +18,7 @@ import "./styles/heading-node.scss";
 import "./styles/code-block-node.scss";
 
 // --- Dev ---
-import { HeadTools } from "./_dev-tools";
+// import { HeadTools } from "./_dev-tools";
 import { EditorDataJson } from "./data/editor-data";
 import { dispatchOrderedListRefresh } from "./lib/utils";
 
@@ -54,6 +54,7 @@ export function EditorContentArea() {
 			}}
 		>
 			<DragContextMenu />
+			<SlashDropdownMenu />
 			<EditorToolbarFloating />
 		</EditorContent>
 	);
@@ -78,11 +79,8 @@ export default function NotionEditor() {
 	if (!editor) return null;
 
 	return (
-		<>
-			<HeadTools editor={editor} />
-			<EditorContext.Provider value={{ editor }}>
-				<EditorContentArea />
-			</EditorContext.Provider>
-		</>
+		<EditorContext.Provider value={{ editor }}>
+			<EditorContentArea />
+		</EditorContext.Provider>
 	);
 }

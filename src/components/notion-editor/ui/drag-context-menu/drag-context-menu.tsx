@@ -62,17 +62,10 @@ const useNodeTransformActions = () => {
 	const bulletList = useList({ type: "bulletList" });
 	const orderedList = useList({ type: "orderedList" });
 	const taskList = useList({ type: "taskList" });
-	const blockquote = useBlockquote();
 	const codeBlock = useCodeBlock();
 
 	const mapper = (
-		action: ReturnType<
-			| typeof useText
-			| typeof useHeading
-			| typeof useList
-			| typeof useBlockquote
-			| typeof useCodeBlock
-		>
+		action: ReturnType<typeof useText | typeof useHeading | typeof useList | typeof useCodeBlock>
 	) => ({
 		icon: action.Icon,
 		label: action.label,
@@ -87,7 +80,6 @@ const useNodeTransformActions = () => {
 		mapper(bulletList),
 		mapper(orderedList),
 		mapper(taskList),
-		mapper(blockquote),
 		mapper(codeBlock),
 	];
 

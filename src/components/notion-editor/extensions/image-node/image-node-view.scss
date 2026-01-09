@@ -1,15 +1,15 @@
 :root {
-	--tiptap-image-handle-bg: var(--tt-brand-color-600);
+	--tiptap-image-handle-bg: var(--tt-color-blue-dec-2);
 }
 
 .dark {
-	--tiptap-image-handle-bg: var(--tt-brand-color-400);
+	--tiptap-image-handle-bg: var(--tt-color-blue-dec-2);
 }
 
 .tiptap.ProseMirror {
 	.ProseMirror-selectednode .tiptap-image .tiptap-image-container {
 		outline: 0.125rem solid transparent;
-		outline-color: var(--tt-brand-color-500);
+		outline-color: var(--tt-color-blue-dec-2);
 		border-radius: var(--tt-radius-xs, 0.25rem);
 	}
 

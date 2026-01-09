@@ -87,6 +87,19 @@
 	--tt-color-green-dec-4: hsla(144, 100%, 16%, 1);
 	--tt-color-green-dec-5: hsla(140, 100%, 9%, 1);
 
+	/* Blue */
+	--tt-color-blue-inc-5: hsla(223, 100%, 96%, 1);
+	--tt-color-blue-inc-4: hsla(225, 100%, 90%, 1);
+	--tt-color-blue-inc-3: hsla(225, 100%, 86%, 1);
+	--tt-color-blue-inc-2: hsla(225, 100%, 73%, 1);
+	--tt-color-blue-inc-1: hsla(225, 100%, 67%, 1);
+	--tt-color-blue-base: hsla(225, 100%, 62%, 1);
+	--tt-color-blue-dec-1: hsla(225, 100%, 54%, 1);
+	--tt-color-blue-dec-2: hsla(225, 100%, 50%, 1);
+	--tt-color-blue-dec-3: hsla(225, 91%, 43%, 1);
+	--tt-color-blue-dec-4: hsla(225, 100%, 27%, 1);
+	--tt-color-blue-dec-5: hsla(225, 100%, 15%, 1);
+
 	/* Yellow */
 	--tt-color-yellow-inc-5: hsla(50, 100%, 97%, 1);
 	--tt-color-yellow-inc-4: hsla(50, 100%, 91%, 1);
@@ -171,7 +184,7 @@
 	--tt-border-color-tint: var(--tt-gray-light-a-100);
 	--tt-sidebar-bg-color: var(--tt-gray-light-100);
 	--tt-scrollbar-color: var(--tt-gray-light-a-200);
-	--tt-cursor-color: var(--tt-brand-color-500);
+	--tt-cursor-color: var(--tt-color-blue-dec-2);
 	--tt-selection-color: rgba(157, 138, 255, 0.2);
 	--tt-card-bg-color: var(--white);
 	--tt-card-border-color: var(--tt-gray-light-a-100);
@@ -184,7 +197,7 @@
 	--tt-border-color-tint: var(--tt-gray-dark-a-100);
 	--tt-sidebar-bg-color: var(--tt-gray-dark-100);
 	--tt-scrollbar-color: var(--tt-gray-dark-a-200);
-	--tt-cursor-color: var(--tt-brand-color-400);
+	--tt-cursor-color: var(--tt-color-blue-dec-2);
 	--tt-selection-color: rgba(122, 82, 255, 0.2);
 	--tt-card-bg-color: var(--tt-gray-dark-50);
 	--tt-card-border-color: var(--tt-gray-dark-a-50);

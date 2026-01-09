@@ -8,6 +8,7 @@ export const EditorDataJson: JSONContent = {
 			attrs: {
 				id: "b6cd8ecb-fc0d-4575-ab93-3418a52279b9",
 				textAlign: null,
+				backgroundColor: null,
 				level: 1,
 			},
 			content: [

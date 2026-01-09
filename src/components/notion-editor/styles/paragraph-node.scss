@@ -1,6 +1,6 @@
 .tiptap.ProseMirror {
 	--tt-collaboration-carets-label: var(--tt-gray-light-900);
-	--link-text-color: var(--tt-brand-color-500);
+	--link-text-color: var(--tt-color-blue-dec-2);
 	--thread-text: var(--tt-gray-light-900);
 	--placeholder-color: var(--tt-gray-light-a-400);
 	--thread-bg-color: var(--tt-color-yellow-inc-2);
@@ -154,7 +154,7 @@
 .tiptap.ProseMirror {
 	[data-type="mention"] {
 		display: inline-block;
-		color: var(--tt-brand-color-500);
+		color: var(--tt-color-blue-dec-2);
 	}
 }
 
