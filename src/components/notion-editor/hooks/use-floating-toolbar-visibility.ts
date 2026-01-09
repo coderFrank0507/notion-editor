@@ -1,6 +1,7 @@
 import { isNodeSelection, type Editor } from "@tiptap/react";
 import { NodeSelection, type Transaction } from "@tiptap/pm/state";
 import { useEffect, useRef, useState } from "react";
+import useUiEditorState from "./use-ui-editor-state";
 
 export const HIDE_FLOATING_META = "hideFloatingToolbar";
 
