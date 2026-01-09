@@ -8,7 +8,7 @@ import {
 } from "@tiptap/react";
 
 export function BulletItemView(props: ReactNodeViewProps) {
-	// const { editor, node, updateAttributes } = props;
+	const { node } = props;
 
 	return (
 		<NodeViewWrapper as={"ul"}>
@@ -17,7 +17,10 @@ export function BulletItemView(props: ReactNodeViewProps) {
 					<div className="size-2 relative rounded-full bg-text-color" />
 				</div>
 
-				<NodeViewContent className="list-item-content" />
+				<NodeViewContent
+					className="list-item-content flex-1"
+					style={{ backgroundColor: node.attrs.backgroundColor }}
+				/>
 			</div>
 		</NodeViewWrapper>
 	);

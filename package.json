@@ -43,6 +43,7 @@
     "@tiptap/starter-kit": "^3.15.3",
     "@tiptap/suggestion": "^3.15.3",
     "clsx": "^2.1.1",
+    "lodash-es": "^4.17.22",
     "prosemirror-state": "^1.4.4",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
@@ -53,6 +54,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
+    "@types/lodash-es": "^4.17.12",
     "@types/node": "^24.10.1",
     "@types/react": "^19.2.5",
     "@types/react-dom": "^19.2.3",

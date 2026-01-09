@@ -25,7 +25,7 @@ function getOrderedIndex(doc: PMNode, pos: number) {
 }
 
 export function OrderedItemView(props: ReactNodeViewProps) {
-	const { editor, getPos } = props;
+	const { editor, node, getPos } = props;
 	const [_, setTick] = useState(0);
 
 	useLayoutEffect(() => {
@@ -53,7 +53,11 @@ export function OrderedItemView(props: ReactNodeViewProps) {
 					contentEditable={false}
 					className="w-4 h-6 mr-1.5 flex justify-center items-center"
 				>{`${number}.`}</div>
-				<NodeViewContent className="list-item-content" />
+
+				<NodeViewContent
+					className="list-item-content flex-1"
+					style={{ backgroundColor: node.attrs.backgroundColor }}
+				/>
 			</div>
 		</NodeViewWrapper>
 	);

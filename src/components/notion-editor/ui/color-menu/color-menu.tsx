@@ -153,7 +153,7 @@ export const ColorMenu: React.FC<ColorMenuProps> = ({
 
 	return (
 		<Menu placement={placement} trigger={trigger || defaultTrigger}>
-			<MenuContent portal>
+			<MenuContent portal className="max-h-96">
 				<ComboboxList>
 					{/* Recent Colors */}
 					{isInitialized && recentColors.length > 0 && (

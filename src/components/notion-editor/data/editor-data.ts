@@ -14,7 +14,21 @@ export const EditorDataJson: JSONContent = {
 			content: [
 				{
 					type: "text",
-					text: "Welcome to Notion-like template",
+					text: "Welcome to ",
+				},
+				{
+					type: "text",
+					text: "Notion",
+					marks: [{ type: "bold" }, { type: "textStyle", attrs: { color: "var(--tt-c-t-red)" } }],
+				},
+				{
+					type: "text",
+					text: "-like ",
+				},
+				{
+					type: "text",
+					text: "template",
+					marks: [{ type: "highlight", attrs: { color: "var(--tt-c-h-orange)" } }],
 				},
 			],
 		},
@@ -28,11 +42,7 @@ export const EditorDataJson: JSONContent = {
 			content: [
 				{
 					type: "text",
-					text: "Start writing your thoughts here … ",
-				},
-				{
-					type: "text",
-					text: " ",
+					text: "Start writing your thoughts here …",
 				},
 				{
 					type: "hardBreak",
@@ -48,7 +58,7 @@ export const EditorDataJson: JSONContent = {
 							type: "bold",
 						},
 					],
-					text: "Markdown:",
+					text: "Markdown",
 				},
 			],
 		},
@@ -128,8 +138,6 @@ export const EditorDataJson: JSONContent = {
 				id: "b8c80273-447a-4e0e-ab9f-78d0150d0a3b",
 				textAlign: null,
 				backgroundColor: null,
-				nodeTextAlign: null,
-				nodeVerticalAlign: null,
 			},
 			content: [
 				{
@@ -144,8 +152,6 @@ export const EditorDataJson: JSONContent = {
 				id: "49974099-ca00-48f1-bd3d-ffd877fa45f1",
 				textAlign: null,
 				backgroundColor: null,
-				nodeTextAlign: null,
-				nodeVerticalAlign: null,
 			},
 			content: [
 				{

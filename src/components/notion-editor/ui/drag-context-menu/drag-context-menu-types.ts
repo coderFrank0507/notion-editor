@@ -2,9 +2,16 @@ import type { DragHandleProps } from "@tiptap/extension-drag-handle-react";
 import type { Node } from "@tiptap/pm/model";
 import type { Editor } from "@tiptap/react";
 
+export interface DropResultItem {
+	id: string;
+	type: string;
+	sort: number;
+}
+
 export interface DragContextMenuProps extends Omit<DragHandleProps, "editor" | "children"> {
 	withSlashCommandTrigger?: boolean;
 	mobileBreakpoint?: number;
+	handleDropEnd?: (data: DropResultItem[]) => void;
 }
 
 export interface NodeChangeData {

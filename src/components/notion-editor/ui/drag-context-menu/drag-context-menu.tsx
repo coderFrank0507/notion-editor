@@ -32,7 +32,6 @@ import { SlashCommandTriggerButton } from "../slash-command-trigger-button";
 import { useText } from "../text-button";
 import { useHeading } from "../heading-button";
 import { useList } from "../list-button";
-import { useBlockquote } from "../blockquote-button";
 import { useCodeBlock } from "../code-block-button";
 import { ColorMenu } from "../color-menu";
 
@@ -42,9 +41,10 @@ import { SR_ONLY } from "../../lib/utils";
 
 import type {
 	DragContextMenuProps,
+	DropResultItem,
 	MenuItemProps,
 	NodeChangeData,
-} from "../drag-context-menu/drag-context-menu-types";
+} from "./drag-context-menu-types";
 
 // Icons
 import { GripVerticalIcon } from "../../icons/grip-vertical-icon";
@@ -53,6 +53,7 @@ import { Repeat2Icon } from "../../icons/repeat-2-icon";
 import "./drag-context-menu.scss";
 import { useCurrentEditor } from "@tiptap/react";
 import { Spacer } from "../../ui-primitive/spacer";
+import { dropInfo } from "../../lib/onUpdate";
 
 const useNodeTransformActions = () => {
 	const text = useText();
@@ -241,6 +242,7 @@ const DeleteActionGroup: React.FC = () => {
 export const DragContextMenu = ({
 	withSlashCommandTrigger = true,
 	mobileBreakpoint = 768,
+	handleDropEnd,
 	...props
 }: DragContextMenuProps) => {
 	const { editor } = useCurrentEditor();
@@ -291,6 +293,7 @@ export const DragContextMenu = ({
 
 	const onElementDragStart = useCallback(() => {
 		if (!editor) return;
+		dropInfo.droping = true;
 		editor.commands.setIsDragging(true);
 	}, [editor]);
 
@@ -302,8 +305,22 @@ export const DragContextMenu = ({
 		setTimeout(() => {
 			editor.view.dom.blur();
 			editor.view.focus();
+
+			if (handleDropEnd) {
+				const { content } = editor.getJSON();
+				if (content) {
+					const list: DropResultItem[] = content
+						.filter((item) => item.type === "image" || item.content)
+						.map((item, index) => ({
+							id: item.attrs!.id,
+							type: item.type,
+							sort: index + 1,
+						}));
+					handleDropEnd(list);
+				}
+			}
 		}, 0);
-	}, [editor]);
+	}, [editor, handleDropEnd]);
 
 	if (!editor) return null;
 

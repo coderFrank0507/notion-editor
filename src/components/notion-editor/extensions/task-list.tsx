@@ -32,13 +32,17 @@ export function TaskItemView(props: ReactNodeViewProps) {
 					>
 						<TaskItemChecked
 							className={cn("block size-full none", node.attrs.checked && "block")}
-							color="white"
+							color={node.attrs.checked ? "white" : "transparent"}
 						/>
 					</div>
 				</div>
 
 				<NodeViewContent
-					className={cn("list-item-content", node.attrs.checked && "text-gray-500 line-through")}
+					className={cn(
+						"list-item-content flex-1",
+						node.attrs.checked && "text-gray-500 line-through"
+					)}
+					style={{ backgroundColor: node.attrs.backgroundColor }}
 				/>
 			</div>
 		</NodeViewWrapper>
