@@ -7,8 +7,10 @@
 		outline: none;
 	}
 
-	.list-item-content > [data-node-view-content-react] {
-		padding-left: 2px;
+	.list-item-content {
+		& > [data-node-view-content-react] {
+			padding-left: 2px;
+		}
 	}
 
 	#notion-editor-container {

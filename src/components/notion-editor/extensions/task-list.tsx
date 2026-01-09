@@ -15,11 +15,11 @@ export function TaskItemView(props: ReactNodeViewProps) {
 	return (
 		<NodeViewWrapper as={"ul"}>
 			<div className="flex items-start py-0.5">
-				<div className="w-4 h-6 mr-1.5 flex items-center">
+				<div contentEditable={false} className="w-4 h-6 mr-1.5 flex items-center">
 					<div
 						className={cn(
-							"size-4 border-[1.5px] border-text-color rounded relative cursor-pointer",
-							node.attrs.checked && "bg-blue-600 border-blue-600"
+							"size-4 border-[1.5px] rounded relative cursor-pointer",
+							node.attrs.checked ? "bg-blue-600 border-blue-600" : "border-text-color"
 						)}
 						onMouseDownCapture={() => {
 							editor.chain().blur();
