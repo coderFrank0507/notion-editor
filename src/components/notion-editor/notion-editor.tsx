@@ -10,6 +10,7 @@ import {
 import extensions from "./extensions";
 import EditorToolbarFloating from "./editor-toolbar-floating";
 import useUiEditorState from "./hooks/use-ui-editor-state";
+import type { Node } from "@tiptap/pm/model";
 
 // --- Tiptap UI ---
 import { SlashDropdownMenu } from "./ui/slash-dropdown-menu";
@@ -28,18 +29,19 @@ import "./styles/tailwind.css";
 import { dispatchOrderedListRefresh } from "./lib/utils";
 import { HandleBlockJson } from "./lib/content-utils";
 import { debounce } from "lodash-es";
-import onUpdate from "./lib/onUpdate";
+import onUpdate, { eventInfo } from "./lib/onUpdate";
+import { generateBaseIndex } from "./lib/generate-unique-sort";
 
 // --- Dev ---
 // import { HeadTools } from "./_dev-tools";
 
-interface NotionEditorProps {
-	initContent?: (editor: Editor) => void;
+export interface NotionEditorProps {
+	initContent?: (editor: Editor) => JSONContent[];
 	onUpdate?: (data: HandleBlockJson[]) => void;
 	onDropEnd?: DragContextMenuProps["handleDropEnd"];
 }
 
-export const CacheMap = new Map<string, { sort: number; json: JSONContent }>();
+export const CacheMap = new Map<string, JSONContent>();
 
 export function EditorContentArea({ onDropEnd }: NotionEditorProps) {
 	const { editor } = useCurrentEditor();
@@ -88,26 +90,58 @@ export default function NotionEditor({ onUpdate: handleUpdate, initContent }: No
 			},
 		},
 		extensions,
-		// content: EditorDataJson,
 		onUpdate: debounce((props) => onUpdate(props, handleUpdate), 1000),
-		onCreate: ({ editor }) => {
-			CacheMap.clear();
-			const { content } = editor.getJSON();
-			if (content.length) {
-				for (let i = 0, length = content.length; i < length; i++) {
-					const item = content[i];
-					try {
-						CacheMap.set(item.attrs!.id, { sort: i, json: item });
-					} catch (err) {
-						console.error(item);
-					}
+		onDrop: (event, slice) => {
+			if (!slice) return;
+
+			const blocks: Node[] = [];
+
+			slice.content.forEach((node) => {
+				if (node.isBlock) {
+					blocks.push(node);
+					eventInfo.draggedBlockId = node.attrs.id;
 				}
-			}
+			});
+
+			setTimeout(() => {
+				const jsonContent = editor.getJSON();
+				jsonContent.content.forEach((node, index) => {
+					// console.log(index, node.attrs.id, eventInfo.draggedBlockId);
+					if (node.attrs?.id === eventInfo.draggedBlockId) {
+						const prev = jsonContent.content[index - 1];
+						const next = jsonContent.content[index + 1];
+						const left = prev?.attrs.sort;
+						const right = next?.attrs.sort;
+						node.attrs.sort = generateBaseIndex(left, right);
+						console.log("node: ", node);
+					}
+				});
+			});
+			// console.log("blocks: ", blocks);
 		},
 	});
 
 	useEffect(() => {
-		if (editor?.isEmpty) initContent?.(editor);
+		if (editor?.isEmpty && initContent) {
+			const result = initContent(editor);
+			console.log("init result: ", result);
+			if (result.length) {
+				CacheMap.clear();
+				for (let i = 0, length = result.length; i < length; i++) {
+					const item = result[i];
+					try {
+						CacheMap.set(item.attrs!.id, item);
+					} catch (err) {
+						console.error(item);
+					}
+				}
+				editor.commands.setContent({
+					type: "doc",
+					content: result,
+				});
+				eventInfo.canUpdate = false;
+			}
+		}
 	}, [editor, initContent]);
 
 	if (!editor) return null;

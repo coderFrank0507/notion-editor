@@ -53,7 +53,7 @@ import { Repeat2Icon } from "../../icons/repeat-2-icon";
 import "./drag-context-menu.scss";
 import { useCurrentEditor } from "@tiptap/react";
 import { Spacer } from "../../ui-primitive/spacer";
-import { dropInfo } from "../../lib/onUpdate";
+import { eventInfo } from "../../lib/onUpdate";
 
 const useNodeTransformActions = () => {
 	const text = useText();
@@ -293,7 +293,7 @@ export const DragContextMenu = ({
 
 	const onElementDragStart = useCallback(() => {
 		if (!editor) return;
-		dropInfo.droping = true;
+		eventInfo.canUpdate = false;
 		editor.commands.setIsDragging(true);
 	}, [editor]);
 

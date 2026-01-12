@@ -1,68 +1,62 @@
-import {
-	type HandleBlockType,
-	transacionToDbdata,
-	type HandleBlockJson,
-	blockHasChanged,
-} from "./content-utils";
-import { CacheMap } from "../notion-editor";
+import { type HandleBlockJson, patchBlock } from "./content-utils";
+import { CacheMap, type NotionEditorProps } from "../notion-editor";
 import type { EditorEvents } from "@tiptap/core";
+import { generateBaseIndex } from "./generate-unique-sort";
 
-export const dropInfo = {
-	droping: false,
+export const eventInfo: {
+	canUpdate: boolean;
+	draggedBlockId: string | null;
+} = {
+	canUpdate: true,
+	draggedBlockId: null,
 };
 
-const onUpdate = (
-	props: EditorEvents["update"],
-	handleUpdate?: (data: HandleBlockJson[]) => void
-) => {
+const onUpdate = (props: EditorEvents["update"], handleUpdate?: NotionEditorProps["onUpdate"]) => {
 	// 排序时不执行此函数
-	if (dropInfo.droping) {
-		dropInfo.droping = false;
+	if (!eventInfo.canUpdate) {
+		eventInfo.canUpdate = true;
 		return;
 	}
 
 	const { editor, transaction } = props;
 	// 没有文档变更，直接返回空
-	if (!transaction.docChanged) return;
+	if (!transaction.docChanged || editor.isEmpty) return;
 
 	const result: HandleBlockJson[] = [];
 
 	const { content } = editor.getJSON();
 
-	// const sortRes: DropResultItem[] = [];
-	const startIndex: number[] = [];
-
 	for (let i = 0, length = content.length; i < length; i++) {
 		const item = content[i];
 		const cache = CacheMap.get(item.attrs!.id);
 		if (cache) {
-			const changed = blockHasChanged(cache.json, item);
+			// const left = content[i - 1]?.attrs.sort;
+			// const right = content[i + 1]?.attrs.sort;
+			// item.attrs.sort = generateBaseIndex(left, right);
+			const changed = patchBlock(cache, item);
 			if (changed) {
-				startIndex.push(cache.sort);
-				result.push({ handleType: "update", json: item, sort: cache.sort });
+				result.push({ handleType: "update", json: item });
 			}
 		} else {
-			startIndex.push(i);
-			result.push({ handleType: "create", json: item, sort: i });
+			const left = content[i - 1]?.attrs.sort;
+			const right = content[i + 1]?.attrs.sort;
+			item.attrs.sort = generateBaseIndex(left, right);
+			result.push({ handleType: "create", json: item });
 		}
 		CacheMap.delete(item.attrs!.id);
 	}
 
 	if (CacheMap.size) {
 		Array.from(CacheMap.values()).forEach((item) => {
-			startIndex.push(item.sort);
-			result.push({ handleType: "delete", json: item.json, sort: item.sort });
-			CacheMap.delete(item.json.attrs!.id);
+			result.push({ handleType: "delete", json: item });
+			CacheMap.delete(item.attrs!.id);
 		});
 	}
-
-	const start = Math.min(...startIndex);
 
 	// 缓存新的数据
 	CacheMap.clear();
 	content.forEach((item, i) => {
-		CacheMap.set(item.attrs!.id, { sort: i, json: item });
-		// sortRes.push({ id: item.attrs!.id, type: item.type, sort: i });
+		CacheMap.set(item.attrs!.id, item);
 	});
 
 	if (result.length) handleUpdate?.(result);

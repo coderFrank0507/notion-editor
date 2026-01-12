@@ -84,6 +84,13 @@ export const OrderedList = Node.create<ParagraphOptions>({
 			},
 		};
 	},
+	addAttributes() {
+		return {
+			sort: {
+				default: null,
+			},
+		};
+	},
 	parseHTML() {
 		return [{ tag: "ul" }];
 	},

@@ -47,16 +47,7 @@ export const NodeBackground = Extension.create<NodeBackgroundOptions>({
 
 	addOptions() {
 		return {
-			types: [
-				"paragraph",
-				"heading",
-				"blockquote",
-				"taskList",
-				"bulletList",
-				"orderedList",
-				"tableCell",
-				"tableHeader",
-			],
+			types: ["paragraph", "heading", "blockquote", "taskList", "bulletList", "orderedList"],
 			useStyle: true,
 		};
 	},

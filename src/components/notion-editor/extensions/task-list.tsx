@@ -75,6 +75,9 @@ export const TaskList = Node.create<ParagraphOptions>({
 			checked: {
 				default: false,
 			},
+			sort: {
+				default: null,
+			},
 		};
 	},
 	parseHTML() {

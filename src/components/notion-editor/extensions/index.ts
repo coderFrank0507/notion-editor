@@ -48,10 +48,8 @@ export default [
 	BulletList,
 	OrderedList,
 	HorizontalRule,
-	Heading,
 	HardBreak,
 	Selection,
-	CodeBlock,
 	Typography,
 	Color,
 	TextStyle,
@@ -59,6 +57,21 @@ export default [
 	Image,
 	NodeBackground,
 	ClearSelectionDropEnd,
+	Heading.extend({
+		addAttributes() {
+			return {
+				level: { default: null },
+				sort: { default: null },
+			};
+		},
+	}),
+	CodeBlock.extend({
+		addAttributes() {
+			return {
+				sort: { default: null },
+			};
+		},
+	}),
 	Highlight.configure({ multicolor: true }),
 	TextAlign.configure({ types: ["heading", "paragraph", "taskList", "orderedList", "bulletList"] }),
 	Dropcursor.configure({

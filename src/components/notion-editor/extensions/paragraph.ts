@@ -14,12 +14,13 @@ const Paragraph = Node.create<ParagraphOptions>({
 			},
 		};
 	},
-	// addAttributes() {
-	// 	return {
-	// 		"data-type": "paragraph",
-	// 		class: "paragraph",
-	// 	};
-	// },
+	addAttributes() {
+		return {
+			sort: {
+				default: null,
+			},
+		};
+	},
 	parseHTML() {
 		return [{ tag: "p" }];
 	},

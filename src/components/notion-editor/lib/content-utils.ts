@@ -18,14 +18,13 @@ export interface HandleBlockType {
 export interface HandleBlockJson {
 	handleType: HandleType;
 	json: JSONContent;
-	sort: number;
 }
 
 function isSameArray(c1: Array<JSONContent>, c2: Array<JSONContent>) {
 	return Array.isArray(c1) === Array.isArray(c2);
 }
 
-export function blockHasChanged(n1: JSONContent, n2: JSONContent) {
+export function patchBlock(n1: JSONContent, n2: JSONContent) {
 	// console.log(n1, n2);
 	// 块类型是否一致
 	if (n1.type !== n2.type) return true;
@@ -129,13 +128,13 @@ function transformContent(content: Array<JSONContent>) {
 }
 
 export function transacionToDbdata(list: HandleBlockJson[]) {
-	const content: DatabaseContentJson[] = [];
+	const content: HandleBlockType[] = [];
 	for (const { handleType, json } of list) {
-		const result: DatabaseContentJson = { type: json.type! };
-		if (json.attrs) result["attrs"] = json.attrs;
+		const result: HandleBlockType = { handleType, json: { type: json.type } };
+		if (json.attrs) result["json"]["attrs"] = json.attrs;
 		if (json.content && handleType !== "delete") {
 			const content = transformContent(json.content);
-			result["content"] = content;
+			result["json"]["content"] = content;
 		}
 		content.push(result);
 	}

@@ -54,6 +54,9 @@ export const Image = TiptapImage.extend<ImageOptions>({
 					return { "data-show-caption": "true" };
 				},
 			},
+			sort: {
+				default: null,
+			},
 		};
 	},
 

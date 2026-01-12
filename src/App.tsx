@@ -9,12 +9,10 @@ function App() {
 		<div className="p-10">
 			<NotionEditor
 				initContent={(editor) => {
-					editor.commands.setContent({
-						type: "doc",
-						content: databaseToJSONContent(databaseData),
-					});
+					return databaseToJSONContent(databaseData);
 				}}
 				onUpdate={(data) => {
+					console.log("data: ", data);
 					const blocks = transacionToDbdata(data);
 					console.log("blocks: ", blocks);
 				}}
