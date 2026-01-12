@@ -27,7 +27,6 @@ import { TaskList } from "./task-list";
 import { UiState } from "./ui-state-extension";
 import { BulletList } from "./bullet-list";
 import { OrderedList } from "./ordered-list";
-import { ClearSelectionDropEnd } from "./plugins";
 import { Image } from "./image-node/image-node-extension";
 import { NodeBackground } from "./node-background-extension";
 import { ImageUploadNode } from "./image-upload-node/image-upload-node-extension";
@@ -56,7 +55,6 @@ export default [
 	UiState,
 	Image,
 	NodeBackground,
-	ClearSelectionDropEnd,
 	Heading.extend({
 		addAttributes() {
 			return {

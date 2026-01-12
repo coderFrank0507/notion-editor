@@ -1,4 +1,3 @@
-import type { ParagraphOptions } from "@tiptap/extension-paragraph";
 import {
 	Node,
 	ReactNodeViewRenderer,
@@ -8,8 +7,9 @@ import {
 	EditorEvents,
 } from "@tiptap/react";
 import { useLayoutEffect, useState } from "react";
-import type { Node as PMNode } from "@tiptap/pm/model";
 import { OrderedRefreshKey } from "../lib/utils";
+import type { Node as PMNode } from "@tiptap/pm/model";
+import type { ParagraphOptions } from "@tiptap/extension-paragraph";
 
 function getOrderedIndex(doc: PMNode, pos: number) {
 	let index = 1;

@@ -30,13 +30,8 @@ const onUpdate = (props: EditorEvents["update"], handleUpdate?: NotionEditorProp
 		const item = content[i];
 		const cache = CacheMap.get(item.attrs!.id);
 		if (cache) {
-			// const left = content[i - 1]?.attrs.sort;
-			// const right = content[i + 1]?.attrs.sort;
-			// item.attrs.sort = generateBaseIndex(left, right);
 			const changed = patchBlock(cache, item);
-			if (changed) {
-				result.push({ handleType: "update", json: item });
-			}
+			if (changed) result.push({ handleType: "update", json: item });
 		} else {
 			const left = content[i - 1]?.attrs.sort;
 			const right = content[i + 1]?.attrs.sort;
@@ -55,7 +50,7 @@ const onUpdate = (props: EditorEvents["update"], handleUpdate?: NotionEditorProp
 
 	// 缓存新的数据
 	CacheMap.clear();
-	content.forEach((item, i) => {
+	content.forEach((item) => {
 		CacheMap.set(item.attrs!.id, item);
 	});
 

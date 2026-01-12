@@ -11,7 +11,6 @@ export interface DropResultItem {
 export interface DragContextMenuProps extends Omit<DragHandleProps, "editor" | "children"> {
 	withSlashCommandTrigger?: boolean;
 	mobileBreakpoint?: number;
-	handleDropEnd?: (data: DropResultItem[]) => void;
 }
 
 export interface NodeChangeData {

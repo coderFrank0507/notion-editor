@@ -5,16 +5,14 @@ import {
 	EditorContext,
 	useCurrentEditor,
 	type JSONContent,
-	type Editor,
 } from "@tiptap/react";
 import extensions from "./extensions";
 import EditorToolbarFloating from "./editor-toolbar-floating";
 import useUiEditorState from "./hooks/use-ui-editor-state";
-import type { Node } from "@tiptap/pm/model";
 
 // --- Tiptap UI ---
 import { SlashDropdownMenu } from "./ui/slash-dropdown-menu";
-import { DragContextMenu, DragContextMenuProps } from "./ui/drag-context-menu";
+import { DragContextMenu } from "./ui/drag-context-menu";
 
 // --- Styles ---
 import "./styles/_keyframe-animations.scss";
@@ -26,24 +24,26 @@ import "./styles/heading-node.scss";
 import "./styles/code-block-node.scss";
 import "./styles/tailwind.css";
 
+// --- Lib ---
 import { dispatchOrderedListRefresh } from "./lib/utils";
-import { HandleBlockJson } from "./lib/content-utils";
 import { debounce } from "lodash-es";
-import onUpdate, { eventInfo } from "./lib/onUpdate";
+import onUpdate, { eventInfo } from "./lib/on-update";
+import onDrop from "./lib/on-drop";
+import type { HandleBlockJson } from "./lib/content-utils";
 import { generateBaseIndex } from "./lib/generate-unique-sort";
 
-// --- Dev ---
-// import { HeadTools } from "./_dev-tools";
+console.log(generateBaseIndex("yyU", null));
 
 export interface NotionEditorProps {
-	initContent?: (editor: Editor) => JSONContent[];
+	/** editor 内容为空时才会执行 */
+	initContent?: () => Promise<JSONContent[]>;
 	onUpdate?: (data: HandleBlockJson[]) => void;
-	onDropEnd?: DragContextMenuProps["handleDropEnd"];
+	onDropEnd?: (data: HandleBlockJson[]) => void;
 }
 
 export const CacheMap = new Map<string, JSONContent>();
 
-export function EditorContentArea({ onDropEnd }: NotionEditorProps) {
+export function EditorContentArea() {
 	const { editor } = useCurrentEditor();
 	const { isDragging } = useUiEditorState(editor);
 
@@ -74,14 +74,18 @@ export function EditorContentArea({ onDropEnd }: NotionEditorProps) {
 				cursor: isDragging ? "grabbing" : "auto",
 			}}
 		>
-			<DragContextMenu handleDropEnd={onDropEnd} />
+			<DragContextMenu />
 			<SlashDropdownMenu />
 			<EditorToolbarFloating />
 		</EditorContent>
 	);
 }
 
-export default function NotionEditor({ onUpdate: handleUpdate, initContent }: NotionEditorProps) {
+export default function NotionEditor({
+	onUpdate: handleUpdate,
+	initContent,
+	onDropEnd,
+}: NotionEditorProps) {
 	const editor = useEditor({
 		immediatelyRender: false,
 		editorProps: {
@@ -91,56 +95,32 @@ export default function NotionEditor({ onUpdate: handleUpdate, initContent }: No
 		},
 		extensions,
 		onUpdate: debounce((props) => onUpdate(props, handleUpdate), 1000),
-		onDrop: (event, slice) => {
-			if (!slice) return;
-
-			const blocks: Node[] = [];
-
-			slice.content.forEach((node) => {
-				if (node.isBlock) {
-					blocks.push(node);
-					eventInfo.draggedBlockId = node.attrs.id;
-				}
-			});
-
-			setTimeout(() => {
-				const jsonContent = editor.getJSON();
-				jsonContent.content.forEach((node, index) => {
-					// console.log(index, node.attrs.id, eventInfo.draggedBlockId);
-					if (node.attrs?.id === eventInfo.draggedBlockId) {
-						const prev = jsonContent.content[index - 1];
-						const next = jsonContent.content[index + 1];
-						const left = prev?.attrs.sort;
-						const right = next?.attrs.sort;
-						node.attrs.sort = generateBaseIndex(left, right);
-						console.log("node: ", node);
-					}
-				});
-			});
-			// console.log("blocks: ", blocks);
+		onDrop: (_, slice) => {
+			if (!slice || !onDropEnd) return;
+			onDrop(slice, editor, onDropEnd);
 		},
 	});
 
 	useEffect(() => {
 		if (editor?.isEmpty && initContent) {
-			const result = initContent(editor);
-			console.log("init result: ", result);
-			if (result.length) {
-				CacheMap.clear();
-				for (let i = 0, length = result.length; i < length; i++) {
-					const item = result[i];
-					try {
-						CacheMap.set(item.attrs!.id, item);
-					} catch (err) {
-						console.error(item);
+			initContent().then((result) => {
+				if (result.length) {
+					CacheMap.clear();
+					for (let i = 0, length = result.length; i < length; i++) {
+						const item = result[i];
+						try {
+							CacheMap.set(item.attrs!.id, item);
+						} catch (err) {
+							console.error(err);
+						}
 					}
+					editor.commands.setContent({
+						type: "doc",
+						content: result,
+					});
+					eventInfo.canUpdate = false;
 				}
-				editor.commands.setContent({
-					type: "doc",
-					content: result,
-				});
-				eventInfo.canUpdate = false;
-			}
+			});
 		}
 	}, [editor, initContent]);
 

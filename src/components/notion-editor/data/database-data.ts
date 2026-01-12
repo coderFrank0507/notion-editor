@@ -46,83 +46,92 @@ export const databaseData: DatabaseContentJson[] = [
 			width: 300,
 			height: 500,
 			"data-align": "center",
+			showCaption: false,
 			sort: "r",
 		},
 	},
-	// {
-	// 	type: "taskList",
-	// 	attrs: {
-	// 		id: "9aa558bd-c8d2-4f38-a574-13505e158fe5",
-	// 		textAlign: null,
-	// 		backgroundColor: null,
-	// 		checked: true,
-	// 	},
-	// 	content: [["Read up to this point"]],
-	// },
-	// {
-	// 	type: "taskList",
-	// 	attrs: {
-	// 		id: "d9b7734a-4b28-4903-9f44-262450bb142d",
-	// 		textAlign: null,
-	// 		backgroundColor: null,
-	// 		checked: false,
-	// 	},
-	// 	content: [["Try a slash command"]],
-	// },
-	// {
-	// 	type: "taskList",
-	// 	attrs: {
-	// 		id: "5cceb712-6cb7-4e26-a768-8fb28637b098",
-	// 		textAlign: null,
-	// 		backgroundColor: null,
-	// 		checked: false,
-	// 	},
-	// 	content: [["Mention someone"]],
-	// },
-	// {
-	// 	type: "codeBlock",
-	// 	attrs: {
-	// 		id: "81b9bf40-8e99-47d4-a5a8-5697f388c5a4",
-	// 		language: null,
-	// 	},
-	// 	content: [["# Headings\n- Lists\n> Quotes\n`Inline code`"]],
-	// },
-	// {
-	// 	type: "bulletList",
-	// 	attrs: {
-	// 		id: "b8c80273-447a-4e0e-ab9f-78d0150d0a3b",
-	// 		textAlign: null,
-	// 		backgroundColor: null,
-	// 	},
-	// 	content: [["Content blocks = Node Components"]],
-	// },
-	// {
-	// 	type: "bulletList",
-	// 	attrs: {
-	// 		id: "49974099-ca00-48f1-bd3d-ffd877fa45f1",
-	// 		textAlign: null,
-	// 		backgroundColor: null,
-	// 	},
-	// 	content: [["Toolbars, menus, and buttons = UI Components"]],
-	// },
-	// {
-	// 	type: "orderedList",
-	// 	attrs: {
-	// 		id: "30afe9a9-a336-40ae-8b0c-8cdaa040db81",
-	// 		textAlign: null,
-	// 		backgroundColor: null,
-	// 	},
-	// 	content: [["Content blocks = Node Components"]],
-	// },
-	// {
-	// 	type: "orderedList",
-	// 	attrs: {
-	// 		id: "30afe9a9-a336-40ae-8b0c-8cdaa040db82",
-	// 		textAlign: null,
-	// 		backgroundColor: null,
-	// 		nodeTextAlign: null,
-	// 		nodeVerticalAlign: null,
-	// 	},
-	// 	content: [["Toolbars, menus, and buttons = UI Components"]],
-	// },
+	{
+		type: "taskList",
+		attrs: {
+			id: "9aa558bd-c8d2-4f38-a574-13505e158fe5",
+			textAlign: null,
+			backgroundColor: null,
+			checked: true,
+			sort: "v",
+		},
+		content: [["Read up to this point"]],
+	},
+	{
+		type: "taskList",
+		attrs: {
+			id: "d9b7734a-4b28-4903-9f44-262450bb142d",
+			textAlign: null,
+			backgroundColor: null,
+			checked: false,
+			sort: "x",
+		},
+		content: [["Try a slash command"]],
+	},
+	{
+		type: "taskList",
+		attrs: {
+			id: "5cceb712-6cb7-4e26-a768-8fb28637b098",
+			textAlign: null,
+			backgroundColor: null,
+			checked: false,
+			sort: "y",
+		},
+		content: [["Mention someone"]],
+	},
+	{
+		type: "codeBlock",
+		attrs: {
+			id: "81b9bf40-8e99-47d4-a5a8-5697f388c5a4",
+			language: null,
+			sort: "yU",
+		},
+		content: [["# Headings\n- Lists\n> Quotes\n`Inline code`"]],
+	},
+	{
+		type: "bulletList",
+		attrs: {
+			id: "b8c80273-447a-4e0e-ab9f-78d0150d0a3b",
+			textAlign: null,
+			backgroundColor: null,
+			sort: "yj",
+		},
+		content: [["Content blocks = Node Components"]],
+	},
+	{
+		type: "bulletList",
+		attrs: {
+			id: "49974099-ca00-48f1-bd3d-ffd877fa45f1",
+			textAlign: null,
+			backgroundColor: null,
+			sort: "yr",
+		},
+		content: [["Toolbars, menus, and buttons = UI Components"]],
+	},
+	{
+		type: "orderedList",
+		attrs: {
+			id: "30afe9a9-a336-40ae-8b0c-8cdaa040db81",
+			textAlign: null,
+			backgroundColor: null,
+			sort: "yv",
+		},
+		content: [["Content blocks = Node Components"]],
+	},
+	{
+		type: "orderedList",
+		attrs: {
+			id: "30afe9a9-a336-40ae-8b0c-8cdaa040db82",
+			textAlign: null,
+			backgroundColor: null,
+			nodeTextAlign: null,
+			nodeVerticalAlign: null,
+			sort: "yx",
+		},
+		content: [["Toolbars, menus, and buttons = UI Components"]],
+	},
 ];

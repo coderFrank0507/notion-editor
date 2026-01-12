@@ -183,7 +183,7 @@ function parseContent(data: NodeItem) {
 	}
 }
 
-export function databaseToJSONContent(data: Array<DatabaseContentJson>) {
+export async function databaseToJSONContent(data: Array<DatabaseContentJson>) {
 	const content: JSONContent[] = [];
 
 	for (const item of data) {

@@ -53,7 +53,7 @@ import { Repeat2Icon } from "../../icons/repeat-2-icon";
 import "./drag-context-menu.scss";
 import { useCurrentEditor } from "@tiptap/react";
 import { Spacer } from "../../ui-primitive/spacer";
-import { eventInfo } from "../../lib/onUpdate";
+import { eventInfo } from "../../lib/on-update";
 
 const useNodeTransformActions = () => {
 	const text = useText();
@@ -242,7 +242,6 @@ const DeleteActionGroup: React.FC = () => {
 export const DragContextMenu = ({
 	withSlashCommandTrigger = true,
 	mobileBreakpoint = 768,
-	handleDropEnd,
 	...props
 }: DragContextMenuProps) => {
 	const { editor } = useCurrentEditor();
@@ -305,22 +304,8 @@ export const DragContextMenu = ({
 		setTimeout(() => {
 			editor.view.dom.blur();
 			editor.view.focus();
-
-			if (handleDropEnd) {
-				const { content } = editor.getJSON();
-				if (content) {
-					const list: DropResultItem[] = content
-						.filter((item) => item.type === "image" || item.content)
-						.map((item, index) => ({
-							id: item.attrs!.id,
-							type: item.type,
-							sort: index + 1,
-						}));
-					handleDropEnd(list);
-				}
-			}
 		}, 0);
-	}, [editor, handleDropEnd]);
+	}, [editor]);
 
 	if (!editor) return null;
 
