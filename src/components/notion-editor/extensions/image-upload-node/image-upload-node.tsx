@@ -86,7 +86,7 @@ function useFileUpload(options: UploadOptions) {
 	const [fileItems, setFileItems] = useState<FileItem[]>([]);
 
 	const uploadFile = async (file: File): Promise<string | null> => {
-		if (file.size > options.maxSize) {
+		if (options.maxSize > 0 && file.size > options.maxSize) {
 			const error = new Error(
 				`File size exceeds maximum allowed (${options.maxSize / 1024 / 1024}MB)`
 			);
@@ -402,14 +402,17 @@ const DropZoneContent: React.FC<{ maxSize: number; limit: number }> = ({ maxSize
 				<em>Click to upload</em> or drag and drop
 			</span>
 			<span className="tiptap-image-upload-subtext">
-				Maximum {limit} file{limit === 1 ? "" : "s"}, {maxSize / 1024 / 1024}MB each.
+				<span>
+					Maximum {limit} file{limit === 1 ? "" : "s"}
+				</span>
+				{!!maxSize && <span>, {maxSize / 1024 / 1024}MB each</span>}
 			</span>
 		</div>
 	</>
 );
 
 export const ImageUploadNode: React.FC<NodeViewProps> = (props) => {
-	const { accept, limit, maxSize } = props.node.attrs;
+	const { accept = "image/*", limit = 1, maxSize = 0 } = props.node.attrs;
 	const inputRef = useRef<HTMLInputElement>(null);
 	const extension = props.extension;
 
@@ -440,6 +443,7 @@ export const ImageUploadNode: React.FC<NodeViewProps> = (props) => {
 							src: url,
 							alt: filename,
 							title: filename,
+							"data-align": "center",
 						},
 					};
 				});
@@ -448,7 +452,7 @@ export const ImageUploadNode: React.FC<NodeViewProps> = (props) => {
 					.chain()
 					.focus()
 					.deleteRange({ from: pos, to: pos + props.node.nodeSize })
-					.insertContentAt(pos, imageNodes)
+					.insertContentAt(pos, imageNodes, {})
 					.run();
 
 				focusNextNode(props.editor);

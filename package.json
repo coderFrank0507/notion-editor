@@ -11,6 +11,8 @@
   },
   "dependencies": {
     "@ariakit/react": "^0.4.20",
+    "@aws-sdk/client-s3": "^3.966.0",
+    "@aws-sdk/s3-request-presigner": "^3.966.0",
     "@floating-ui/react": "^0.27.16",
     "@radix-ui/react-dropdown-menu": "^2.1.16",
     "@radix-ui/react-popover": "^1.1.15",
@@ -42,6 +44,9 @@
     "@tiptap/react": "^3.15.1",
     "@tiptap/starter-kit": "^3.15.3",
     "@tiptap/suggestion": "^3.15.3",
+    "@uppy/aws-s3": "^5.1.0",
+    "@uppy/core": "^5.2.0",
+    "axios": "^1.13.2",
     "clsx": "^2.1.1",
     "lodash-es": "^4.17.22",
     "prosemirror-state": "^1.4.4",

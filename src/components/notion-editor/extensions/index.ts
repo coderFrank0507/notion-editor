@@ -29,81 +29,90 @@ import { BulletList } from "./bullet-list";
 import { OrderedList } from "./ordered-list";
 import { Image } from "./image-node/image-node-extension";
 import { NodeBackground } from "./node-background-extension";
-import { ImageUploadNode } from "./image-upload-node/image-upload-node-extension";
+import {
+	ImageUploadNode,
+	type ImageUploadNodeOptions,
+} from "./image-upload-node/image-upload-node-extension";
 
-// --- Lib ---
-import { handleImageUpload, MAX_FILE_SIZE } from "../lib/utils";
+interface ExtensionsConfig {
+	uploadImageConfig: Omit<ImageUploadNodeOptions, "HTMLAttributes">;
+}
 
-export default [
-	Document,
-	Text,
-	Paragraph,
-	Bold,
-	Italic,
-	Underline,
-	Strike,
-	Code,
-	TaskList,
-	BulletList,
-	OrderedList,
-	HorizontalRule,
-	HardBreak,
-	Selection,
-	Typography,
-	Color,
-	TextStyle,
-	UiState,
-	Image,
-	NodeBackground,
-	Heading.extend({
-		addAttributes() {
-			return {
-				level: { default: null },
-				sort: { default: null },
-			};
-		},
-	}),
-	CodeBlock.extend({
-		addAttributes() {
-			return {
-				sort: { default: null },
-			};
-		},
-	}),
-	Highlight.configure({ multicolor: true }),
-	TextAlign.configure({ types: ["heading", "paragraph", "taskList", "orderedList", "bulletList"] }),
-	Dropcursor.configure({
-		width: 2,
-	}),
-	History.configure({
-		depth: 50,
-		newGroupDelay: 500,
-	}),
-	ImageUploadNode.configure({
-		accept: "image/*",
-		maxSize: MAX_FILE_SIZE,
-		limit: 3,
-		upload: handleImageUpload,
-		onError: (error) => console.error("Upload failed:", error),
-	}),
-	Placeholder.configure({
-		placeholder: ({ node }) => {
-			const { type } = node;
-			if (type.name === "task-list") return "Task Item";
-			if (type.name === "bullet-list") return "Bullet Item";
-			return "Write, type '/' for commands…";
-		},
-	}),
-	UniqueID.configure({
-		types: [
-			"heading",
-			"paragraph",
-			"taskList",
-			"orderedList",
-			"bulletList",
-			"horizontalRule",
-			"image",
-			"codeBlock",
-		],
-	}),
-];
+export function createExtensions({ uploadImageConfig }: ExtensionsConfig) {
+	return [
+		Document,
+		Text,
+		Paragraph,
+		Bold,
+		Italic,
+		Underline,
+		Strike,
+		Code,
+		TaskList,
+		BulletList,
+		OrderedList,
+		HorizontalRule,
+		HardBreak,
+		Selection,
+		Typography,
+		Color,
+		TextStyle,
+		UiState,
+		Image,
+		NodeBackground,
+		Heading.extend({
+			addAttributes() {
+				return {
+					level: { default: null },
+					sort: { default: null },
+				};
+			},
+		}),
+		CodeBlock.extend({
+			addAttributes() {
+				return {
+					sort: { default: null },
+				};
+			},
+		}),
+		Highlight.configure({ multicolor: true }),
+		TextAlign.configure({
+			types: ["heading", "paragraph", "taskList", "orderedList", "bulletList"],
+		}),
+		Dropcursor.configure({
+			width: 2,
+		}),
+		History.configure({
+			depth: 50,
+			newGroupDelay: 500,
+		}),
+		// ImageUploadNode.configure({
+		// 	accept: "image/*",
+		// 	maxSize: MAX_FILE_SIZE,
+		// 	limit: 3,
+		// 	upload: handleImageUpload,
+		// 	onError: (error) => console.error("Upload failed:", error),
+		// }),
+		ImageUploadNode.configure(uploadImageConfig),
+		Placeholder.configure({
+			placeholder: ({ node }) => {
+				const { type } = node;
+				if (type.name === "task-list") return "Task Item";
+				if (type.name === "bullet-list") return "Bullet Item";
+				return "Write, type '/' for commands…";
+			},
+		}),
+		UniqueID.configure({
+			types: [
+				"heading",
+				"paragraph",
+				"taskList",
+				"orderedList",
+				"bulletList",
+				"horizontalRule",
+				"image",
+				"codeBlock",
+			],
+		}),
+	];
+}

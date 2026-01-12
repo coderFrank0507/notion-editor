@@ -6,7 +6,7 @@ import {
 	useCurrentEditor,
 	type JSONContent,
 } from "@tiptap/react";
-import extensions from "./extensions";
+import extensions, { createExtensions } from "./extensions";
 import EditorToolbarFloating from "./editor-toolbar-floating";
 import useUiEditorState from "./hooks/use-ui-editor-state";
 
@@ -22,7 +22,6 @@ import "./styles/list-node.scss";
 import "./styles/paragraph-node.scss";
 import "./styles/heading-node.scss";
 import "./styles/code-block-node.scss";
-import "./styles/tailwind.css";
 
 // --- Lib ---
 import { dispatchOrderedListRefresh } from "./lib/utils";
@@ -30,15 +29,14 @@ import { debounce } from "lodash-es";
 import onUpdate, { eventInfo } from "./lib/on-update";
 import onDrop from "./lib/on-drop";
 import type { HandleBlockJson } from "./lib/content-utils";
-import { generateBaseIndex } from "./lib/generate-unique-sort";
-
-console.log(generateBaseIndex("yyU", null));
+import { ImageUploadNodeOptions } from "./extensions/image-upload-node";
 
 export interface NotionEditorProps {
 	/** editor 内容为空时才会执行 */
 	initContent?: () => Promise<JSONContent[]>;
 	onUpdate?: (data: HandleBlockJson[]) => void;
 	onDropEnd?: (data: HandleBlockJson[]) => void;
+	uploadImageConfig?: Omit<ImageUploadNodeOptions, "HTMLAttributes">;
 }
 
 export const CacheMap = new Map<string, JSONContent>();
@@ -85,6 +83,7 @@ export default function NotionEditor({
 	onUpdate: handleUpdate,
 	initContent,
 	onDropEnd,
+	uploadImageConfig,
 }: NotionEditorProps) {
 	const editor = useEditor({
 		immediatelyRender: false,
@@ -93,7 +92,7 @@ export default function NotionEditor({
 				id: "notion-editor-container",
 			},
 		},
-		extensions,
+		extensions: createExtensions({ uploadImageConfig }),
 		onUpdate: debounce((props) => onUpdate(props, handleUpdate), 1000),
 		onDrop: (_, slice) => {
 			if (!slice || !onDropEnd) return;
@@ -114,10 +113,7 @@ export default function NotionEditor({
 							console.error(err);
 						}
 					}
-					editor.commands.setContent({
-						type: "doc",
-						content: result,
-					});
+					editor.commands.setContent({ type: "doc", content: result });
 					eventInfo.canUpdate = false;
 				}
 			});

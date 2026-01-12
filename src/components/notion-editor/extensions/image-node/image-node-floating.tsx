@@ -10,6 +10,8 @@ import { ImageAlignButton } from "../../ui/image-align-button";
 // --- UI Primitive ---
 import { Separator } from "../../ui-primitive/separator";
 import { ImageCaptionButton } from "../../ui/image-caption-button";
+import { ImageUploadButton } from "../../ui/image-upload-button";
+import { RefreshCcwIcon } from "../../icons/refresh-ccw-icon";
 
 export function ImageNodeFloating() {
 	const { editor } = useCurrentEditor();
@@ -27,6 +29,7 @@ export function ImageNodeFloating() {
 			<Separator />
 			<ImageCaptionButton />
 			<Separator />
+			<ImageUploadButton icon={RefreshCcwIcon} tooltip="Replace" />
 			<DeleteNodeButton />
 		</>
 	);

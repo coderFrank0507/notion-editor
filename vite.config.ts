@@ -12,6 +12,9 @@ export default defineConfig({
 		}),
 		tailwindcss(),
 	],
+	server: {
+		port: 5678,
+	},
 	resolve: {
 		// 配置路径别名
 		alias: {

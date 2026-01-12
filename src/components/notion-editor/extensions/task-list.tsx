@@ -19,7 +19,9 @@ export function TaskItemView(props: ReactNodeViewProps) {
 					<div
 						className={cn(
 							"size-4 border-[1.5px] rounded relative cursor-pointer",
-							node.attrs.checked ? "bg-checked border-checked" : "border-text-color"
+							node.attrs.checked
+								? "bg-(--tt-color-blue-dec-1) border-(--tt-color-blue-dec-1)"
+								: "border"
 						)}
 						onMouseDownCapture={() => {
 							editor.chain().blur();
@@ -31,7 +33,7 @@ export function TaskItemView(props: ReactNodeViewProps) {
 						}}
 					>
 						<TaskItemChecked
-							className={cn("block size-full none", node.attrs.checked && "block")}
+							className={cn("block size-full", node.attrs.checked ? "block" : "none")}
 							color={node.attrs.checked ? "white" : "transparent"}
 						/>
 					</div>
