@@ -180,6 +180,7 @@
 
 	/* Global colors - Light mode */
 	--tt-bg-color: var(--white);
+	--tt-text-color: #000000;
 	--tt-border-color: var(--tt-gray-light-a-200);
 	--tt-border-color-tint: var(--tt-gray-light-a-100);
 	--tt-sidebar-bg-color: var(--tt-gray-light-100);
@@ -193,6 +194,7 @@
 /* Global colors - Dark mode */
 .dark {
 	--tt-bg-color: var(--black);
+	--tt-text-color: #ffffff;
 	--tt-border-color: var(--tt-gray-dark-a-200);
 	--tt-border-color-tint: var(--tt-gray-dark-a-100);
 	--tt-sidebar-bg-color: var(--tt-gray-dark-100);

@@ -16,13 +16,13 @@ function App() {
 		uppy.use(AWSS3, {
 			shouldUseMultipart: false,
 			async getUploadParameters(file) {
+				console.log("file: ", file);
 				try {
 					const result = await createPresignedUrl({
 						filename: file.data instanceof File ? file.data.name : "test",
 						type: file.data instanceof File ? file.data?.type : "",
 						size: file.size!,
 					});
-					console.log("result: ", result);
 					return result;
 				} catch (error) {
 					console.log(error);
@@ -55,9 +55,7 @@ function App() {
 	return (
 		<div className="p-10">
 			<NotionEditor
-				initContent={() => {
-					return databaseToJSONContent(databaseData);
-				}}
+				initContent={() => databaseToJSONContent(databaseData)}
 				onUpdate={(data) => {
 					const blocks = transacionToDbdata(data);
 					console.log("onUpdate: ", blocks);

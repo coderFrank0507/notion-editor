@@ -6,7 +6,7 @@ import {
 	useCurrentEditor,
 	type JSONContent,
 } from "@tiptap/react";
-import extensions, { createExtensions } from "./extensions";
+import { createExtensions } from "./extensions";
 import EditorToolbarFloating from "./editor-toolbar-floating";
 import useUiEditorState from "./hooks/use-ui-editor-state";
 

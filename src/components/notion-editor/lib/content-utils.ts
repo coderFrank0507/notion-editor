@@ -10,7 +10,7 @@ export type DatabaseContentJson = {
 	attrs?: JSONContent["attrs"];
 	content?: Array<NodeItem>;
 };
-export type HandleType = "create" | "update" | "delete";
+export type HandleType = "create" | "update" | "update-sort" | "delete";
 export interface HandleBlockType {
 	handleType: HandleType;
 	json: DatabaseContentJson;

@@ -1,6 +1,10 @@
 import { S3Client, PutObjectCommand, PutObjectCommandInput } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
+function addTimestampToImageName(filename: string, timestamp: number = Date.now()): string {
+	return filename.replace(/(\.(jpg|jpeg|png|gif|webp|svg))$/i, `_${timestamp}$1`);
+}
+
 export async function createPresignedUrl({
 	filename,
 	type,
@@ -16,7 +20,7 @@ export async function createPresignedUrl({
 
 	const params: PutObjectCommandInput = {
 		Bucket: import.meta.env.VITE_BUCKET_NAME,
-		Key: `${dateString}/${filename.replaceAll(" ", "_")}_${date.getTime()}`,
+		Key: `${dateString}/${addTimestampToImageName(filename.replaceAll(" ", "_"))}}`,
 		ContentType: type,
 		ContentLength: size,
 	};
