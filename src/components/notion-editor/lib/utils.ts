@@ -540,7 +540,9 @@ export const OrderedRefreshKey = new PluginKey<{
 } | null>("ordered-refresh");
 
 /** 当 blocks 列表发生变化时，刷新 ordered-list 序号 */
-export function dispatchOrderedListRefresh(editor: Editor) {
+export function dispatchOrderedListRefresh(editor: Editor | null) {
+	if (!editor) return;
+
 	const view = editor.view;
 	const tr = view.state.tr;
 	tr.setMeta(OrderedRefreshKey, {

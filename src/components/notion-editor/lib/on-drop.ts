@@ -4,7 +4,9 @@ import { generateBaseIndex } from "./generate-unique-sort";
 import type { Editor } from "@tiptap/core";
 import type { Slice } from "@tiptap/pm/model";
 
-const onDrop = (slice: Slice, editor: Editor, onDropEnd: NotionEditorProps["onDropEnd"]) => {
+const onDrop = (slice: Slice, editor: Editor | null, onDropEnd: NotionEditorProps["onDropEnd"]) => {
+	if (!editor || !onDropEnd) return;
+
 	slice.content.forEach((node) => {
 		if (node.isBlock) {
 			eventInfo.draggedBlockId = node.attrs.id;
@@ -17,8 +19,8 @@ const onDrop = (slice: Slice, editor: Editor, onDropEnd: NotionEditorProps["onDr
 			if (node.attrs?.id === eventInfo.draggedBlockId) {
 				const prev = jsonContent.content[index - 1];
 				const next = jsonContent.content[index + 1];
-				const left = prev?.attrs.sort;
-				const right = next?.attrs.sort;
+				const left = prev?.attrs!.sort;
+				const right = next?.attrs!.sort;
 				node.attrs.sort = generateBaseIndex(left, right);
 				onDropEnd([{ handleType: "update-sort", json: { attrs: node.attrs } }]);
 				eventInfo.draggedBlockId = null;

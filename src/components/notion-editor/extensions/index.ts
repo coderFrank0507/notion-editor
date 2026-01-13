@@ -35,11 +35,11 @@ import {
 } from "./image-upload-node/image-upload-node-extension";
 
 interface ExtensionsConfig {
-	uploadImageConfig: Omit<ImageUploadNodeOptions, "HTMLAttributes">;
+	uploadImageConfig?: Omit<ImageUploadNodeOptions, "HTMLAttributes">;
 }
 
 export function createExtensions({ uploadImageConfig }: ExtensionsConfig) {
-	return [
+	const extensions = [
 		Document,
 		Text,
 		Paragraph,
@@ -86,14 +86,6 @@ export function createExtensions({ uploadImageConfig }: ExtensionsConfig) {
 			depth: 50,
 			newGroupDelay: 500,
 		}),
-		// ImageUploadNode.configure({
-		// 	accept: "image/*",
-		// 	maxSize: MAX_FILE_SIZE,
-		// 	limit: 3,
-		// 	upload: handleImageUpload,
-		// 	onError: (error) => console.error("Upload failed:", error),
-		// }),
-		ImageUploadNode.configure(uploadImageConfig),
 		Placeholder.configure({
 			placeholder: ({ node }) => {
 				const { type } = node;
@@ -115,4 +107,6 @@ export function createExtensions({ uploadImageConfig }: ExtensionsConfig) {
 			],
 		}),
 	];
+	if (uploadImageConfig) extensions.push(ImageUploadNode.configure(uploadImageConfig));
+	return extensions;
 }
