@@ -20,7 +20,7 @@ export async function createPresignedUrl({
 
 	const params: PutObjectCommandInput = {
 		Bucket: import.meta.env.VITE_BUCKET_NAME,
-		Key: `${dateString}/${addTimestampToImageName(filename.replaceAll(" ", "_"))}}`,
+		Key: `${dateString}/${addTimestampToImageName(filename.replaceAll(" ", "_"))}`,
 		ContentType: type,
 		ContentLength: size,
 	};

@@ -113,8 +113,7 @@ export default function NotionEditor({
 							console.error(err);
 						}
 					}
-					editor.commands.setContent({ type: "doc", content: result });
-					eventInfo.canUpdate = false;
+					editor.commands.setContent({ type: "doc", content: result }, { emitUpdate: false });
 				}
 			});
 		}

@@ -18,6 +18,8 @@ const onUpdate = (props: EditorEvents["update"], handleUpdate?: NotionEditorProp
 		return;
 	}
 
+	console.log("onUpdate");
+
 	const { editor, transaction } = props;
 	// 没有文档变更，直接返回空
 	if (!transaction.docChanged || editor.isEmpty) return;
