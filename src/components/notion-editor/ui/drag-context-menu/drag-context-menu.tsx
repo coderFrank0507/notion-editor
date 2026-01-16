@@ -379,7 +379,7 @@ export const DragContextMenu = ({
 							<ComboboxList style={{ minWidth: "15rem" }}>
 								<MenuGroup>
 									<MenuGroupLabel>{nodeName}</MenuGroupLabel>
-									<ColorMenu />
+									{/* <ColorMenu /> */}
 									<TransformActionGroup />
 									<ImageActionGroup />
 								</MenuGroup>

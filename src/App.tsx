@@ -4,8 +4,8 @@ import AWSS3 from "@uppy/aws-s3";
 import NotionEditor, {
 	databaseToJSONContent,
 	transacionToDbdata,
+	DatabaseData,
 } from "./components/notion-editor";
-import { databaseData } from "./components/notion-editor/data/database-data";
 import { createPresignedUrl } from "./http/file";
 
 function App() {
@@ -55,7 +55,7 @@ function App() {
 	return (
 		<div className="p-10">
 			<NotionEditor
-				initContent={() => databaseToJSONContent(databaseData)}
+				initContent={() => databaseToJSONContent(DatabaseData)}
 				onUpdate={(data) => {
 					const blocks = transacionToDbdata(data);
 					console.log("onUpdate: ", blocks);

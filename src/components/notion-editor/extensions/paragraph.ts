@@ -1,6 +1,6 @@
 import { mergeAttributes, Node } from "@tiptap/react";
 import type { ParagraphOptions } from "@tiptap/extension-paragraph";
-import { splitBlock } from "prosemirror-commands";
+import { toggleParagraph } from "../ui/text-button";
 
 const Paragraph = Node.create<ParagraphOptions>({
 	name: "paragraph",
@@ -40,7 +40,7 @@ const Paragraph = Node.create<ParagraphOptions>({
 							type: $from.parent.type.name,
 						});
 					} else {
-						return editor.chain().focus().setNode("paragraph").run();
+						return toggleParagraph(editor);
 					}
 				}
 				return editor.commands.createParagraphNear();

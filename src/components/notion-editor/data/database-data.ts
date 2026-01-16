@@ -1,6 +1,6 @@
 import { DatabaseContentJson } from "../lib/content-utils";
 
-export const databaseData: DatabaseContentJson[] = [
+export const DatabaseData: DatabaseContentJson[] = [
 	{
 		type: "heading",
 		attrs: {
