@@ -1,5 +1,6 @@
 import NotionEditor from "./notion-editor";
-export { DatabaseData } from "./data/database-data";
+export { template_ZH_CN } from "./template/zh-cn";
+export { template_EN } from "./template/en";
 export type {
 	HandleBlockType,
 	NodeItem,
