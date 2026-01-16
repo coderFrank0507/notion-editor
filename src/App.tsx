@@ -55,7 +55,7 @@ function App() {
 	return (
 		<div className="p-10">
 			<NotionEditor
-				initContent={() => databaseToJSONContent(DatabaseData)}
+				// initContent={() => databaseToJSONContent(DatabaseData)}
 				onUpdate={(data) => {
 					const blocks = transacionToDbdata(data);
 					console.log("onUpdate: ", blocks);

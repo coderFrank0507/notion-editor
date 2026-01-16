@@ -20,11 +20,24 @@ const onUpdate = (props: EditorEvents["update"], handleUpdate?: NotionEditorProp
 
 	const { editor, transaction } = props;
 	// 没有文档变更，直接返回空
-	if (!transaction.docChanged || editor.isEmpty) return;
+	if (!transaction.docChanged) return;
 
 	const result: HandleBlockJson[] = [];
 
 	const { content } = editor.getJSON();
+
+	if (editor.isEmpty) {
+		for (let i = 0, length = content.length; i < length; i++) {
+			const item = content[i];
+			const cache = CacheMap.get(item.attrs!.id);
+			if (cache) result.push({ handleType: "delete", json: item });
+			CacheMap.delete(item.attrs!.id);
+			BlockSortMap.delete(item.attrs!.id);
+		}
+
+		if (result.length) handleUpdate?.(result);
+		return;
+	}
 
 	for (let i = 0, length = content.length; i < length; i++) {
 		const item = content[i];
@@ -33,15 +46,18 @@ const onUpdate = (props: EditorEvents["update"], handleUpdate?: NotionEditorProp
 			const changed = patchBlock(cache, item);
 			if (changed) result.push({ handleType: "update", json: item });
 		} else {
-			if (item.type !== "imageUpload") result.push({ handleType: "create", json: item });
+			if (item.type !== "imageUpload" && !editor.isEmpty)
+				result.push({ handleType: "create", json: item });
 		}
 		CacheMap.delete(item.attrs!.id);
+		BlockSortMap.delete(item.attrs!.id);
 	}
 
 	if (CacheMap.size) {
 		Array.from(CacheMap.values()).forEach((item) => {
 			if (item.type !== "imageUpload") result.push({ handleType: "delete", json: item });
 			CacheMap.delete(item.attrs!.id);
+			BlockSortMap.delete(item.attrs!.id);
 		});
 	}
 

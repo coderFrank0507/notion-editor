@@ -24,6 +24,12 @@ function isSameArray(c1: Array<JSONContent> | undefined, c2: Array<JSONContent> 
 	return Array.isArray(c1) === Array.isArray(c2);
 }
 
+/**
+ *
+ * @param n1 旧节点
+ * @param n2 新节点
+ * @returns Boolean
+ */
 export function patchBlock(n1: JSONContent, n2: JSONContent) {
 	// console.log(n1, n2);
 	// 块类型是否一致
