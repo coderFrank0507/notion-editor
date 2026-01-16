@@ -11,16 +11,18 @@ import { OrderedRefreshKey } from "../lib/utils";
 import type { Node as PMNode } from "@tiptap/pm/model";
 import type { ParagraphOptions } from "@tiptap/extension-paragraph";
 
-function getOrderedIndex(doc: PMNode, pos: number) {
+function getOrderedIndex(doc: PMNode, pos: number | undefined) {
 	let index = 1;
-	doc.nodesBetween(0, pos, (node) => {
-		if (!node.isBlock) return;
-		if (node.type.name !== "orderedList") {
-			index = 1; // reset return;
-		} else {
-			index++;
-		}
-	});
+	if (pos) {
+		doc.nodesBetween(0, pos, (node) => {
+			if (!node.isBlock) return;
+			if (node.type.name !== "orderedList") {
+				index = 1; // reset return;
+			} else {
+				index++;
+			}
+		});
+	}
 	return index;
 }
 
@@ -34,8 +36,10 @@ export function OrderedItemView(props: ReactNodeViewProps) {
 			if (!range) return;
 
 			const pos = getPos();
-			if (pos >= range.from && pos <= range.to) {
-				setTick((t) => t + 1);
+			if (pos) {
+				if (pos >= range.from && pos <= range.to) {
+					setTick((t) => t + 1);
+				}
 			}
 		};
 
@@ -51,11 +55,11 @@ export function OrderedItemView(props: ReactNodeViewProps) {
 			<div className="ordered-item flex items-start py-0.5">
 				<div
 					contentEditable={false}
-					className="w-4 h-6 mr-1.5 flex justify-center items-center"
+					className="w-4 h-6 mr-1.5 flex justify-center items-center text-base"
 				>{`${number}.`}</div>
 
 				<NodeViewContent
-					className="list-item-content flex-1"
+					className="list-item-content flex-1 text-base"
 					style={{ backgroundColor: node.attrs.backgroundColor }}
 				/>
 			</div>
@@ -80,7 +84,6 @@ export const OrderedList = Node.create<ParagraphOptions>({
 		return {
 			HTMLAttributes: {
 				"data-type": "orderedList",
-				class: "orderedList",
 			},
 		};
 	},

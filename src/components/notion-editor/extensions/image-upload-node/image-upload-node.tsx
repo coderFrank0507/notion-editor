@@ -445,6 +445,7 @@ export const ImageUploadNode: React.FC<NodeViewProps> = (props) => {
 							title: filename,
 							"data-align": "center",
 						},
+						content: [{ type: "text", text: filename }],
 					};
 				});
 

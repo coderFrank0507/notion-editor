@@ -165,7 +165,13 @@ export const Image = TiptapImage.extend<ImageOptions>({
 	},
 
 	addNodeView() {
-		return ReactNodeViewRenderer(ImageNodeView);
+		return ReactNodeViewRenderer(ImageNodeView, {
+			attrs({ node }) {
+				return {
+					"data-id": node.attrs.id,
+				};
+			},
+		});
 	},
 });
 

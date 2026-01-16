@@ -90,7 +90,7 @@ export function useRecentColors(maxColors: number = 3) {
 
 	useEffect(() => {
 		try {
-			const storedColors = localStorage.getItem("tiptapRecentlyUsedColors");
+			const storedColors = localStorage.getItem("editorRecentlyUsedColors");
 			if (storedColors) {
 				const colors = JSON.parse(storedColors) as RecentColor[];
 				setRecentColors(colors.slice(0, maxColors));
@@ -109,7 +109,7 @@ export function useRecentColors(maxColors: number = 3) {
 				const updated = [{ type, label, value }, ...filtered].slice(0, maxColors);
 
 				try {
-					localStorage.setItem("tiptapRecentlyUsedColors", JSON.stringify(updated));
+					localStorage.setItem("editorRecentlyUsedColors", JSON.stringify(updated));
 				} catch (e) {
 					console.error("Failed to store colors:", e);
 				}

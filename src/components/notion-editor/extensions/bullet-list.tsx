@@ -18,7 +18,7 @@ export function BulletItemView(props: ReactNodeViewProps) {
 				</div>
 
 				<NodeViewContent
-					className="list-item-content flex-1"
+					className="list-item-content flex-1 text-base"
 					style={{ backgroundColor: node.attrs.backgroundColor }}
 				/>
 			</div>
@@ -43,7 +43,6 @@ export const BulletList = Node.create<ParagraphOptions>({
 		return {
 			HTMLAttributes: {
 				"data-type": "bulletList",
-				class: "bulletList",
 			},
 		};
 	},

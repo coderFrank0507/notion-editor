@@ -1,5 +1,6 @@
 import { mergeAttributes, Node } from "@tiptap/react";
 import type { ParagraphOptions } from "@tiptap/extension-paragraph";
+import { splitBlock } from "prosemirror-commands";
 
 const Paragraph = Node.create<ParagraphOptions>({
 	name: "paragraph",
@@ -10,7 +11,6 @@ const Paragraph = Node.create<ParagraphOptions>({
 		return {
 			HTMLAttributes: {
 				"data-type": "paragraph",
-				class: "paragraph",
 			},
 		};
 	},
@@ -34,21 +34,16 @@ const Paragraph = Node.create<ParagraphOptions>({
 				const { $from } = state.selection;
 
 				const hasContent = $from.parent.textContent.trim().length > 0;
-				if (
-					["taskList", "bulletList", "orderedList"].includes($from.parent.type.name) &&
-					hasContent
-				) {
-					const res = editor.commands.insertContent({
-						type: $from.parent.type.name,
-					});
-					return res;
+				if (["taskList", "bulletList", "orderedList"].includes($from.parent.type.name)) {
+					if (hasContent) {
+						return editor.commands.insertContent({
+							type: $from.parent.type.name,
+						});
+					} else {
+						return editor.chain().focus().setNode("paragraph").run();
+					}
 				}
-
-				if ($from.parent.type.name !== "paragraph" && !hasContent) {
-					return editor.chain().focus().setNode("paragraph").run();
-				} else {
-					return false;
-				}
+				return editor.commands.createParagraphNear();
 			},
 		};
 	},

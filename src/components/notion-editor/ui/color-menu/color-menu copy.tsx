@@ -39,12 +39,14 @@ const TextColorMenuItem: React.FC<ColorMenuItemProps> = ({ color }) => {
 	});
 
 	return (
-		<MenuItem render={<Button data-style="ghost" data-active-state={isActive ? "on" : "off"} />}>
+		<MenuItem
+			render={<Button data-style="ghost" data-active-state={isActive ? "on" : "off"} />}
+			onClick={handleColorText}
+		>
 			<span className="tiptap-button-color-text" style={{ color: color.value }}>
 				<TextColorSmallIcon
 					className="tiptap-button-icon"
 					style={{ color: color.value, flexGrow: 1 }}
-					onClick={handleColorText}
 				/>
 			</span>
 			<span className="tiptap-button-text">{label}</span>

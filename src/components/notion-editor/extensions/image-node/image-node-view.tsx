@@ -313,13 +313,13 @@ export const ResizableImage: React.FC<ResizableImageProps> = ({
 					)}
 				</div>
 
-				{editor?.isEditable && shouldShowCaption && (
+				{/* {editor?.isEditable && shouldShowCaption && (
 					<NodeViewContent
 						as="div"
 						className="tiptap-image-caption"
 						data-placeholder="Add a caption..."
 					/>
-				)}
+				)} */}
 			</div>
 		</NodeViewWrapper>
 	);

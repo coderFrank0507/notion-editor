@@ -22,7 +22,7 @@ const onDrop = (slice: Slice, editor: Editor | null, onDropEnd: NotionEditorProp
 				const left = prev?.attrs!.sort;
 				const right = next?.attrs!.sort;
 				node.attrs.sort = generateBaseIndex(left, right);
-				onDropEnd([{ handleType: "update-sort", json: { attrs: node.attrs } }]);
+				onDropEnd([{ handleType: "update-sort", json: node }]);
 				eventInfo.draggedBlockId = null;
 			}
 		});

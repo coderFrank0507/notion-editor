@@ -27,8 +27,8 @@ export function ImageNodeFloating() {
 			<ImageAlignButton align="center" />
 			<ImageAlignButton align="right" />
 			<Separator />
-			<ImageCaptionButton />
-			<Separator />
+			{/* <ImageCaptionButton />
+			<Separator /> */}
 			<ImageUploadButton icon={RefreshCcwIcon} tooltip="Replace" />
 			<DeleteNodeButton />
 		</>

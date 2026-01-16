@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useLayoutEffect } from "react";
 import {
 	useEditor,
 	EditorContent,
@@ -30,6 +30,7 @@ import onUpdate, { eventInfo } from "./lib/on-update";
 import onDrop from "./lib/on-drop";
 import type { HandleBlockJson } from "./lib/content-utils";
 import { ImageUploadNodeOptions } from "./extensions/image-upload-node";
+import { BlockSortMap } from "./extensions/block-sort";
 
 export interface NotionEditorProps {
 	/** editor 内容为空时才会执行 */
@@ -100,24 +101,27 @@ export default function NotionEditor({
 		},
 	});
 
-	useEffect(() => {
-		if (editor?.isEmpty && initContent) {
-			initContent().then((result) => {
+	useLayoutEffect(() => {
+		if (editor?.isEmpty) {
+			initContent?.().then((result) => {
 				if (result.length) {
 					CacheMap.clear();
+					BlockSortMap.clear();
 					for (let i = 0, length = result.length; i < length; i++) {
 						const item = result[i];
 						try {
 							CacheMap.set(item.attrs!.id, item);
+							BlockSortMap.set(item.attrs!.id, item.attrs!.sort);
 						} catch (err) {
 							console.error(err);
 						}
 					}
-					editor.commands.setContent({ type: "doc", content: result }, { emitUpdate: false });
+					editor.commands.setContent({ type: "doc", content: result });
+					eventInfo.canUpdate = false;
 				}
 			});
 		}
-	}, [editor, initContent]);
+	}, [editor]);
 
 	if (!editor) return null;
 

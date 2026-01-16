@@ -20,7 +20,7 @@ export interface HandleBlockJson {
 	json: JSONContent;
 }
 
-function isSameArray(c1: Array<JSONContent>, c2: Array<JSONContent>) {
+function isSameArray(c1: Array<JSONContent> | undefined, c2: Array<JSONContent> | undefined) {
 	return Array.isArray(c1) === Array.isArray(c2);
 }
 
@@ -42,8 +42,8 @@ export function patchBlock(n1: JSONContent, n2: JSONContent) {
 		if (!isSameArray(n1.content, n2.content)) return true;
 
 		for (let i = 0; i < n1cl; i++) {
-			const c1 = n1.content[i];
-			const c2 = n2.content[i];
+			const c1 = n1.content![i];
+			const c2 = n2.content![i];
 
 			// 内容类型是否一致，有 text | hardBreak
 			if (c1.type !== c2.type) return true;
@@ -63,8 +63,8 @@ export function patchBlock(n1: JSONContent, n2: JSONContent) {
 				if (!isSameArray(c1.marks, c2.marks)) return true;
 
 				for (let j = 0; j < m1l; j++) {
-					const n1mi = c1.marks[j];
-					const n2mi = c2.marks[j];
+					const n1mi = c1.marks![j];
+					const n2mi = c2.marks![j];
 					// 标记类型是否一致，有 bold | italic | textStyle 等
 					if (n1mi.type !== n2mi.type) return true;
 					// mark.type = textStyle 时，会有 attrs 属性
@@ -130,7 +130,7 @@ function transformContent(content: Array<JSONContent>) {
 export function transacionToDbdata(list: HandleBlockJson[]) {
 	const content: HandleBlockType[] = [];
 	for (const { handleType, json } of list) {
-		const result: HandleBlockType = { handleType, json: { type: json.type } };
+		const result: HandleBlockType = { handleType, json: { type: json.type! } };
 		if (json.attrs) result["json"]["attrs"] = json.attrs;
 		if (json.content && handleType !== "delete") {
 			const content = transformContent(json.content);

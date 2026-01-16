@@ -49,6 +49,7 @@ export const databaseData: DatabaseContentJson[] = [
 			showCaption: false,
 			sort: "r",
 		},
+		content: [["test"]],
 	},
 	{
 		type: "taskList",

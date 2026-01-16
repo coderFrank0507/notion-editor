@@ -21,6 +21,7 @@ import Highlight from "@tiptap/extension-highlight";
 import { Placeholder, Selection } from "@tiptap/extensions";
 import { Dropcursor } from "@tiptap/extensions";
 import { Color, TextStyle } from "@tiptap/extension-text-style";
+import { isChangeOrigin } from "@tiptap/extension-collaboration";
 
 // --- Custom Extensions ---
 import { TaskList } from "./task-list";
@@ -33,6 +34,7 @@ import {
 	ImageUploadNode,
 	type ImageUploadNodeOptions,
 } from "./image-upload-node/image-upload-node-extension";
+import { BlockSortExtension } from "./block-sort";
 
 interface ExtensionsConfig {
 	uploadImageConfig?: Omit<ImageUploadNodeOptions, "HTMLAttributes">;
@@ -60,6 +62,7 @@ export function createExtensions({ uploadImageConfig }: ExtensionsConfig) {
 		UiState,
 		Image,
 		NodeBackground,
+		BlockSortExtension,
 		Heading.extend({
 			addAttributes() {
 				return {
@@ -90,6 +93,7 @@ export function createExtensions({ uploadImageConfig }: ExtensionsConfig) {
 			placeholder: ({ node }) => {
 				const { type } = node;
 				if (type.name === "task-list") return "Task Item";
+				if (type.name === "ordered-list") return "Ordered Item";
 				if (type.name === "bullet-list") return "Bullet Item";
 				return "Write, type '/' for commands…";
 			},
@@ -105,6 +109,7 @@ export function createExtensions({ uploadImageConfig }: ExtensionsConfig) {
 				"image",
 				"codeBlock",
 			],
+			filterTransaction: (transaction) => !isChangeOrigin(transaction),
 		}),
 	];
 	if (uploadImageConfig) extensions.push(ImageUploadNode.configure(uploadImageConfig));

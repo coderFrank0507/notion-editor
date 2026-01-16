@@ -41,7 +41,7 @@ export function TaskItemView(props: ReactNodeViewProps) {
 
 				<NodeViewContent
 					className={cn(
-						"list-item-content flex-1",
+						"list-item-content flex-1 text-base",
 						node.attrs.checked && "text-gray-500 line-through"
 					)}
 					style={{ backgroundColor: node.attrs.backgroundColor }}
@@ -68,7 +68,6 @@ export const TaskList = Node.create<ParagraphOptions>({
 		return {
 			HTMLAttributes: {
 				"data-type": "taskList",
-				class: "taskList",
 			},
 		};
 	},

@@ -1,7 +1,7 @@
 import { type HandleBlockJson, patchBlock } from "./content-utils";
 import { CacheMap, type NotionEditorProps } from "../notion-editor";
 import type { EditorEvents } from "@tiptap/core";
-import { generateBaseIndex } from "./generate-unique-sort";
+import { BlockSortMap } from "../extensions/block-sort";
 
 export const eventInfo: {
 	canUpdate: boolean;
@@ -18,8 +18,6 @@ const onUpdate = (props: EditorEvents["update"], handleUpdate?: NotionEditorProp
 		return;
 	}
 
-	console.log("onUpdate");
-
 	const { editor, transaction } = props;
 	// 没有文档变更，直接返回空
 	if (!transaction.docChanged || editor.isEmpty) return;
@@ -35,25 +33,24 @@ const onUpdate = (props: EditorEvents["update"], handleUpdate?: NotionEditorProp
 			const changed = patchBlock(cache, item);
 			if (changed) result.push({ handleType: "update", json: item });
 		} else {
-			const left = content[i - 1]?.attrs.sort;
-			const right = content[i + 1]?.attrs.sort;
-			item.attrs.sort = generateBaseIndex(left, right);
-			result.push({ handleType: "create", json: item });
+			if (item.type !== "imageUpload") result.push({ handleType: "create", json: item });
 		}
 		CacheMap.delete(item.attrs!.id);
 	}
 
 	if (CacheMap.size) {
 		Array.from(CacheMap.values()).forEach((item) => {
-			result.push({ handleType: "delete", json: item });
+			if (item.type !== "imageUpload") result.push({ handleType: "delete", json: item });
 			CacheMap.delete(item.attrs!.id);
 		});
 	}
 
 	// 缓存新的数据
 	CacheMap.clear();
+	BlockSortMap.clear();
 	content.forEach((item) => {
 		CacheMap.set(item.attrs!.id, item);
+		BlockSortMap.set(item.attrs!.id, item.attrs!.sort);
 	});
 
 	if (result.length) handleUpdate?.(result);
