@@ -187,7 +187,7 @@ export function useDuplicate(config?: UseDuplicateConfig) {
 
 	useHotkeys(
 		DUPLICATE_SHORTCUT_KEY,
-		(event) => {
+		event => {
 			event.preventDefault(); // prevent browser default bookmarking
 			handleDuplicate();
 		},
@@ -195,14 +195,14 @@ export function useDuplicate(config?: UseDuplicateConfig) {
 			enabled: isVisible && canDuplicate,
 			enableOnContentEditable: !isMobile,
 			enableOnFormTags: true,
-		}
+		},
 	);
 
 	return {
 		isVisible,
 		handleDuplicate,
 		canDuplicate,
-		label: "Duplicate node",
+		label: "drag.duplicate",
 		shortcutKeys: DUPLICATE_SHORTCUT_KEY,
 		Icon: CopyIcon,
 	};

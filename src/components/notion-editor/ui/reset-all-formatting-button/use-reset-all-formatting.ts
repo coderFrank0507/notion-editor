@@ -48,14 +48,14 @@ export function removeAllMarksExcept(tr: Transaction, skip: string[] = []) {
 
 	if (empty) return tr;
 
-	ranges.forEach((range) => {
+	ranges.forEach(range => {
 		const from = range.$from.pos;
 		const to = range.$to.pos;
 
 		tr.doc.nodesBetween(from, to, (node, pos) => {
 			if (!node.isInline) return true;
 
-			node.marks.forEach((mark) => {
+			node.marks.forEach(mark => {
 				if (!skip.includes(mark.type.name)) {
 					tr.removeMark(pos, pos + node.nodeSize, mark.type);
 				}
@@ -86,7 +86,7 @@ export function canResetMarks(tr: Transaction, skip: string[] = []): boolean {
 
 		let hasRemovableMarks = false;
 
-		tr.doc.nodesBetween(from, to, (node) => {
+		tr.doc.nodesBetween(from, to, node => {
 			if (!node.isInline) return true;
 
 			for (const mark of node.marks) {
@@ -226,7 +226,7 @@ export function useResetAllFormatting(config?: UseResetAllFormattingConfig) {
 
 	useHotkeys(
 		RESET_ALL_FORMATTING_SHORTCUT_KEY,
-		(event) => {
+		event => {
 			event.preventDefault(); // prevent browser default refresh
 			handleResetFormatting();
 		},
@@ -234,14 +234,14 @@ export function useResetAllFormatting(config?: UseResetAllFormattingConfig) {
 			enabled: isVisible && canReset,
 			enableOnContentEditable: !isMobile,
 			enableOnFormTags: true,
-		}
+		},
 	);
 
 	return {
 		isVisible,
 		handleResetFormatting,
 		canReset,
-		label: "Reset formatting",
+		label: "drag.reset",
 		shortcutKeys: RESET_ALL_FORMATTING_SHORTCUT_KEY,
 		Icon: RotateCcwIcon,
 	};

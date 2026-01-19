@@ -63,9 +63,9 @@ export const imageAlignIcons = {
 };
 
 export const imageAlignLabels: Record<ImageAlign, string> = {
-	left: "Image align left",
-	center: "Image align center",
-	right: "Image align right",
+	left: "image_style.align_left",
+	center: "image_style.align_center",
+	right: "image_style.align_right",
 };
 
 /**
@@ -75,7 +75,7 @@ export function canSetImageAlign(
 	editor: Editor | null,
 	align: ImageAlign,
 	extensionName: string = "image",
-	attributeName: string = "data-align"
+	attributeName: string = "data-align",
 ): boolean {
 	if (!editor || !editor.isEditable) return false;
 	if (!isExtensionAvailable(editor, [extensionName])) return false;
@@ -90,7 +90,7 @@ export function useImageAlignActive(
 	editor: Editor | null,
 	align: ImageAlign,
 	extensionName: string = "image",
-	attributeName: string = "data-align"
+	attributeName: string = "data-align",
 ): boolean {
 	const editorState = useEditorState({
 		editor,
@@ -118,7 +118,7 @@ export function setImageAlign(
 	editor: Editor | null,
 	align: ImageAlign,
 	extensionName: string = "image",
-	attributeName: string = "data-align"
+	attributeName: string = "data-align",
 ): boolean {
 	if (!editor?.isEditable) {
 		return false;
@@ -247,7 +247,7 @@ export function useImageAlign(config: UseImageAlignConfig) {
 					hideWhenUnavailable,
 					extensionName,
 					attributeName,
-				})
+				}),
 			);
 		};
 
@@ -271,7 +271,7 @@ export function useImageAlign(config: UseImageAlignConfig) {
 
 	useHotkeys(
 		IMAGE_ALIGN_SHORTCUT_KEYS[align],
-		(event) => {
+		event => {
 			event.preventDefault();
 			handleImageAlign();
 		},
@@ -279,7 +279,7 @@ export function useImageAlign(config: UseImageAlignConfig) {
 			enabled: isVisible && canAlign,
 			enableOnContentEditable: !isMobile,
 			enableOnFormTags: true,
-		}
+		},
 	);
 
 	return {

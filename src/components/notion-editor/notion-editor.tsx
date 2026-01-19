@@ -14,6 +14,18 @@ import useUiEditorState from "./hooks/use-ui-editor-state";
 import { SlashDropdownMenu } from "./ui/slash-dropdown-menu";
 import { DragContextMenu } from "./ui/drag-context-menu";
 
+// --- Lib ---
+import { dispatchOrderedListRefresh } from "./lib/utils";
+import { debounce } from "lodash-es";
+import onUpdate, { eventInfo } from "./lib/on-update";
+import onDrop from "./lib/on-drop";
+import { ImageUploadNodeOptions } from "./extensions/image-upload-node";
+import { BlockSortMap } from "./extensions/block-sort";
+import type { HandleBlockJson } from "./lib/content-utils";
+
+// --- i18n ---
+import { LangContext, type LangKey, useLanguage } from "./i18n";
+
 // --- Styles ---
 import "./styles/_keyframe-animations.scss";
 import "./styles/_variables.scss";
@@ -23,18 +35,8 @@ import "./styles/paragraph-node.scss";
 import "./styles/heading-node.scss";
 import "./styles/code-block-node.scss";
 
-// --- Lib ---
-import { dispatchOrderedListRefresh } from "./lib/utils";
-import { debounce } from "lodash-es";
-import onUpdate, { eventInfo } from "./lib/on-update";
-import onDrop from "./lib/on-drop";
-import type { HandleBlockJson } from "./lib/content-utils";
-import { ImageUploadNodeOptions } from "./extensions/image-upload-node";
-import { BlockSortMap } from "./extensions/block-sort";
-import { LangContext, LangKey, useLanguage } from "./i18n";
-
 export interface NotionEditorProps {
-	lang?: "zh-CN" | "en";
+	lang?: LangKey;
 	/** editor 内容为空时才会执行 */
 	initContent?: () => Promise<JSONContent[]>;
 	onUpdate?: (data: HandleBlockJson[]) => void;
@@ -44,7 +46,7 @@ export interface NotionEditorProps {
 
 export const CacheMap = new Map<string, JSONContent>();
 
-export function EditorContentArea() {
+export function EditorContentArea({ lang }: NotionEditorProps) {
 	const { t } = useLanguage();
 	const { editor } = useCurrentEditor();
 	const { isDragging } = useUiEditorState(editor);
@@ -65,11 +67,10 @@ export function EditorContentArea() {
 		};
 	}, [editor]);
 
-	if (!editor) return <span>Error: editor instance is null</span>;
+	if (!editor) return <span>Error: {t("editor_error")}</span>;
 
 	return (
 		<>
-			<span>{t("a.b.c")}</span>
 			<EditorContent
 				editor={editor}
 				role="presentation"
@@ -86,13 +87,15 @@ export function EditorContentArea() {
 	);
 }
 
-export default function NotionEditor({
-	// lang = "zh-CN",
-	onUpdate: handleUpdate,
-	initContent,
-	onDropEnd,
-	uploadImageConfig,
-}: NotionEditorProps) {
+export default function NotionEditor(props: NotionEditorProps) {
+	const {
+		// lang = "zh-CN",
+		onUpdate: handleUpdate,
+		initContent,
+		onDropEnd,
+		uploadImageConfig,
+	} = props;
+
 	const [lang, setLang] = useState<LangKey>("zh-CN");
 
 	const editor = useEditor({
@@ -102,8 +105,8 @@ export default function NotionEditor({
 				id: "notion-editor-container",
 			},
 		},
-		extensions: createExtensions({ uploadImageConfig }),
-		onUpdate: debounce((props) => onUpdate(props, handleUpdate), 1000),
+		extensions: createExtensions({ uploadImageConfig, lang }),
+		onUpdate: debounce(props => onUpdate(props, handleUpdate), 1000),
 		onDrop: (_, slice) => {
 			if (!slice || !onDropEnd) return;
 			onDrop(slice, editor, onDropEnd);
@@ -112,7 +115,7 @@ export default function NotionEditor({
 
 	useLayoutEffect(() => {
 		if (editor?.isEmpty) {
-			initContent?.().then((result) => {
+			initContent?.().then(result => {
 				if (result.length) {
 					CacheMap.clear();
 					BlockSortMap.clear();
@@ -142,7 +145,7 @@ export default function NotionEditor({
 			</div>
 			<LangContext.Provider value={{ lang }}>
 				<EditorContext.Provider value={{ editor }}>
-					<EditorContentArea />
+					<EditorContentArea {...props} lang={lang} />
 				</EditorContext.Provider>
 			</LangContext.Provider>
 		</>

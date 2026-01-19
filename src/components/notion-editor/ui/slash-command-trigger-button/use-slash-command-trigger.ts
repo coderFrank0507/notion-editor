@@ -54,7 +54,7 @@ export interface UseSlashCommandTriggerConfig {
 export function canInsertSlashCommand(
 	editor: Editor | null,
 	node?: Node | null,
-	nodePos?: number | null
+	nodePos?: number | null,
 ): boolean {
 	if (!editor || !editor.isEditable) return false;
 	if (isNodeTypeSelected(editor, ["image"])) return false;
@@ -78,7 +78,7 @@ export function insertSlashCommand(
 	editor: Editor | null,
 	trigger: string = "/",
 	node?: Node | null,
-	nodePos?: number | null
+	nodePos?: number | null,
 ): boolean {
 	if (!editor || !editor.isEditable) return false;
 	if (!canInsertSlashCommand(editor, node, nodePos)) return false;
@@ -99,7 +99,7 @@ export function insertSlashCommand(
 			const insertPos = isEmpty ? foundPos.pos : foundPos.pos + foundPos.node.nodeSize;
 
 			editor.view.dispatch(
-				editor.view.state.tr.scrollIntoView().insertText(trigger, insertPos, insertPos)
+				editor.view.state.tr.scrollIntoView().insertText(trigger, insertPos, insertPos),
 			);
 
 			const triggerLength = trigger.length + 1; // +1 for the space after the trigger
@@ -232,7 +232,7 @@ export function useSlashCommandTrigger(config?: UseSlashCommandTriggerConfig) {
 
 	useHotkeys(
 		SLASH_COMMAND_TRIGGER_SHORTCUT_KEY,
-		(event) => {
+		event => {
 			event.preventDefault();
 			handleSlashCommand();
 		},
@@ -241,14 +241,14 @@ export function useSlashCommandTrigger(config?: UseSlashCommandTriggerConfig) {
 			enableOnContentEditable: !isMobile,
 			enableOnFormTags: true,
 		},
-		[isVisible, canInsert, handleSlashCommand]
+		[isVisible, canInsert, handleSlashCommand],
 	);
 
 	return {
 		isVisible,
 		handleSlashCommand,
 		canInsert,
-		label: "Insert block",
+		label: "drag.insert_block",
 		shortcutKeys: SLASH_COMMAND_TRIGGER_SHORTCUT_KEY,
 		trigger,
 		Icon: PlusIcon,

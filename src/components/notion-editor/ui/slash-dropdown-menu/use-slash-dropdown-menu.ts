@@ -11,7 +11,6 @@ import { HeadingThreeIcon } from "../../icons/heading-three-icon";
 import { ImageIcon } from "../../icons/image-icon";
 import { ListIcon } from "../../icons/list-icon";
 import { ListOrderedIcon } from "../../icons/list-ordered-icon";
-import { BlockquoteIcon } from "../../icons/blockquote-icon";
 import { ListTodoIcon } from "../../icons/list-todo-icon";
 import { TypeIcon } from "../../icons/type-icon";
 
@@ -33,69 +32,69 @@ export interface SlashMenuConfig {
 const texts = {
 	// Style
 	text: {
-		title: "Text",
+		title: "turn_into.text",
 		subtext: "Regular text paragraph",
 		keywords: ["p", "paragraph", "text"],
 		badge: TypeIcon,
-		group: "Style",
+		group: "turn_into._style",
 	},
 	heading_1: {
-		title: "Heading 1",
+		title: "turn_into.heading1",
 		subtext: "Top-level heading",
 		keywords: ["h", "heading1", "h1"],
 		badge: HeadingOneIcon,
-		group: "Style",
+		group: "turn_into._style",
 	},
 	heading_2: {
-		title: "Heading 2",
+		title: "turn_into.heading2",
 		subtext: "Key section heading",
 		keywords: ["h2", "heading2", "subheading"],
 		badge: HeadingTwoIcon,
-		group: "Style",
+		group: "turn_into._style",
 	},
 	heading_3: {
-		title: "Heading 3",
+		title: "turn_into.heading3",
 		subtext: "Subsection and group heading",
 		keywords: ["h3", "heading3", "subheading"],
 		badge: HeadingThreeIcon,
-		group: "Style",
+		group: "turn_into._style",
 	},
 	bullet_list: {
-		title: "Bullet List",
+		title: "turn_into.bullet_list",
 		subtext: "List with unordered items",
 		keywords: ["ul", "li", "list", "bulletlist", "bullet list"],
 		badge: ListIcon,
-		group: "Style",
+		group: "turn_into._style",
 	},
 	ordered_list: {
-		title: "Numbered List",
+		title: "turn_into.ordered_list",
 		subtext: "List with ordered items",
 		keywords: ["ol", "li", "list", "numberedlist", "numbered list"],
 		badge: ListOrderedIcon,
-		group: "Style",
+		group: "turn_into._style",
 	},
 	task_list: {
-		title: "To-do list",
+		title: "turn_into.task_list",
 		subtext: "List with tasks",
 		keywords: ["tasklist", "task list", "todo", "checklist"],
 		badge: ListTodoIcon,
-		group: "Style",
+		group: "turn_into._style",
 	},
 	code_block: {
-		title: "Code Block",
+		title: "turn_into.code_block",
 		subtext: "Code block with syntax highlighting",
 		keywords: ["code", "pre"],
 		badge: CodeBlockIcon,
-		group: "Style",
+		group: "turn_into._style",
 	},
 
 	// Upload
 	image: {
-		title: "Image",
+		title: "turn_into.image",
 		subtext: "Resizable image with caption",
 		keywords: ["image", "imageUpload", "upload", "img", "picture", "media", "url"],
 		badge: ImageIcon,
-		group: "Upload",
+		group: "turn_into._upload",
 	},
 };
 
@@ -171,13 +170,13 @@ const getItemImplementations = () => {
 
 function organizeItemsByGroups(items: SuggestionItem[], showGroups: boolean): SuggestionItem[] {
 	if (!showGroups) {
-		return items.map((item) => ({ ...item, group: "" }));
+		return items.map(item => ({ ...item, group: "" }));
 	}
 
 	const groups: { [groupLabel: string]: SuggestionItem[] } = {};
 
 	// Group items
-	items.forEach((item) => {
+	items.forEach(item => {
 		const groupLabel = item.group || "";
 		if (!groups[groupLabel]) {
 			groups[groupLabel] = [];
@@ -207,7 +206,7 @@ export function useSlashDropdownMenu(config?: SlashMenuConfig) {
 
 			const itemImplementations = getItemImplementations();
 
-			enabledItems.forEach((itemType) => {
+			enabledItems.forEach(itemType => {
 				const itemImpl = itemImplementations[itemType];
 				const itemText = texts[itemType];
 
@@ -234,7 +233,7 @@ export function useSlashDropdownMenu(config?: SlashMenuConfig) {
 			// Reorganize items by groups to ensure keyboard navigation works correctly
 			return organizeItemsByGroups(items, showGroups);
 		},
-		[config]
+		[config],
 	);
 
 	return {

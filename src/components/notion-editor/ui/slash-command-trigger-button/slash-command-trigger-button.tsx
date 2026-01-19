@@ -15,10 +15,10 @@ import type { ButtonProps } from "../../ui-primitive/button";
 import { Button } from "../../ui-primitive/button";
 import { Badge } from "../../ui-primitive/badge";
 import { useCurrentEditor } from "@tiptap/react";
+import { useLanguage } from "../../i18n";
 
 export interface SlashCommandTriggerButtonProps
-	extends Omit<ButtonProps, "type">,
-		UseSlashCommandTriggerConfig {
+	extends Omit<ButtonProps, "type">, UseSlashCommandTriggerConfig {
 	/**
 	 * Optional text to display alongside the icon.
 	 */
@@ -60,8 +60,9 @@ export const SlashCommandTriggerButton = forwardRef<
 			children,
 			...buttonProps
 		},
-		ref
+		ref,
 	) => {
+		const { t } = useLanguage();
 		const { editor } = useCurrentEditor();
 		const { isVisible, canInsert, handleSlashCommand, label, shortcutKeys, Icon } =
 			useSlashCommandTrigger({
@@ -79,7 +80,7 @@ export const SlashCommandTriggerButton = forwardRef<
 				if (event.defaultPrevented) return;
 				handleSlashCommand();
 			},
-			[handleSlashCommand, onClick]
+			[handleSlashCommand, onClick],
 		);
 
 		if (!isVisible) {
@@ -95,7 +96,7 @@ export const SlashCommandTriggerButton = forwardRef<
 				disabled={!canInsert}
 				data-disabled={!canInsert}
 				aria-label={label}
-				tooltip={label}
+				tooltip={t(label)}
 				onClick={handleClick}
 				{...buttonProps}
 				ref={ref}
@@ -109,7 +110,7 @@ export const SlashCommandTriggerButton = forwardRef<
 				)}
 			</Button>
 		);
-	}
+	},
 );
 
 SlashCommandTriggerButton.displayName = "SlashCommandTriggerButton";

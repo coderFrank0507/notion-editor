@@ -13,6 +13,7 @@ import { Button, ButtonProps } from "./ui-primitive/button";
 import { MoreVerticalIcon } from "./icons/more-vertical-icon";
 import { canSetTextAlign, TextAlign, TextAlignButton } from "./ui/text-align-button";
 import { canToggleMark, Mark, MarkButton } from "./ui/mark-button";
+import { useLanguage } from "./i18n";
 
 export default function EditorToolbarFloating() {
 	const { editor } = useCurrentEditor();
@@ -64,13 +65,11 @@ function canMoreOptions(editor: Editor | null): boolean {
 		return false;
 	}
 
-	const canTextAlignAny = ["left", "center", "right", "justify"].some((align) =>
-		canSetTextAlign(editor, align as TextAlign)
+	const canTextAlignAny = ["left", "center", "right", "justify"].some(align =>
+		canSetTextAlign(editor, align as TextAlign),
 	);
 
-	const canMarkAny = ["superscript", "subscript"].some((type) =>
-		canToggleMark(editor, type as Mark)
-	);
+	const canMarkAny = ["superscript", "subscript"].some(type => canToggleMark(editor, type as Mark));
 
 	return canMarkAny || canTextAlignAny;
 }
@@ -105,6 +104,7 @@ export interface MoreOptionsProps extends Omit<ButtonProps, "type"> {
 }
 
 export function MoreOptions({ hideWhenUnavailable = false, ...props }: MoreOptionsProps) {
+	const { t } = useLanguage();
 	const { editor } = useCurrentEditor();
 	const [show, setShow] = useState(false);
 
@@ -116,7 +116,7 @@ export function MoreOptions({ hideWhenUnavailable = false, ...props }: MoreOptio
 				shouldShowMoreOptions({
 					editor,
 					hideWhenUnavailable,
-				})
+				}),
 			);
 		};
 
@@ -144,7 +144,7 @@ export function MoreOptions({ hideWhenUnavailable = false, ...props }: MoreOptio
 							data-style="ghost"
 							role="button"
 							tabIndex={-1}
-							tooltip="More options"
+							tooltip={t("text_style.more_options")}
 							{...props}
 						>
 							<MoreVerticalIcon className="tiptap-button-icon" />

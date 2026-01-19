@@ -35,12 +35,14 @@ import {
 	type ImageUploadNodeOptions,
 } from "./image-upload-node/image-upload-node-extension";
 import { BlockSortExtension } from "./block-sort";
+import { type LangKey, LanguageStore } from "../i18n";
 
 interface ExtensionsConfig {
+	lang: LangKey;
 	uploadImageConfig?: Omit<ImageUploadNodeOptions, "HTMLAttributes">;
 }
 
-export function createExtensions({ uploadImageConfig }: ExtensionsConfig) {
+export function createExtensions({ uploadImageConfig, lang }: ExtensionsConfig) {
 	const extensions = [
 		Document,
 		Text,
@@ -92,10 +94,10 @@ export function createExtensions({ uploadImageConfig }: ExtensionsConfig) {
 		Placeholder.configure({
 			placeholder: ({ node }) => {
 				const { type } = node;
-				if (type.name === "task-list") return "Task Item";
-				if (type.name === "ordered-list") return "Ordered Item";
-				if (type.name === "bullet-list") return "Bullet Item";
-				return "Write, type '/' for commands…";
+				if (type.name === "taskList") return LanguageStore[lang].task_item;
+				if (type.name === "orderedList") return LanguageStore[lang].ordered_item;
+				if (type.name === "bulletList") return LanguageStore[lang].bullet_item;
+				return LanguageStore[lang].placeholder;
 			},
 		}),
 		UniqueID.configure({
@@ -109,7 +111,7 @@ export function createExtensions({ uploadImageConfig }: ExtensionsConfig) {
 				"image",
 				"codeBlock",
 			],
-			filterTransaction: (transaction) => !isChangeOrigin(transaction),
+			filterTransaction: transaction => !isChangeOrigin(transaction),
 		}),
 	];
 	if (uploadImageConfig) extensions.push(ImageUploadNode.configure(uploadImageConfig));

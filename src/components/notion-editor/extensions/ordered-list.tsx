@@ -6,15 +6,15 @@ import {
 	ReactNodeViewProps,
 	EditorEvents,
 } from "@tiptap/react";
-import { useLayoutEffect, useState } from "react";
-import { OrderedRefreshKey } from "../lib/utils";
+import { useLayoutEffect, useMemo, useState } from "react";
+import { cn, OrderedRefreshKey } from "../lib/utils";
 import type { Node as PMNode } from "@tiptap/pm/model";
 import type { ParagraphOptions } from "@tiptap/extension-paragraph";
 
 function getOrderedIndex(doc: PMNode, pos: number | undefined) {
 	let index = 1;
 	if (pos) {
-		doc.nodesBetween(0, pos, (node) => {
+		doc.nodesBetween(0, pos, node => {
 			if (!node.isBlock) return;
 			if (node.type.name !== "orderedList") {
 				index = 1; // reset return;
@@ -30,6 +30,17 @@ export function OrderedItemView(props: ReactNodeViewProps) {
 	const { editor, node, getPos } = props;
 	const [_, setTick] = useState(0);
 
+	const align = useMemo(() => {
+		switch (node.attrs.textAlign) {
+			case "left":
+				return "text-left";
+			case "center":
+				return "text-center";
+			case "right":
+				return "text-right";
+		}
+	}, [node.attrs.textAlign]);
+
 	useLayoutEffect(() => {
 		const onTransaction = ({ transaction }: EditorEvents["transaction"]) => {
 			const range = transaction.getMeta(OrderedRefreshKey);
@@ -38,7 +49,7 @@ export function OrderedItemView(props: ReactNodeViewProps) {
 			const pos = getPos();
 			if (pos) {
 				if (pos >= range.from && pos <= range.to) {
-					setTick((t) => t + 1);
+					setTick(t => t + 1);
 				}
 			}
 		};
@@ -59,7 +70,7 @@ export function OrderedItemView(props: ReactNodeViewProps) {
 				>{`${number}.`}</div>
 
 				<NodeViewContent
-					className="list-item-content flex-1 text-base"
+					className={cn("list-item-content flex-1 text-base", align)}
 					style={{ backgroundColor: node.attrs.backgroundColor }}
 				/>
 			</div>
@@ -103,7 +114,7 @@ export const OrderedList = Node.create<ParagraphOptions>({
 	addCommands() {
 		return {
 			toggleOrderedList:
-				(type) =>
+				type =>
 				({ commands }) =>
 					commands.toggleNode(this.name, type),
 		};

@@ -8,9 +8,21 @@ import {
 } from "@tiptap/react";
 import { TaskItemChecked } from "../icons/task-item-checked";
 import { cn } from "../lib/utils";
+import { useMemo } from "react";
 
 export function TaskItemView(props: ReactNodeViewProps) {
 	const { editor, node, updateAttributes } = props;
+
+	const align = useMemo(() => {
+		switch (node.attrs.textAlign) {
+			case "left":
+				return "text-left";
+			case "center":
+				return "text-center";
+			case "right":
+				return "text-right";
+		}
+	}, [node.attrs.textAlign]);
 
 	return (
 		<NodeViewWrapper as={"ul"}>
@@ -21,7 +33,7 @@ export function TaskItemView(props: ReactNodeViewProps) {
 							"size-4 border-[1.5px] rounded relative cursor-pointer",
 							node.attrs.checked
 								? "bg-(--tt-color-blue-dec-1) border-(--tt-color-blue-dec-1)"
-								: "border-(--tt-text-color)"
+								: "border-(--tt-text-color)",
 						)}
 						onMouseDownCapture={() => {
 							editor.chain().blur();
@@ -42,7 +54,8 @@ export function TaskItemView(props: ReactNodeViewProps) {
 				<NodeViewContent
 					className={cn(
 						"list-item-content flex-1 text-base",
-						node.attrs.checked && "text-gray-500 line-through"
+						node.attrs.checked && "text-gray-500 line-through",
+						align,
 					)}
 					style={{ backgroundColor: node.attrs.backgroundColor }}
 				/>
@@ -90,7 +103,7 @@ export const TaskList = Node.create<ParagraphOptions>({
 	addCommands() {
 		return {
 			toggleTaskList:
-				(type) =>
+				type =>
 				({ commands }) =>
 					commands.toggleNode(this.name, type),
 		};

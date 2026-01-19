@@ -22,6 +22,7 @@ import {
 } from "../../ui-primitive/dropdown-menu";
 import { Card, CardBody, CardGroupLabel, CardItemGroup } from "../../ui-primitive/card";
 import { useCurrentEditor } from "@tiptap/react";
+import { useLanguage } from "../../i18n";
 
 export interface TurnIntoDropdownContentProps {
 	blockTypes?: string[];
@@ -32,12 +33,13 @@ export const TurnIntoDropdownContent: React.FC<TurnIntoDropdownContentProps> = (
 	blockTypes,
 	useCardLayout = true,
 }) => {
+	const { t } = useLanguage();
 	const filteredOptions = getFilteredBlockTypeOptions(blockTypes);
 
 	const renderButtons = () => (
 		<ButtonGroup>
 			{filteredOptions.map((option, index) =>
-				renderBlockTypeButton(option, `${option.type}-${option.level ?? index}`)
+				renderBlockTypeButton(option, t(option.label), `${option.type}-${option.level ?? index}`),
 			)}
 		</ButtonGroup>
 	);
@@ -46,9 +48,9 @@ export const TurnIntoDropdownContent: React.FC<TurnIntoDropdownContentProps> = (
 
 	return (
 		<Card>
-			<CardBody>
+			<CardBody className="min-w-40">
 				<CardItemGroup>
-					<CardGroupLabel>Turn into</CardGroupLabel>
+					<CardGroupLabel>{t("turn_into._label")}</CardGroupLabel>
 					{renderButtons()}
 				</CardItemGroup>
 			</CardBody>
@@ -58,13 +60,14 @@ export const TurnIntoDropdownContent: React.FC<TurnIntoDropdownContentProps> = (
 
 function renderBlockTypeButton(
 	option: ReturnType<typeof getFilteredBlockTypeOptions>[0],
-	key: string
+	text: string,
+	key: string,
 ) {
 	switch (option.type) {
 		case "paragraph":
 			return (
 				<DropdownMenuItem key={key} asChild>
-					<TextButton showTooltip={false} text={option.label} />
+					<TextButton showTooltip={false} text={text} />
 				</DropdownMenuItem>
 			);
 
@@ -75,42 +78,42 @@ function renderBlockTypeButton(
 
 			return (
 				<DropdownMenuItem key={key} asChild>
-					<HeadingButton level={option.level || 1} showTooltip={false} text={option.label} />
+					<HeadingButton level={option.level || 1} showTooltip={false} text={text} />
 				</DropdownMenuItem>
 			);
 
 		case "bulletList":
 			return (
 				<DropdownMenuItem key={key} asChild>
-					<ListButton type="bulletList" showTooltip={false} text={option.label} />
+					<ListButton type="bulletList" showTooltip={false} text={text} />
 				</DropdownMenuItem>
 			);
 
 		case "orderedList":
 			return (
 				<DropdownMenuItem key={key} asChild>
-					<ListButton type="orderedList" showTooltip={false} text={option.label} />
+					<ListButton type="orderedList" showTooltip={false} text={text} />
 				</DropdownMenuItem>
 			);
 
 		case "taskList":
 			return (
 				<DropdownMenuItem key={key} asChild>
-					<ListButton type="taskList" showTooltip={false} text={option.label} />
+					<ListButton type="taskList" showTooltip={false} text={text} />
 				</DropdownMenuItem>
 			);
 
 		case "blockquote":
 			return (
 				<DropdownMenuItem key={key} asChild>
-					<BlockquoteButton showTooltip={false} text={option.label} />
+					<BlockquoteButton showTooltip={false} text={text} />
 				</DropdownMenuItem>
 			);
 
 		case "codeBlock":
 			return (
 				<DropdownMenuItem key={key} asChild>
-					<CodeBlockButton showTooltip={false} text={option.label} />
+					<CodeBlockButton showTooltip={false} text={text} />
 				</DropdownMenuItem>
 			);
 
@@ -120,8 +123,7 @@ function renderBlockTypeButton(
 }
 
 export interface TurnIntoDropdownProps
-	extends Omit<ButtonProps, "type">,
-		UseTurnIntoDropdownConfig {
+	extends Omit<ButtonProps, "type">, UseTurnIntoDropdownConfig {
 	/**
 	 * Whether to use card layout for the dropdown content
 	 * @default true
@@ -143,8 +145,9 @@ export const TurnIntoDropdown = forwardRef<HTMLButtonElement, TurnIntoDropdownPr
 			children,
 			...buttonProps
 		},
-		ref
+		ref,
 	) => {
+		const { t } = useLanguage();
 		const { editor } = useCurrentEditor();
 		const { isVisible, canToggle, isOpen, activeBlockType, handleOpenChange, label, Icon } =
 			useTurnIntoDropdown({
@@ -169,13 +172,13 @@ export const TurnIntoDropdown = forwardRef<HTMLButtonElement, TurnIntoDropdownPr
 						role="button"
 						tabIndex={-1}
 						aria-label={label}
-						tooltip="Turn into"
+						tooltip={t("turn_into._label")}
 						{...buttonProps}
 						ref={ref}
 					>
 						{children ?? (
 							<>
-								<span className="tiptap-button-text">{activeBlockType?.label || "Text"}</span>
+								<span className="tiptap-button-text">{t(activeBlockType?.label) || "Text"}</span>
 								<Icon className="tiptap-button-dropdown-small" />
 							</>
 						)}
@@ -187,7 +190,7 @@ export const TurnIntoDropdown = forwardRef<HTMLButtonElement, TurnIntoDropdownPr
 				</DropdownMenuContent>
 			</DropdownMenu>
 		);
-	}
+	},
 );
 
 TurnIntoDropdown.displayName = "TurnIntoDropdown";

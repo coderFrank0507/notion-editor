@@ -1,6 +1,6 @@
-.node-task-list,
-.node-bullet-list,
-.node-ordered-list {
+.node-taskList,
+.node-bulletList,
+.node-orderedList {
 	&.is-empty::before {
 		content: attr(data-placeholder);
 		color: #9ca3af;
@@ -8,5 +8,6 @@
 		position: absolute;
 		left: 26px;
 		right: 0;
+		line-height: 28px;
 	}
 }

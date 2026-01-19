@@ -3,7 +3,7 @@ import en from "./en";
 
 import { createContext, useContext } from "react";
 
-const LanguageStore = {
+export const LanguageStore = {
 	"zh-CN": zhCN,
 	en,
 };
@@ -29,7 +29,7 @@ function getObjValue(obj: any, path: string) {
 export const useLanguage = () => {
 	const { lang } = useContext(LangContext);
 
-	const t = (path?: string) => {
+	const t = (path?: string): string => {
 		if (!path) return null;
 		return getObjValue(LanguageStore[lang], path);
 	};

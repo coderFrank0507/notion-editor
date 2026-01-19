@@ -7,6 +7,7 @@ import { CloseIcon } from "../../icons/close-icon";
 import { focusNextNode, isValidPosition } from "../../lib/utils";
 import "./image-upload-node.scss";
 import type { NodeViewProps } from "@tiptap/react";
+import { useLanguage } from "../../i18n";
 
 export interface FileItem {
 	/**
@@ -63,7 +64,7 @@ export interface UploadOptions {
 	upload: (
 		file: File,
 		onProgress: (event: { progress: number }) => void,
-		signal: AbortSignal
+		signal: AbortSignal,
 	) => Promise<string>;
 	/**
 	 * Callback triggered when a file is uploaded successfully
@@ -88,7 +89,7 @@ function useFileUpload(options: UploadOptions) {
 	const uploadFile = async (file: File): Promise<string | null> => {
 		if (options.maxSize > 0 && file.size > options.maxSize) {
 			const error = new Error(
-				`File size exceeds maximum allowed (${options.maxSize / 1024 / 1024}MB)`
+				`File size exceeds maximum allowed (${options.maxSize / 1024 / 1024}MB)`,
 			);
 			options.onError?.(error);
 			return null;
@@ -105,7 +106,7 @@ function useFileUpload(options: UploadOptions) {
 			abortController,
 		};
 
-		setFileItems((prev) => [...prev, newFileItem]);
+		setFileItems(prev => [...prev, newFileItem]);
 
 		try {
 			if (!options.upload) {
@@ -115,20 +116,20 @@ function useFileUpload(options: UploadOptions) {
 			const url = await options.upload(
 				file,
 				(event: { progress: number }) => {
-					setFileItems((prev) =>
-						prev.map((item) => (item.id === fileId ? { ...item, progress: event.progress } : item))
+					setFileItems(prev =>
+						prev.map(item => (item.id === fileId ? { ...item, progress: event.progress } : item)),
 					);
 				},
-				abortController.signal
+				abortController.signal,
 			);
 
 			if (!url) throw new Error("Upload failed: No URL returned");
 
 			if (!abortController.signal.aborted) {
-				setFileItems((prev) =>
-					prev.map((item) =>
-						item.id === fileId ? { ...item, status: "success", url, progress: 100 } : item
-					)
+				setFileItems(prev =>
+					prev.map(item =>
+						item.id === fileId ? { ...item, status: "success", url, progress: 100 } : item,
+					),
 				);
 				options.onSuccess?.(url);
 				return url;
@@ -137,10 +138,8 @@ function useFileUpload(options: UploadOptions) {
 			return null;
 		} catch (error) {
 			if (!abortController.signal.aborted) {
-				setFileItems((prev) =>
-					prev.map((item) =>
-						item.id === fileId ? { ...item, status: "error", progress: 0 } : item
-					)
+				setFileItems(prev =>
+					prev.map(item => (item.id === fileId ? { ...item, status: "error", progress: 0 } : item)),
 				);
 				options.onError?.(error instanceof Error ? error : new Error("Upload failed"));
 			}
@@ -156,13 +155,13 @@ function useFileUpload(options: UploadOptions) {
 
 		if (options.limit && files.length > options.limit) {
 			options.onError?.(
-				new Error(`Maximum ${options.limit} file${options.limit === 1 ? "" : "s"} allowed`)
+				new Error(`Maximum ${options.limit} file${options.limit === 1 ? "" : "s"} allowed`),
 			);
 			return [];
 		}
 
 		// Upload all files concurrently
-		const uploadPromises = files.map((file) => uploadFile(file));
+		const uploadPromises = files.map(file => uploadFile(file));
 		const results = await Promise.all(uploadPromises);
 
 		// Filter out null results (failed uploads)
@@ -170,20 +169,20 @@ function useFileUpload(options: UploadOptions) {
 	};
 
 	const removeFileItem = (fileId: string) => {
-		setFileItems((prev) => {
-			const fileToRemove = prev.find((item) => item.id === fileId);
+		setFileItems(prev => {
+			const fileToRemove = prev.find(item => item.id === fileId);
 			if (fileToRemove?.abortController) {
 				fileToRemove.abortController.abort();
 			}
 			if (fileToRemove?.url) {
 				URL.revokeObjectURL(fileToRemove.url);
 			}
-			return prev.filter((item) => item.id !== fileId);
+			return prev.filter(item => item.id !== fileId);
 		});
 	};
 
 	const clearAllFiles = () => {
-		fileItems.forEach((item) => {
+		fileItems.forEach(item => {
 			if (item.abortController) {
 				item.abortController.abort();
 			}
@@ -374,7 +373,7 @@ const ImageUploadPreview: React.FC<ImageUploadPreviewProps> = ({ fileItem, onRem
 					<Button
 						type="button"
 						data-style="ghost"
-						onClick={(e) => {
+						onClick={e => {
 							e.stopPropagation();
 							onRemove();
 						}}
@@ -387,31 +386,40 @@ const ImageUploadPreview: React.FC<ImageUploadPreviewProps> = ({ fileItem, onRem
 	);
 };
 
-const DropZoneContent: React.FC<{ maxSize: number; limit: number }> = ({ maxSize, limit }) => (
-	<>
-		<div className="tiptap-image-upload-dropzone">
-			<FileIcon />
-			<FileCornerIcon />
-			<div className="tiptap-image-upload-icon-container">
-				<CloudUploadIcon />
+const DropZoneContent: React.FC<{ maxSize: number; limit: number }> = ({ maxSize, limit }) => {
+	const { t } = useLanguage();
+
+	return (
+		<>
+			<div className="tiptap-image-upload-dropzone">
+				<FileIcon />
+				<FileCornerIcon />
+				<div className="tiptap-image-upload-icon-container">
+					<CloudUploadIcon />
+				</div>
 			</div>
-		</div>
 
-		<div className="tiptap-image-upload-content">
-			<span className="tiptap-image-upload-text">
-				<em>Click to upload</em> or drag and drop
-			</span>
-			<span className="tiptap-image-upload-subtext">
-				<span>
-					Maximum {limit} file{limit === 1 ? "" : "s"}
+			<div className="tiptap-image-upload-content">
+				<span className="tiptap-image-upload-text">
+					<em>{t("turn_into._upload01")}</em> {t("turn_into._upload02")}
 				</span>
-				{!!maxSize && <span>, {maxSize / 1024 / 1024}MB each</span>}
-			</span>
-		</div>
-	</>
-);
+				<span className="tiptap-image-upload-subtext">
+					<span>
+						{t("turn_into._upload03")} {limit} {t("turn_into._upload04")}
+						{limit === 1 ? "" : "s"}
+					</span>
+					{!!maxSize && (
+						<span>
+							, {maxSize / 1024 / 1024}MB {t("turn_into._upload05")}
+						</span>
+					)}
+				</span>
+			</div>
+		</>
+	);
+};
 
-export const ImageUploadNode: React.FC<NodeViewProps> = (props) => {
+export const ImageUploadNode: React.FC<NodeViewProps> = props => {
 	const { accept = "image/*", limit = 1, maxSize = 0 } = props.node.attrs;
 	const inputRef = useRef<HTMLInputElement>(null);
 	const extension = props.extension;
@@ -495,7 +503,7 @@ export const ImageUploadNode: React.FC<NodeViewProps> = (props) => {
 							<Button
 								type="button"
 								data-style="ghost"
-								onClick={(e) => {
+								onClick={e => {
 									e.stopPropagation();
 									clearAllFiles();
 								}}
@@ -504,7 +512,7 @@ export const ImageUploadNode: React.FC<NodeViewProps> = (props) => {
 							</Button>
 						</div>
 					)}
-					{fileItems.map((fileItem) => (
+					{fileItems.map(fileItem => (
 						<ImageUploadPreview
 							key={fileItem.id}
 							fileItem={fileItem}

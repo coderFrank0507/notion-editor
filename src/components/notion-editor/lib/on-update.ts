@@ -54,7 +54,7 @@ const onUpdate = (props: EditorEvents["update"], handleUpdate?: NotionEditorProp
 	}
 
 	if (CacheMap.size) {
-		Array.from(CacheMap.values()).forEach((item) => {
+		Array.from(CacheMap.values()).forEach(item => {
 			if (item.type !== "imageUpload") result.push({ handleType: "delete", json: item });
 			CacheMap.delete(item.attrs!.id);
 			BlockSortMap.delete(item.attrs!.id);
@@ -64,7 +64,7 @@ const onUpdate = (props: EditorEvents["update"], handleUpdate?: NotionEditorProp
 	// 缓存新的数据
 	CacheMap.clear();
 	BlockSortMap.clear();
-	content.forEach((item) => {
+	content.forEach(item => {
 		CacheMap.set(item.attrs!.id, item);
 		BlockSortMap.set(item.attrs!.id, item.attrs!.sort);
 	});

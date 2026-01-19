@@ -103,7 +103,7 @@ export function isHeadingActive(editor: Editor | null, level?: Level | Level[]):
 	if (!editor || !editor.isEditable) return false;
 
 	if (Array.isArray(level)) {
-		return level.some((l) => editor.isActive("heading", { level: l }));
+		return level.some(l => editor.isActive("heading", { level: l }));
 	}
 
 	return level ? editor.isActive("heading", { level }) : editor.isActive("heading");
@@ -116,7 +116,7 @@ export function toggleHeading(editor: Editor | null, level: Level | Level[]): bo
 	if (!editor || !editor.isEditable) return false;
 
 	const levels = Array.isArray(level) ? level : [level];
-	const toggleLevel = levels.find((l) => canToggle(editor, l));
+	const toggleLevel = levels.find(l => canToggle(editor, l));
 
 	if (!toggleLevel) return false;
 
@@ -156,7 +156,7 @@ export function toggleHeading(editor: Editor | null, level: Level | Level[]): bo
 			chain = chain.setTextSelection(TextSelection.between(resolvedFrom, resolvedTo)).clearNodes();
 		}
 
-		const isActive = levels.some((l) => editor.isActive("heading", { level: l }));
+		const isActive = levels.some(l => editor.isActive("heading", { level: l }));
 
 		const toggle = isActive
 			? chain.setNode("paragraph")
@@ -187,7 +187,7 @@ export function shouldShowButton(props: {
 
 	if (hideWhenUnavailable && !editor.isActive("code")) {
 		if (Array.isArray(level)) {
-			return level.some((l) => canToggle(editor, l));
+			return level.some(l => canToggle(editor, l));
 		}
 		return canToggle(editor, level);
 	}
@@ -280,7 +280,7 @@ export function useHeading(config: UseHeadingConfig) {
 		isActive,
 		handleToggle,
 		canToggle: canToggleState,
-		label: `Heading ${level}`,
+		label: `turn_into.heading${level}`,
 		shortcutKeys: HEADING_SHORTCUT_KEYS[level],
 		Icon: headingIcons[level],
 	};

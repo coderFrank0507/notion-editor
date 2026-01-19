@@ -1,4 +1,5 @@
 import NotionEditor from "./notion-editor";
+export { EditorDatabaseContentJson } from "./template/mock-data";
 export { template_ZH_CN } from "./template/zh-CN";
 export { template_EN } from "./template/en";
 export type {

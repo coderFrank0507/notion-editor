@@ -227,7 +227,7 @@ export function useText(config?: UseTextConfig) {
 
 	useHotkeys(
 		TEXT_SHORTCUT_KEY,
-		(event) => {
+		event => {
 			event.preventDefault();
 			handleToggle();
 		},
@@ -235,7 +235,7 @@ export function useText(config?: UseTextConfig) {
 			enabled: isVisible && canToggle,
 			enableOnContentEditable: !isMobile,
 			enableOnFormTags: true,
-		}
+		},
 	);
 
 	return {
@@ -243,7 +243,7 @@ export function useText(config?: UseTextConfig) {
 		isActive,
 		handleToggle,
 		canToggle,
-		label: "Text",
+		label: "turn_into.text",
 		shortcutKeys: TEXT_SHORTCUT_KEY,
 		Icon: TypeIcon,
 	};

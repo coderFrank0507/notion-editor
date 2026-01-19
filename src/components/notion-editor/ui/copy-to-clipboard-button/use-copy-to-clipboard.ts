@@ -84,7 +84,7 @@ export function canCopyToClipboard(editor: Editor | null): boolean {
  */
 export function extractContent(
 	editor: Editor,
-	copyWithFormatting: boolean = true
+	copyWithFormatting: boolean = true,
 ): { textContent: string; htmlContent?: string } {
 	const { selection } = editor.state;
 	const { $anchor } = selection;
@@ -112,7 +112,7 @@ export function extractContent(
  */
 export async function copyToClipboard(
 	editor: Editor | null,
-	copyWithFormatting: boolean = true
+	copyWithFormatting: boolean = true,
 ): Promise<boolean> {
 	if (!editor || !editor.isEditable) return false;
 
@@ -218,7 +218,7 @@ export function useCopyToClipboard(config?: UseCopyToClipboardConfig) {
 
 	useHotkeys(
 		COPY_TO_CLIPBOARD_SHORTCUT_KEY,
-		(event) => {
+		event => {
 			event.preventDefault(); // prevent native copy behavior
 			handleCopyToClipboard();
 		},
@@ -226,14 +226,14 @@ export function useCopyToClipboard(config?: UseCopyToClipboardConfig) {
 			enabled: isVisible && canCopyToClipboardState,
 			enableOnContentEditable: !isMobile,
 			enableOnFormTags: true,
-		}
+		},
 	);
 
 	return {
 		isVisible,
 		handleCopyToClipboard,
 		canCopyToClipboard: canCopyToClipboardState,
-		label: "Copy to clipboard",
+		label: "drag.copy",
 		shortcutKeys: COPY_TO_CLIPBOARD_SHORTCUT_KEY,
 		Icon: ClipboardIcon,
 	};

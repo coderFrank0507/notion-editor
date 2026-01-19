@@ -12,6 +12,7 @@ import type { ButtonProps } from "../../ui-primitive/button";
 import { Button } from "../../ui-primitive/button";
 import { Badge } from "../../ui-primitive/badge";
 import { useCurrentEditor } from "@tiptap/react";
+import { useLanguage } from "../../i18n";
 
 type IconProps = React.SVGProps<SVGSVGElement>;
 type IconComponent = ({ className, ...props }: IconProps) => React.ReactElement;
@@ -60,8 +61,9 @@ export const TextAlignButton = forwardRef<HTMLButtonElement, TextAlignButtonProp
 			children,
 			...buttonProps
 		},
-		ref
+		ref,
 	) => {
+		const { t } = useLanguage();
 		const { editor } = useCurrentEditor();
 		const { isVisible, handleTextAlign, label, canAlign, isActive, Icon, shortcutKeys } =
 			useTextAlign({
@@ -77,7 +79,7 @@ export const TextAlignButton = forwardRef<HTMLButtonElement, TextAlignButtonProp
 				if (event.defaultPrevented) return;
 				handleTextAlign();
 			},
-			[handleTextAlign, onClick]
+			[handleTextAlign, onClick],
 		);
 
 		if (!isVisible) {
@@ -97,7 +99,7 @@ export const TextAlignButton = forwardRef<HTMLButtonElement, TextAlignButtonProp
 				tabIndex={-1}
 				aria-label={label}
 				aria-pressed={isActive}
-				tooltip={label}
+				tooltip={t(label)}
 				onClick={handleClick}
 				{...buttonProps}
 				ref={ref}
@@ -111,7 +113,7 @@ export const TextAlignButton = forwardRef<HTMLButtonElement, TextAlignButtonProp
 				)}
 			</Button>
 		);
-	}
+	},
 );
 
 TextAlignButton.displayName = "TextAlignButton";

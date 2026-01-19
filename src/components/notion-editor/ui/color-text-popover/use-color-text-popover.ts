@@ -54,7 +54,7 @@ export interface UseColorTextPopoverConfig {
  */
 export function getColorByValue(value: string, colorArray: ColorItem[]): ColorItem {
 	return (
-		colorArray.find((color) => color.value === value) ?? {
+		colorArray.find(color => color.value === value) ?? {
 			value,
 			label: value,
 			border: value,
@@ -104,8 +104,8 @@ export function useRecentColors(maxColors: number = 3) {
 
 	const addRecentColor = useCallback(
 		({ type, label, value }: { type: ColorType; label: string; value: string }) => {
-			setRecentColors((prevColors) => {
-				const filtered = prevColors.filter((c) => !(c.type === type && c.value === value));
+			setRecentColors(prevColors => {
+				const filtered = prevColors.filter(c => !(c.type === type && c.value === value));
 				const updated = [{ type, label, value }, ...filtered].slice(0, maxColors);
 
 				try {
@@ -117,7 +117,7 @@ export function useRecentColors(maxColors: number = 3) {
 				return updated;
 			});
 		},
-		[maxColors]
+		[maxColors],
 	);
 
 	return { recentColors, addRecentColor, isInitialized };
@@ -145,7 +145,7 @@ export function useColorTextPopover(config?: UseColorTextPopoverConfig) {
 				shouldShowColorTextPopover({
 					editor,
 					hideWhenUnavailable,
-				})
+				}),
 			);
 		};
 
@@ -162,7 +162,7 @@ export function useColorTextPopover(config?: UseColorTextPopoverConfig) {
 		({ type, label, value }: { type: ColorType; label: string; value: string }) => {
 			onColorChanged?.({ type, label, value });
 		},
-		[onColorChanged]
+		[onColorChanged],
 	);
 
 	return {
@@ -171,7 +171,7 @@ export function useColorTextPopover(config?: UseColorTextPopoverConfig) {
 		activeTextStyle,
 		activeHighlight,
 		handleColorChanged,
-		label: "Text color",
+		label: "text_color",
 		Icon: TextColorSmallIcon,
 	};
 }

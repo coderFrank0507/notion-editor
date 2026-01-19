@@ -6,9 +6,22 @@ import {
 	NodeViewContent,
 	ReactNodeViewProps,
 } from "@tiptap/react";
+import { useMemo } from "react";
+import { cn } from "../lib/utils";
 
 export function BulletItemView(props: ReactNodeViewProps) {
 	const { node } = props;
+
+	const align = useMemo(() => {
+		switch (node.attrs.textAlign) {
+			case "left":
+				return "text-left";
+			case "center":
+				return "text-center";
+			case "right":
+				return "text-right";
+		}
+	}, [node.attrs.textAlign]);
 
 	return (
 		<NodeViewWrapper as={"ul"}>
@@ -18,7 +31,7 @@ export function BulletItemView(props: ReactNodeViewProps) {
 				</div>
 
 				<NodeViewContent
-					className="list-item-content flex-1 text-base"
+					className={cn("list-item-content flex-1 text-base", align)}
 					style={{ backgroundColor: node.attrs.backgroundColor }}
 				/>
 			</div>
@@ -62,7 +75,7 @@ export const BulletList = Node.create<ParagraphOptions>({
 	addCommands() {
 		return {
 			toggleBulletList:
-				(type) =>
+				type =>
 				({ commands }) =>
 					commands.toggleNode(this.name, type),
 		};

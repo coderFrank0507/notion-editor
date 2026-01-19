@@ -12,6 +12,7 @@ import type { ButtonProps } from "../../ui-primitive/button";
 import { Button } from "../../ui-primitive/button";
 import { Badge } from "../../ui-primitive/badge";
 import { useCurrentEditor } from "@tiptap/react";
+import { useLanguage } from "../../i18n";
 
 export interface MarkButtonProps extends Omit<ButtonProps, "type">, UseMarkConfig {
 	/**
@@ -52,8 +53,9 @@ export const MarkButton = forwardRef<HTMLButtonElement, MarkButtonProps>(
 			children,
 			...buttonProps
 		},
-		ref
+		ref,
 	) => {
+		const { t } = useLanguage();
 		const { editor } = useCurrentEditor();
 		const { isVisible, handleMark, label, canToggle, isActive, Icon, shortcutKeys } = useMark({
 			editor,
@@ -68,7 +70,7 @@ export const MarkButton = forwardRef<HTMLButtonElement, MarkButtonProps>(
 				if (event.defaultPrevented) return;
 				handleMark();
 			},
-			[handleMark, onClick]
+			[handleMark, onClick],
 		);
 
 		if (!isVisible) {
@@ -86,7 +88,7 @@ export const MarkButton = forwardRef<HTMLButtonElement, MarkButtonProps>(
 				tabIndex={-1}
 				aria-label={label}
 				aria-pressed={isActive}
-				tooltip={label}
+				tooltip={t(`text_style.${type}`)}
 				onClick={handleClick}
 				{...buttonProps}
 				ref={ref}
@@ -100,7 +102,7 @@ export const MarkButton = forwardRef<HTMLButtonElement, MarkButtonProps>(
 				)}
 			</Button>
 		);
-	}
+	},
 );
 
 MarkButton.displayName = "MarkButton";

@@ -12,6 +12,7 @@ import type { ButtonProps } from "../../ui-primitive/button";
 import { Button } from "../../ui-primitive/button";
 import { Badge } from "../../ui-primitive/badge";
 import { useCurrentEditor } from "@tiptap/react";
+import { useLanguage } from "../../i18n";
 
 export interface ImageAlignButtonProps extends Omit<ButtonProps, "type">, UseImageAlignConfig {
 	/**
@@ -54,8 +55,9 @@ export const ImageAlignButton = forwardRef<HTMLButtonElement, ImageAlignButtonPr
 			children,
 			...buttonProps
 		},
-		ref
+		ref,
 	) => {
+		const { t } = useLanguage();
 		const { editor } = useCurrentEditor();
 		const { isVisible, handleImageAlign, label, canAlign, isActive, Icon, shortcutKeys } =
 			useImageAlign({
@@ -73,7 +75,7 @@ export const ImageAlignButton = forwardRef<HTMLButtonElement, ImageAlignButtonPr
 				if (event.defaultPrevented) return;
 				handleImageAlign();
 			},
-			[handleImageAlign, onClick]
+			[handleImageAlign, onClick],
 		);
 
 		if (!isVisible) {
@@ -91,7 +93,7 @@ export const ImageAlignButton = forwardRef<HTMLButtonElement, ImageAlignButtonPr
 				tabIndex={-1}
 				aria-label={label}
 				aria-pressed={isActive}
-				tooltip={label}
+				tooltip={t(label)}
 				onClick={handleClick}
 				{...buttonProps}
 				ref={ref}
@@ -107,7 +109,7 @@ export const ImageAlignButton = forwardRef<HTMLButtonElement, ImageAlignButtonPr
 				)}
 			</Button>
 		);
-	}
+	},
 );
 
 ImageAlignButton.displayName = "ImageAlignButton";

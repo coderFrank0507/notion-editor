@@ -205,7 +205,7 @@ export function useDeleteNode(config?: UseDeleteNodeConfig) {
 
 	useHotkeys(
 		DELETE_NODE_SHORTCUT_KEY,
-		(event) => {
+		event => {
 			event.preventDefault();
 			handleDeleteNode();
 		},
@@ -213,14 +213,14 @@ export function useDeleteNode(config?: UseDeleteNodeConfig) {
 			enabled: isVisible && canDeleteNodeState,
 			enableOnContentEditable: !isMobile,
 			enableOnFormTags: true,
-		}
+		},
 	);
 
 	return {
 		isVisible,
 		handleDeleteNode,
 		canDeleteNode: canDeleteNodeState,
-		label: "Delete",
+		label: "drag.delete",
 		shortcutKeys: DELETE_NODE_SHORTCUT_KEY,
 		Icon: TrashIcon,
 	};

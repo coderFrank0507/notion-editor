@@ -183,7 +183,7 @@ export async function downloadSelectedImage(
 	editor: Editor | null,
 	filename?: string,
 	resolveFileUrl?: (url: string) => Promise<string>,
-	downloadMethod: "download" | "open" | "auto" = "auto"
+	downloadMethod: "download" | "open" | "auto" = "auto",
 ): Promise<boolean> {
 	if (!editor || !canDownloadImage(editor)) return false;
 
@@ -312,7 +312,7 @@ export function useImageDownload(config?: UseImageDownloadConfig) {
 
 	useHotkeys(
 		IMAGE_DOWNLOAD_SHORTCUT_KEY,
-		(event) => {
+		event => {
 			event.preventDefault();
 			handleDownload();
 		},
@@ -320,14 +320,14 @@ export function useImageDownload(config?: UseImageDownloadConfig) {
 			enabled: isVisible && canDownload,
 			enableOnContentEditable: !isMobile,
 			enableOnFormTags: true,
-		}
+		},
 	);
 
 	return {
 		isVisible,
 		canDownload,
 		handleDownload,
-		label: "Download image",
+		label: "drag.download_image",
 		shortcutKeys: IMAGE_DOWNLOAD_SHORTCUT_KEY,
 		Icon: ArrowDownToLineIcon,
 	};

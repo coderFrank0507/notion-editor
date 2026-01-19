@@ -23,61 +23,61 @@ export interface ColorItem {
 
 export const TEXT_COLORS: ColorItem[] = [
 	{
-		label: "Default text",
+		label: "text_style.text.default",
 		flag: "default",
 		value: "var(--tt-c-t)",
 		border: "var(--tt-c-t-c)",
 	},
 	{
-		label: "Gray text",
+		label: "text_style.text.gray",
 		flag: "gray",
 		value: "var(--tt-c-t-gray)",
 		border: "var(--tt-c-t-gray-c)",
 	},
 	{
-		label: "Brown text",
+		label: "text_style.text.brown",
 		flag: "brown",
 		value: "var(--tt-c-t-brown)",
 		border: "var(--tt-c-t-brown-c)",
 	},
 	{
-		label: "Orange text",
+		label: "text_style.text.orange",
 		flag: "orange",
 		value: "var(--tt-c-t-orange)",
 		border: "var(--tt-c-t-orange-c)",
 	},
 	{
-		label: "Yellow text",
+		label: "text_style.text.yellow",
 		flag: "yellow",
 		value: "var(--tt-c-t-yellow)",
 		border: "var(--tt-c-t-yellow-c)",
 	},
 	{
-		label: "Green text",
+		label: "text_style.text.green",
 		flag: "green",
 		value: "var(--tt-c-t-green)",
 		border: "var(--tt-c-t-green-c)",
 	},
 	{
-		label: "Blue text",
+		label: "text_style.text.blue",
 		flag: "blue",
 		value: "var(--tt-c-t-blue)",
 		border: "var(--tt-c-t-blue-c)",
 	},
 	{
-		label: "Purple text",
+		label: "text_style.text.purple",
 		flag: "purple",
 		value: "var(--tt-c-t-purple)",
 		border: "var(--tt-c-t-purple-c)",
 	},
 	{
-		label: "Pink text",
+		label: "text_style.text.pink",
 		flag: "pink",
 		value: "var(--tt-c-t-pink)",
 		border: "var(--tt-c-t-pink-c)",
 	},
 	{
-		label: "Red text",
+		label: "text_style.text.red",
 		flag: "red",
 		value: "var(--tt-c-t-red)",
 		border: "var(--tt-c-t-red-c)",
@@ -209,7 +209,7 @@ export function useColorText(config: UseColorTextConfig) {
 
 	useHotkeys(
 		COLOR_TEXT_SHORTCUT_KEY,
-		(event) => {
+		event => {
 			event.preventDefault();
 			handleColorText();
 		},
@@ -217,7 +217,7 @@ export function useColorText(config: UseColorTextConfig) {
 			enabled: isVisible && canColorTextState,
 			enableOnContentEditable: !isMobile,
 			enableOnFormTags: true,
-		}
+		},
 	);
 
 	const handleRemoveColorText = useCallback(() => {

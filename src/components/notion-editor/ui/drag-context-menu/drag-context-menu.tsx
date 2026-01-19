@@ -33,15 +33,13 @@ import { useText } from "../text-button";
 import { useHeading } from "../heading-button";
 import { useList } from "../list-button";
 import { useCodeBlock } from "../code-block-button";
-import { ColorMenu } from "../color-menu";
 
 // Utils
-import { getNodeDisplayName, isTextSelectionValid } from "../../lib/collab-utils";
+import { isTextSelectionValid } from "../../lib/collab-utils";
 import { SR_ONLY } from "../../lib/utils";
 
 import type {
 	DragContextMenuProps,
-	DropResultItem,
 	MenuItemProps,
 	NodeChangeData,
 } from "./drag-context-menu-types";
@@ -54,6 +52,7 @@ import "./drag-context-menu.scss";
 import { useCurrentEditor } from "@tiptap/react";
 import { Spacer } from "../../ui-primitive/spacer";
 import { eventInfo } from "../../lib/on-update";
+import { useLanguage } from "../../i18n";
 
 const useNodeTransformActions = () => {
 	const text = useText();
@@ -66,7 +65,7 @@ const useNodeTransformActions = () => {
 	const codeBlock = useCodeBlock();
 
 	const mapper = (
-		action: ReturnType<typeof useText | typeof useHeading | typeof useList | typeof useCodeBlock>
+		action: ReturnType<typeof useText | typeof useHeading | typeof useList | typeof useCodeBlock>,
 	) => ({
 		icon: action.Icon,
 		label: action.label,
@@ -84,7 +83,7 @@ const useNodeTransformActions = () => {
 		mapper(codeBlock),
 	];
 
-	const allDisabled = actions.every((a) => a.disabled);
+	const allDisabled = actions.every(a => a.disabled);
 
 	return allDisabled ? null : actions;
 };
@@ -96,17 +95,21 @@ const BaseMenuItem: React.FC<MenuItemProps> = ({
 	disabled = false,
 	isActive = false,
 	shortcutBadge,
-}) => (
-	<MenuItem
-		render={<Button data-style="ghost" data-active-state={isActive ? "on" : "off"} />}
-		onClick={onClick}
-		disabled={disabled}
-	>
-		<Icon className="tiptap-button-icon" />
-		<span className="tiptap-button-text">{label}</span>
-		{shortcutBadge}
-	</MenuItem>
-);
+}) => {
+	const { t } = useLanguage();
+
+	return (
+		<MenuItem
+			render={<Button data-style="ghost" data-active-state={isActive ? "on" : "off"} />}
+			onClick={onClick}
+			disabled={disabled}
+		>
+			<Icon className="tiptap-button-icon" />
+			<span className="tiptap-button-text">{t(label)}</span>
+			{shortcutBadge}
+		</MenuItem>
+	);
+};
 
 const SubMenuTrigger: React.FC<{
 	icon: React.ComponentType<{ className?: string }>;
@@ -139,6 +142,7 @@ const SubMenuTrigger: React.FC<{
 );
 
 const TransformActionGroup: React.FC = () => {
+	const { t } = useLanguage();
 	const actions = useNodeTransformActions();
 	const { canReset, handleResetFormatting, label, Icon } = useResetAllFormatting({
 		hideWhenUnavailable: true,
@@ -150,10 +154,10 @@ const TransformActionGroup: React.FC = () => {
 	return (
 		<>
 			{actions && (
-				<SubMenuTrigger icon={Repeat2Icon} label="Turn Into">
+				<SubMenuTrigger icon={Repeat2Icon} label={t("turn_into._label")}>
 					<MenuGroup>
-						<MenuGroupLabel>Turn into</MenuGroupLabel>
-						{actions.map((action) => (
+						<MenuGroupLabel>{t("turn_into._label")}</MenuGroupLabel>
+						{actions.map(action => (
 							<BaseMenuItem key={action.label} {...action} />
 						))}
 					</MenuGroup>
@@ -244,6 +248,7 @@ export const DragContextMenu = ({
 	mobileBreakpoint = 768,
 	...props
 }: DragContextMenuProps) => {
+	const { t } = useLanguage();
 	const { editor } = useCurrentEditor();
 	const { isDragging } = useUiEditorState(editor);
 	const isMobile = useIsBreakpoint("max", mobileBreakpoint);
@@ -267,7 +272,7 @@ export const DragContextMenu = ({
 	const dynamicPositions = useMemo(() => {
 		return {
 			middleware: [
-				offset((props) => {
+				offset(props => {
 					const { rects } = props;
 					const nodeHeight = rects.reference.height;
 					const dragHandleHeight = rects.floating.height;
@@ -309,7 +314,7 @@ export const DragContextMenu = ({
 
 	if (!editor) return null;
 
-	const nodeName = getNodeDisplayName(editor);
+	// const nodeName = getNodeDisplayName(editor);
 
 	return (
 		<div
@@ -352,8 +357,8 @@ export const DragContextMenu = ({
 										tabIndex={-1}
 										tooltip={
 											<>
-												<div>Click for options</div>
-												<div>Hold for drag</div>
+												<div>{t("drag.handle1")}</div>
+												<div>{t("drag.handle2")}</div>
 											</>
 										}
 										data-weight="small"
@@ -378,7 +383,7 @@ export const DragContextMenu = ({
 							<Combobox style={SR_ONLY} />
 							<ComboboxList style={{ minWidth: "15rem" }}>
 								<MenuGroup>
-									<MenuGroupLabel>{nodeName}</MenuGroupLabel>
+									{/* <MenuGroupLabel>{nodeName}</MenuGroupLabel> */}
 									{/* <ColorMenu /> */}
 									<TransformActionGroup />
 									<ImageActionGroup />

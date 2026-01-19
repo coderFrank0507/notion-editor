@@ -17,61 +17,61 @@ export const COLOR_HIGHLIGHT_SHORTCUT_KEY = "mod+shift+h";
 
 export const HIGHLIGHT_COLORS: ColorItem[] = [
 	{
-		label: "Default background",
+		label: "text_style.highlight.default",
 		flag: "default",
 		value: "var(--tt-bg-color)",
 		border: "var(--tt-bg-color-c)",
 	},
 	{
-		label: "Gray background",
+		label: "text_style.highlight.gray",
 		flag: "gray",
 		value: "var(--tt-c-h-gray)",
 		border: "var(--tt-c-h-gray-c)",
 	},
 	{
-		label: "Brown background",
+		label: "text_style.highlight.brown",
 		flag: "brown",
 		value: "var(--tt-c-h-brown)",
 		border: "var(--tt-c-h-brown-c)",
 	},
 	{
-		label: "Orange background",
+		label: "text_style.highlight.orange",
 		flag: "orange",
 		value: "var(--tt-c-h-orange)",
 		border: "var(--tt-c-h-orange-c)",
 	},
 	{
-		label: "Yellow background",
+		label: "text_style.highlight.yellow",
 		flag: "yellow",
 		value: "var(--tt-c-h-yellow)",
 		border: "var(--tt-c-h-yellow-c)",
 	},
 	{
-		label: "Green background",
+		label: "text_style.highlight.green",
 		flag: "green",
 		value: "var(--tt-c-h-green)",
 		border: "var(--tt-c-h-green-c)",
 	},
 	{
-		label: "Blue background",
+		label: "text_style.highlight.blue",
 		flag: "blue",
 		value: "var(--tt-c-h-blue)",
 		border: "var(--tt-c-h-blue-c)",
 	},
 	{
-		label: "Purple background",
+		label: "text_style.highlight.purple",
 		flag: "purple",
 		value: "var(--tt-c-h-purple)",
 		border: "var(--tt-c-h-purple-c)",
 	},
 	{
-		label: "Pink background",
+		label: "text_style.highlight.pink",
 		flag: "pink",
 		value: "var(--tt-c-h-pink)",
 		border: "var(--tt-c-h-pink-c)",
 	},
 	{
-		label: "Red background",
+		label: "text_style.highlight.red",
 		flag: "red",
 		value: "var(--tt-c-h-red)",
 		border: "var(--tt-c-h-red-c)",
@@ -125,9 +125,9 @@ export interface UseColorHighlightConfig {
 }
 
 export function pickHighlightColorsByValue(values: string[]) {
-	const colorMap = new Map(HIGHLIGHT_COLORS.map((color) => [color.value, color]));
+	const colorMap = new Map(HIGHLIGHT_COLORS.map(color => [color.value, color]));
 	return values
-		.map((value) => colorMap.get(value))
+		.map(value => colorMap.get(value))
 		.filter((color): color is (typeof HIGHLIGHT_COLORS)[number] => !!color);
 }
 
@@ -158,7 +158,7 @@ export function canColorHighlight(editor: Editor | null, mode: HighlightMode = "
 export function isColorHighlightActive(
 	editor: Editor | null,
 	flag: string,
-	mode: HighlightMode = "mark"
+	mode: HighlightMode = "mark",
 ): boolean {
 	if (!editor || !editor.isEditable) return false;
 
@@ -300,7 +300,7 @@ export function useColorHighlight(config: UseColorHighlightConfig) {
 
 	useHotkeys(
 		COLOR_HIGHLIGHT_SHORTCUT_KEY,
-		(event) => {
+		event => {
 			event.preventDefault();
 			handleColorHighlight();
 		},
@@ -308,7 +308,7 @@ export function useColorHighlight(config: UseColorHighlightConfig) {
 			enabled: isVisible && canColorHighlightState,
 			enableOnContentEditable: !isMobile,
 			enableOnFormTags: true,
-		}
+		},
 	);
 
 	return {

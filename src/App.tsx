@@ -6,6 +6,7 @@ import NotionEditor, {
 	transacionToDbdata,
 	template_ZH_CN,
 	template_EN,
+	EditorDatabaseContentJson,
 } from "./components/notion-editor";
 import { createPresignedUrl } from "./http/file";
 
@@ -56,12 +57,12 @@ function App() {
 	return (
 		<div className="p-10">
 			<NotionEditor
-				initContent={() => databaseToJSONContent(template_EN)}
-				onUpdate={(data) => {
+				initContent={() => databaseToJSONContent(EditorDatabaseContentJson)}
+				onUpdate={data => {
 					const blocks = transacionToDbdata(data);
 					console.log("onUpdate: ", blocks);
 				}}
-				onDropEnd={(data) => {
+				onDropEnd={data => {
 					console.log("onDropEnd: ", data);
 				}}
 				uploadImageConfig={{
@@ -75,7 +76,7 @@ function App() {
 						const [response] = successful;
 						return response.uploadURL;
 					},
-					onError: (error) => {
+					onError: error => {
 						console.log("error: ", error);
 					},
 				}}

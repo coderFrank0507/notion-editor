@@ -50,9 +50,9 @@ export const listIcons = {
 };
 
 export const listLabels: Record<ListType, string> = {
-	bulletList: "Bullet List",
-	orderedList: "Ordered List",
-	taskList: "Task List",
+	bulletList: "turn_into.bullet_list",
+	orderedList: "turn_into.ordered_list",
+	taskList: "turn_into.task_list",
 };
 
 export const LIST_SHORTCUT_KEYS: Record<ListType, string> = {
@@ -67,7 +67,7 @@ export const LIST_SHORTCUT_KEYS: Record<ListType, string> = {
 export function canToggleList(
 	editor: Editor | null,
 	type: ListType,
-	turnInto: boolean = true
+	turnInto: boolean = true,
 ): boolean {
 	if (!editor || !editor.isEditable) return false;
 	if (!isNodeInSchema(type, editor) || isNodeTypeSelected(editor, ["image"])) return false;

@@ -12,6 +12,7 @@ import type { ButtonProps } from "../../ui-primitive/button";
 import { Button } from "../../ui-primitive/button";
 import { Badge } from "../../ui-primitive/badge";
 import { useCurrentEditor } from "@tiptap/react";
+import { useLanguage } from "../../i18n";
 
 export interface DeleteNodeButtonProps extends Omit<ButtonProps, "type">, UseDeleteNodeConfig {
 	/**
@@ -49,8 +50,9 @@ export const DeleteNodeButton = forwardRef<HTMLButtonElement, DeleteNodeButtonPr
 			children,
 			...buttonProps
 		},
-		ref
+		ref,
 	) => {
+		const { t } = useLanguage();
 		const { editor } = useCurrentEditor();
 		const { isVisible, handleDeleteNode, label, shortcutKeys, Icon } = useDeleteNode({
 			editor,
@@ -64,7 +66,7 @@ export const DeleteNodeButton = forwardRef<HTMLButtonElement, DeleteNodeButtonPr
 				if (event.defaultPrevented) return;
 				handleDeleteNode();
 			},
-			[handleDeleteNode, onClick]
+			[handleDeleteNode, onClick],
 		);
 
 		if (!isVisible) {
@@ -78,7 +80,7 @@ export const DeleteNodeButton = forwardRef<HTMLButtonElement, DeleteNodeButtonPr
 				role="button"
 				tabIndex={-1}
 				aria-label={label}
-				tooltip="Delete"
+				tooltip={t("image_style.delete")}
 				onClick={handleClick}
 				{...buttonProps}
 				ref={ref}
@@ -92,7 +94,7 @@ export const DeleteNodeButton = forwardRef<HTMLButtonElement, DeleteNodeButtonPr
 				)}
 			</Button>
 		);
-	}
+	},
 );
 
 DeleteNodeButton.displayName = "DeleteNodeButton";

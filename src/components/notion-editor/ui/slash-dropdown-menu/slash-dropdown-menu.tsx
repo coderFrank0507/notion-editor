@@ -22,12 +22,14 @@ import { Separator } from "../../ui-primitive/separator";
 import { Card, CardBody, CardGroupLabel, CardItemGroup } from "../../ui-primitive/card";
 
 import "./slash-dropdown-menu.scss";
+import { useLanguage } from "../../i18n";
 
 type SlashDropdownMenuProps = Omit<SuggestionMenuProps, "items" | "children"> & {
 	config?: SlashMenuConfig;
 };
 
 export const SlashDropdownMenu = (props: SlashDropdownMenuProps) => {
+	const { t } = useLanguage();
 	const { config, ...restProps } = props;
 	const { getSlashMenuItems } = useSlashDropdownMenu(config);
 
@@ -36,23 +38,24 @@ export const SlashDropdownMenu = (props: SlashDropdownMenuProps) => {
 			char="/"
 			pluginKey="slashDropdownMenu"
 			decorationClass="tiptap-slash-decoration"
-			decorationContent="Filter..."
+			decorationContent={t("slash.decoration_content")}
 			selector="tiptap-slash-dropdown-menu"
 			items={({ query, editor }) => filterSuggestionItems(getSlashMenuItems(editor), query)}
 			{...restProps}
 		>
-			{(props) => <List {...props} config={config} />}
+			{props => <List {...props} config={config} />}
 		</SuggestionMenu>
 	);
 };
 
 const Item = (props: { item: SuggestionItem; isSelected: boolean; onSelect: () => void }) => {
+	const { t } = useLanguage();
 	const { item, isSelected, onSelect } = props;
 	const itemRef = useRef<HTMLButtonElement>(null);
 
 	useEffect(() => {
 		const selector = document.querySelector(
-			'[data-selector="tiptap-slash-dropdown-menu"]'
+			'[data-selector="tiptap-slash-dropdown-menu"]',
 		) as HTMLElement;
 		if (!itemRef.current || !isSelected || !selector) return;
 
@@ -75,7 +78,7 @@ const Item = (props: { item: SuggestionItem; isSelected: boolean; onSelect: () =
 			onClick={onSelect}
 		>
 			{BadgeIcon && <BadgeIcon className="tiptap-button-icon" />}
-			<div className="tiptap-button-text">{item.title}</div>
+			<div className="tiptap-button-text">{t(item.title)}</div>
 		</Button>
 	);
 };
@@ -86,6 +89,8 @@ const List = ({
 	onSelect,
 	config,
 }: SuggestionMenuRenderProps & { config?: SlashMenuConfig }) => {
+	const { t } = useLanguage();
+
 	const renderedItems = useMemo(() => {
 		const rendered: React.ReactElement[] = [];
 		const showGroups = config?.showGroups !== false;
@@ -98,7 +103,7 @@ const List = ({
 						item={item}
 						isSelected={index === selectedIndex}
 						onSelect={() => onSelect(item)}
-					/>
+					/>,
 				);
 			});
 			return rendered;
@@ -137,9 +142,9 @@ const List = ({
 			if (groupLabel) {
 				rendered.push(
 					<CardItemGroup key={`group-${groupIndex}-${groupLabel}`}>
-						<CardGroupLabel>{groupLabel}</CardGroupLabel>
+						<CardGroupLabel>{t(groupLabel)}</CardGroupLabel>
 						<ButtonGroup>{groupItems}</ButtonGroup>
-					</CardItemGroup>
+					</CardItemGroup>,
 				);
 			} else {
 				rendered.push(...groupItems);
@@ -147,7 +152,7 @@ const List = ({
 		});
 
 		return rendered;
-	}, [items, selectedIndex, onSelect, config?.showGroups]);
+	}, [items, selectedIndex, onSelect, t, config?.showGroups]);
 
 	if (!renderedItems.length) {
 		return null;
