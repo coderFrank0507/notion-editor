@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import {
 	useEditor,
 	EditorContent,
@@ -31,8 +31,10 @@ import onDrop from "./lib/on-drop";
 import type { HandleBlockJson } from "./lib/content-utils";
 import { ImageUploadNodeOptions } from "./extensions/image-upload-node";
 import { BlockSortMap } from "./extensions/block-sort";
+import { LangContext, LangKey, useLanguage } from "./i18n";
 
 export interface NotionEditorProps {
+	lang?: "zh-CN" | "en";
 	/** editor 内容为空时才会执行 */
 	initContent?: () => Promise<JSONContent[]>;
 	onUpdate?: (data: HandleBlockJson[]) => void;
@@ -43,6 +45,7 @@ export interface NotionEditorProps {
 export const CacheMap = new Map<string, JSONContent>();
 
 export function EditorContentArea() {
+	const { t } = useLanguage();
 	const { editor } = useCurrentEditor();
 	const { isDragging } = useUiEditorState(editor);
 
@@ -65,27 +68,33 @@ export function EditorContentArea() {
 	if (!editor) return <span>Error: editor instance is null</span>;
 
 	return (
-		<EditorContent
-			editor={editor}
-			role="presentation"
-			id="notion-editor-content"
-			style={{
-				cursor: isDragging ? "grabbing" : "auto",
-			}}
-		>
-			<DragContextMenu />
-			<SlashDropdownMenu />
-			<EditorToolbarFloating />
-		</EditorContent>
+		<>
+			<span>{t("a.b.c")}</span>
+			<EditorContent
+				editor={editor}
+				role="presentation"
+				id="notion-editor-content"
+				style={{
+					cursor: isDragging ? "grabbing" : "auto",
+				}}
+			>
+				<DragContextMenu />
+				<SlashDropdownMenu />
+				<EditorToolbarFloating />
+			</EditorContent>
+		</>
 	);
 }
 
 export default function NotionEditor({
+	// lang = "zh-CN",
 	onUpdate: handleUpdate,
 	initContent,
 	onDropEnd,
 	uploadImageConfig,
 }: NotionEditorProps) {
+	const [lang, setLang] = useState<LangKey>("zh-CN");
+
 	const editor = useEditor({
 		immediatelyRender: false,
 		editorProps: {
@@ -126,8 +135,16 @@ export default function NotionEditor({
 	if (!editor) return null;
 
 	return (
-		<EditorContext.Provider value={{ editor }}>
-			<EditorContentArea />
-		</EditorContext.Provider>
+		<>
+			<div className="flex gap-4">
+				<button onClick={() => setLang("zh-CN")}>zh-CN</button>
+				<button onClick={() => setLang("en")}>En</button>
+			</div>
+			<LangContext.Provider value={{ lang }}>
+				<EditorContext.Provider value={{ editor }}>
+					<EditorContentArea />
+				</EditorContext.Provider>
+			</LangContext.Provider>
+		</>
 	);
 }

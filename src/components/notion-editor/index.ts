@@ -1,5 +1,5 @@
 import NotionEditor from "./notion-editor";
-export { template_ZH_CN } from "./template/zh-cn";
+export { template_ZH_CN } from "./template/zh-CN";
 export { template_EN } from "./template/en";
 export type {
 	HandleBlockType,
