@@ -89,14 +89,12 @@ export function EditorContentArea({ lang }: NotionEditorProps) {
 
 export default function NotionEditor(props: NotionEditorProps) {
 	const {
-		// lang = "zh-CN",
+		lang = "zh-CN",
 		onUpdate: handleUpdate,
 		initContent,
 		onDropEnd,
 		uploadImageConfig,
 	} = props;
-
-	const [lang, setLang] = useState<LangKey>("zh-CN");
 
 	const editor = useEditor({
 		immediatelyRender: false,
@@ -138,16 +136,10 @@ export default function NotionEditor(props: NotionEditorProps) {
 	if (!editor) return null;
 
 	return (
-		<>
-			<div className="flex gap-4">
-				<button onClick={() => setLang("zh-CN")}>zh-CN</button>
-				<button onClick={() => setLang("en")}>En</button>
-			</div>
-			<LangContext.Provider value={{ lang }}>
-				<EditorContext.Provider value={{ editor }}>
-					<EditorContentArea {...props} lang={lang} />
-				</EditorContext.Provider>
-			</LangContext.Provider>
-		</>
+		<LangContext.Provider value={{ lang }}>
+			<EditorContext.Provider value={{ editor }}>
+				<EditorContentArea {...props} lang={lang} />
+			</EditorContext.Provider>
+		</LangContext.Provider>
 	);
 }
