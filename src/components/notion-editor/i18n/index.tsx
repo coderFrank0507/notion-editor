@@ -8,10 +8,10 @@ export const LanguageStore = {
 	en,
 };
 
-export type LangKey = keyof typeof LanguageStore;
+export type LangKeys = keyof typeof LanguageStore;
 
 export const LangContext = createContext<{
-	lang: LangKey;
+	lang: LangKeys;
 }>({ lang: "zh-CN" });
 
 function getObjValue(obj: any, path: string) {

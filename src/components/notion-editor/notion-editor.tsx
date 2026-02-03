@@ -24,7 +24,7 @@ import { BlockSortMap } from "./extensions/block-sort";
 import type { HandleBlockJson } from "./lib/content-utils";
 
 // --- i18n ---
-import { LangContext, type LangKey, useLanguage } from "./i18n";
+import { LangContext, type LangKeys, useLanguage } from "./i18n";
 
 // --- Styles ---
 import "./styles/_keyframe-animations.scss";
@@ -36,7 +36,10 @@ import "./styles/heading-node.scss";
 import "./styles/code-block-node.scss";
 
 export interface NotionEditorProps {
-	lang?: LangKey;
+	/** 语种，当前支持：zh-CN | en */
+	lang?: LangKeys;
+	/** 是否可编辑 */
+	editable?: boolean;
 	/** editor 内容为空时才会执行 */
 	initContent?: () => Promise<JSONContent[]>;
 	onUpdate?: (data: HandleBlockJson[]) => void;
@@ -90,6 +93,7 @@ export function EditorContentArea({ lang }: NotionEditorProps) {
 export default function NotionEditor(props: NotionEditorProps) {
 	const {
 		lang = "zh-CN",
+		editable = true,
 		onUpdate: handleUpdate,
 		initContent,
 		onDropEnd,
@@ -98,6 +102,7 @@ export default function NotionEditor(props: NotionEditorProps) {
 
 	const editor = useEditor({
 		immediatelyRender: false,
+		editable,
 		editorProps: {
 			attributes: {
 				id: "notion-editor-container",
@@ -110,6 +115,10 @@ export default function NotionEditor(props: NotionEditorProps) {
 			onDrop(slice, editor, onDropEnd);
 		},
 	});
+
+	useEffect(() => {
+		editor?.setEditable(editable);
+	}, [editable, editor]);
 
 	useLayoutEffect(() => {
 		if (editor?.isEmpty) {
